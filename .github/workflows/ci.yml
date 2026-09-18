@@ -81,8 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, frontend]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    environment:
-      name: production
     concurrency:
       group: production
       cancel-in-progress: false
