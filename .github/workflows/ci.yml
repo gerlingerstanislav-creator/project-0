@@ -97,10 +97,10 @@ jobs:
           name: laravel-release-${{ github.sha }}
 
       - name: Upload release to VPS
-        uses: appleboy/scp-action@v1.0.0
+        uses: appleboy/scp-action@v1
         with:
-          host: 45.137.42.239
-          username: root
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: 22
           source: release.tar.gz
@@ -109,7 +109,7 @@ jobs:
           command_timeout: 10m
 
       - name: Bootstrap and deploy
-        uses: appleboy/ssh-action@v1.2.5
+        uses: appleboy/ssh-action@v1
         with:
           host: 45.137.42.239
           username: root
@@ -156,7 +156,7 @@ jobs:
               cp .env.example .env
               sed -i 's/^APP_ENV=.*/APP_ENV=production/' .env
               sed -i 's/^APP_DEBUG=.*/APP_DEBUG=false/' .env
-              sed -i 's#^APP_URL=.*#APP_URL=http://45.137.42.239#' .env
+              sed -i 's#^APP_URL=.*#APP_URL=http://${{ vars.VPS_HOST }}#' .env
               sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env
               sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env
               sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/test/database/database.sqlite#' .env
@@ -166,11 +166,11 @@ jobs:
             touch database/database.sqlite
             mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
 
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
             if ! grep -q '^APP_KEY=base64:' .env; then
               php artisan key:generate --force
             fi
-
-            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
             php artisan optimize
             php artisan storage:link || true
@@ -180,7 +180,7 @@ jobs:
             server {
                 listen 80 default_server;
                 listen [::]:80 default_server;
-                server_name 45.137.42.239 _;
+                server_name ${{ vars.VPS_HOST }} _;
                 root /var/www/test/public;
                 index index.php;
                 charset utf-8;
@@ -223,7 +223,7 @@ jobs:
       - name: Health check
         run: |
           for i in 1 2 3 4 5; do
-            if curl --fail --silent --show-error --max-time 10 http://45.137.42.239/up > /dev/null; then
+            if curl --fail --silent --show-error --max-time 10 http://${{ vars.VPS_HOST }}/up > /dev/null; then
               echo "Health check passed"
               exit 0
             fi
