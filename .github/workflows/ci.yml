@@ -47,7 +47,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Run Laravel tests
-        run: php artisan test
+        run: vendor/bin/phpunit
 
   frontend:
     name: Frontend build
@@ -69,7 +69,9 @@ jobs:
         run: npm run build
 
       - name: Package release
-        run: tar --exclude=.git --exclude=node_modules --exclude=vendor --exclude=.env --exclude=database/database.sqlite --exclude=release.tar.gz -czf release.tar.gz .
+        run: |
+          tar --exclude=.git --exclude=node_modules --exclude=vendor --exclude=.env --exclude=database/database.sqlite --exclude=release.tar.gz -czf /tmp/release.tar.gz .
+          mv /tmp/release.tar.gz release.tar.gz
 
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
