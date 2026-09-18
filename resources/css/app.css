@@ -70,10 +70,11 @@ body { background: #f4f4f5; }
     min-height: 100vh;
     margin-left: 190px;
     padding: 48px;
+    max-width: 1390px;
 }
 
 .page {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 48px;
     border: 1px solid #e4e4e7;
