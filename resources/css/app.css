@@ -126,6 +126,29 @@ body { background: #f4f4f5; }
 
     .sidebar.is-open { transform: translateX(0); }
 
+    .sidebar.is-open ~ .menu-toggle {
+        left: 174px;
+        border-color: #3f3f46;
+        background: #27272a;
+        box-shadow: none;
+    }
+
+    .sidebar.is-open ~ .menu-toggle span:not(.sr-only) {
+        background: #fff;
+    }
+
+    .sidebar.is-open ~ .menu-toggle span:not(.sr-only):nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .sidebar.is-open ~ .menu-toggle span:not(.sr-only):nth-child(2) {
+        opacity: 0;
+    }
+
+    .sidebar.is-open ~ .menu-toggle span:not(.sr-only):nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
     .content {
         margin-left: 0;
         padding: 72px 16px 24px;
