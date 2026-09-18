@@ -1,3 +1,7 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laravel</title></head>
-<body><main style="font-family:system-ui;max-width:720px;margin:10vh auto;padding:2rem"><h1>Вот это поворот</h1><p>Your application scaffold is installed.</p></main></body></html>
+<x-layout title="Инструменты">
+    <section class="page">
+        <p class="page__eyebrow">Tools</p>
+        <h1>Вот это поворот</h1>
+        <p class="page__description">Выбери инструмент в боковом меню.</p>
+    </section>
+</x-layout>
