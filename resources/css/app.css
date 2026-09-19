@@ -104,6 +104,7 @@ button, input { font: inherit; }
 }
 
 .page {
+    position: relative;
     max-width: 1200px;
     margin: 0 auto;
     padding: 48px;
@@ -112,7 +113,10 @@ button, input { font: inherit; }
     background: #fff;
 }
 .page__eyebrow {
-    margin: 0 0 10px;
+    position: absolute;
+    right: 48px;
+    bottom: 48px;
+    margin: 0;
     color: #71717a;
     font-size: 12px;
     font-weight: 700;
@@ -318,7 +322,11 @@ button, input { font: inherit; }
     .sidebar.is-open ~ .menu-toggle span:not(.sr-only):nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     .content { margin-left: 0; padding: 72px 16px 24px; }
-    .page { padding: 28px 22px; }
+    .page { padding: 28px 22px 64px; }
+    .page__eyebrow {
+        right: 22px;
+        bottom: 22px;
+    }
     .startup-ideas__list { margin-top: 28px; }
     .startup-idea__title { padding: 17px 16px; font-size: 15px; }
     .startup-idea__description { padding: 0 16px 18px; font-size: 14px; }

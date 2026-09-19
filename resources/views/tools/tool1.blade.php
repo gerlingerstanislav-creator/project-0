@@ -1,6 +1,6 @@
 <x-layout title="Идеи для стартапов">
     <section class="page startup-ideas">
-        <p class="page__eyebrow">Tool 01</p>
+        <p class="page__eyebrow">Page 01</p>
         <h1>Идеи для стартапов</h1>
         <p class="page__description">
             Список идей из базы проекта.
