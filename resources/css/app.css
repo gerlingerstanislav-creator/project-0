@@ -83,7 +83,9 @@ button, input { font: inherit; }
     color: #a1a1aa;
     font-size: 11px;
 }
+.sidebar__login,
 .sidebar__logout {
+    display: block;
     width: 100%;
     margin-top: 12px;
     padding: 8px 10px;
@@ -94,6 +96,14 @@ button, input { font: inherit; }
     cursor: pointer;
     text-align: left;
 }
+.sidebar__login {
+    padding: 8px 10px;
+    border: 1px solid #3f3f46;
+    border-radius: 7px;
+    color: #d4d4d8;
+    text-decoration: none;
+}
+.sidebar__login:hover,
 .sidebar__logout:hover { background: #27272a; color: #fff; }
 
 .content {

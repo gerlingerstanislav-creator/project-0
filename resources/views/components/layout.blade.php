@@ -28,6 +28,10 @@
         </nav>
 
         <div class="sidebar__account">
+            @guest
+                <a class="sidebar__login" href="{{ route('login') }}">Войти</a>
+            @endguest
+
             @auth
                 <div class="sidebar__account-label">Аккаунт</div>
                 <div class="sidebar__account-name">{{ auth()->user()->username }}</div>
