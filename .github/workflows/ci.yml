@@ -240,34 +240,19 @@ jobs:
   notify:
     name: Telegram notification
     runs-on: ubuntu-latest
-    needs: [deploy]
-    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [test, frontend, deploy]
+    if: ${{ failure() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
     steps:
       - name: Send Telegram notification
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          DEPLOY_STATUS: ${{ needs.deploy.result }}
           PROJECT_NAME: ${{ github.event.repository.name }}
         run: |
           set -e
-          case "$DEPLOY_STATUS" in
-            success)
-              ACTION="Deploy completed"
-              ;;
-            failure)
-              ACTION="Deploy failed"
-              ;;
-            skipped)
-              ACTION="Deploy skipped"
-              ;;
-            *)
-              ACTION="Deploy status: $DEPLOY_STATUS"
-              ;;
-          esac
 
           curl --fail --silent --show-error -X POST \
             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=GitHub - ${PROJECT_NAME} - ${ACTION}"
+            --data-urlencode "text=GitHub - ${PROJECT_NAME} - Deploy failed"
