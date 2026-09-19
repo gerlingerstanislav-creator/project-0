@@ -245,7 +245,6 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DEPLOY_STATUS: ${{ needs.deploy.result }}
           PROJECT_NAME: ${{ github.event.repository.name }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           set -e
           case "$DEPLOY_STATUS" in
@@ -263,12 +262,7 @@ jobs:
               ;;
           esac
 
-          COMMIT_TITLE="$(printf '%s\n' "$COMMIT_MESSAGE" | head -n 1)"
-          if [ -n "$COMMIT_TITLE" ] && [ "${#COMMIT_TITLE}" -gt 48 ]; then
-            COMMIT_TITLE="${COMMIT_TITLE:0:45}…"
-          fi
-
           curl --fail --silent --show-error -X POST \
             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=GitHub - ${PROJECT_NAME} - ${ACTION}\n${COMMIT_TITLE}"
+            --data-urlencode "text=GitHub - ${PROJECT_NAME} - ${ACTION}"
