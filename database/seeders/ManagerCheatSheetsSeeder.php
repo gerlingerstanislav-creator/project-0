@@ -98,7 +98,7 @@ class ManagerCheatSheetsSeeder extends Seeder { public function run(): void { $c
 <p>Сначала заметить, затем сформулировать несколько возможных объяснений, затем проверить их вопросом.</p>
 <h3>Мини-чек-лист перед 1:1</h3>
 <ul>
-<li><span class="startup-idea__checkbox" aria-hidden="true"></span>Я понимаю цель этой встречи.</li>
+<li>☐ Я понимаю цель этой встречи.</li>
 <li><span class="startup-idea__checkbox" aria-hidden="true"></span>У меня есть конкретные наблюдения.</li>
 <li><span class="startup-idea__checkbox" aria-hidden="true"></span>Я оставил место для тем сотрудника.</li>
 <li><span class="startup-idea__checkbox" aria-hidden="true"></span>Я не собираюсь превращать встречу в статус-митинг.</li>
