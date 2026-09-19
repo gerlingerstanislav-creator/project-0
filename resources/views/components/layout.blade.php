@@ -14,7 +14,7 @@
     <aside id="sidebar" class="sidebar">
         <div class="sidebar__brand">Tools</div>
         <nav class="sidebar__nav" aria-label="Основная навигация">
-            <a href="{{ url('/tool-1') }}" class="sidebar__link {{ request()->is('tool-1') ? 'is-active' : '' }}"><span>1</span> Инструмент 1</a>
+            <a href="{{ url('/tool-1') }}" class="sidebar__link {{ request()->is('tool-1') ? 'is-active' : '' }}"><span>1</span> Идеи стартапов</a>
             <a href="{{ url('/tool-2') }}" class="sidebar__link {{ request()->is('tool-2') ? 'is-active' : '' }}"><span>2</span> Инструмент 2</a>
             <a href="{{ url('/tool-3') }}" class="sidebar__link {{ request()->is('tool-3') ? 'is-active' : '' }}"><span>3</span> Инструмент 3</a>
         </nav>
