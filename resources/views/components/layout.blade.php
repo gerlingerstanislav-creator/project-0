@@ -21,14 +21,5 @@
     </aside>
     <main class="content">{{ $slot }}</main>
     <div class="sidebar-backdrop" aria-hidden="true"></div>
-    <script>
-        const toggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
-        const backdrop = document.querySelector('.sidebar-backdrop');
-        const closeMenu = () => { sidebar.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); toggle.querySelector('.sr-only').textContent = 'Открыть меню'; };
-        toggle.addEventListener('click', () => { const open = sidebar.classList.toggle('is-open'); toggle.setAttribute('aria-expanded', String(open)); toggle.querySelector('.sr-only').textContent = open ? 'Закрыть меню' : 'Открыть меню'; });
-        backdrop.addEventListener('click', closeMenu);
-        document.querySelectorAll('.sidebar__link').forEach(link => link.addEventListener('click', closeMenu));
-    </script>
 </body>
 </html>

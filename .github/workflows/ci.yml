@@ -111,8 +111,8 @@ jobs:
       - name: Bootstrap and deploy
         uses: appleboy/ssh-action@v1
         with:
-          host: 45.137.42.239
-          username: root
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: 22
           timeout: 30s
@@ -244,6 +244,8 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DEPLOY_STATUS: ${{ needs.deploy.result }}
+          PROJECT_NAME: ${{ github.event.repository.name }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           set -e
           case "$DEPLOY_STATUS" in
@@ -261,7 +263,10 @@ jobs:
               ;;
           esac
 
+          COMMIT_TITLE="$(printf '%s\n' "$COMMIT_MESSAGE" | head -n 1)"
+          COMMIT_TITLE="$(python3 -c 'import os; s=os.environ["COMMIT_TITLE"]; print(s if len(s) <= 48 else s[:45] + "…")')"
+
           curl --fail --silent --show-error -X POST \
             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=GitHub - test - ${ACTION}"
+            --data-urlencode "text=GitHub - ${PROJECT_NAME} - ${ACTION}\n${COMMIT_TITLE}"
