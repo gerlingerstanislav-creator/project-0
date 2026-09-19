@@ -17,14 +17,30 @@
         <span></span><span></span><span></span>
         <span class="sr-only">Открыть меню</span>
     </button>
+
     <aside id="sidebar" class="sidebar">
         <div class="sidebar__brand">Tools</div>
+
         <nav class="sidebar__nav" aria-label="Основная навигация">
             <a href="{{ url('/tool-1') }}" class="sidebar__link {{ request()->is('tool-1') ? 'is-active' : '' }}"><span>1</span> Идеи стартапов</a>
             <a href="{{ url('/tool-2') }}" class="sidebar__link {{ request()->is('tool-2') ? 'is-active' : '' }}"><span>2</span> Инструмент 2</a>
             <a href="{{ url('/tool-3') }}" class="sidebar__link {{ request()->is('tool-3') ? 'is-active' : '' }}"><span>3</span> Инструмент 3</a>
         </nav>
+
+        <div class="sidebar__account">
+            @auth
+                <div class="sidebar__account-label">Аккаунт</div>
+                <div class="sidebar__account-name">{{ auth()->user()->username }}</div>
+                <div class="sidebar__account-role">{{ auth()->user()->roleLabel() }}</div>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="sidebar__logout" type="submit">Выйти</button>
+                </form>
+            @endauth
+        </div>
     </aside>
+
     <main class="content">{{ $slot }}</main>
     <div class="sidebar-backdrop" aria-hidden="true"></div>
 </body>

@@ -3,22 +3,30 @@
 namespace Tests\Feature;
 
 use App\Models\StartupIdea;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class StartupIdeaUpdateTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_startup_idea_can_be_updated(): void
+    public function test_admin_can_update_startup_idea(): void
     {
+        $user = User::create([
+            'username' => 'admin',
+            'role' => 'admin',
+            'password' => Hash::make('secret'),
+        ]);
+
         $idea = StartupIdea::create([
-            'slug' => 'test-idea',
+            'slug' => 'admin-test',
             'title' => 'Старое название',
             'description' => 'Старое описание',
         ]);
 
-        $response = $this->patchJson(route('tools.tool1.update', $idea), [
+        $response = $this->actingAs($user)->patchJson(route('tools.tool1.update', $idea), [
             'title' => 'Новое название',
             'description' => 'Новое описание',
         ]);
@@ -33,5 +41,27 @@ class StartupIdeaUpdateTest extends TestCase
             'title' => 'Новое название',
             'description' => 'Новое описание',
         ]);
+    }
+
+    public function test_editor_can_update_startup_idea(): void
+    {
+        $user = User::create([
+            'username' => 'editor',
+            'role' => 'editor',
+            'password' => Hash::make('secret'),
+        ]);
+
+        $idea = StartupIdea::create([
+            'slug' => 'editor-test',
+            'title' => 'Старое название',
+            'description' => 'Старое описание',
+        ]);
+
+        $this->actingAs($user)
+            ->patchJson(route('tools.tool1.update', $idea), [
+                'title' => 'Новое название',
+                'description' => 'Новое описание',
+            ])
+            ->assertSuccessful();
     }
 }
