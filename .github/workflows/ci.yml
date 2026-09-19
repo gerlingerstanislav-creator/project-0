@@ -186,7 +186,7 @@ jobs:
                 listen 80 default_server;
                 listen [::]:80 default_server;
                 server_name ${{ vars.VPS_HOST }} _;
-                root /var/www/test/public;
+                root /var/www/stools/public;
                 index index.php;
                 charset utf-8;
                 add_header X-Frame-Options "SAMEORIGIN";
@@ -213,7 +213,7 @@ jobs:
             }
             NGINX
             ln -sf /etc/nginx/sites-available/stools /etc/nginx/sites-enabled/stools
-            rm -f /etc/nginx/sites-enabled/default
+            rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/test
 
             chown -R www-data:www-data storage bootstrap/cache
             chmod -R ug+rwX storage bootstrap/cache
