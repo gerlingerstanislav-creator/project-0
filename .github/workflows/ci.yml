@@ -248,25 +248,20 @@ jobs:
           set -e
           case "$DEPLOY_STATUS" in
             success)
-              TITLE="🚀 Deploy completed"
-              STATUS="✅ Success"
+              ACTION="Deploy completed"
               ;;
             failure)
-              TITLE="🔴 Deploy failed"
-              STATUS="❌ Failed"
+              ACTION="Deploy failed"
               ;;
             skipped)
-              TITLE="⏭️ Deploy skipped"
-              STATUS="⚠️ Skipped"
+              ACTION="Deploy skipped"
               ;;
             *)
-              TITLE="ℹ️ Deploy status"
-              STATUS="$DEPLOY_STATUS"
+              ACTION="Deploy status: $DEPLOY_STATUS"
               ;;
           esac
 
           curl --fail --silent --show-error -X POST \
             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=${TITLE}\nProject: test\nBranch: ${GITHUB_REF_NAME}\nCommit: ${GITHUB_SHA}\nStatus: ${STATUS}"
-
+            --data-urlencode "text=GitHub - test - ${ACTION}"
