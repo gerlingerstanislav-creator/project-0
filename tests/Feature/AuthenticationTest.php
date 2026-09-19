@@ -12,10 +12,17 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_is_redirected_to_login(): void
+    public function test_guest_can_view_tools_without_edit_controls(): void
     {
         $this->get(route('tools.tool1'))
-            ->assertRedirect(route('login'));
+            ->assertSuccessful()
+            ->assertDontSee('data-edit-button', false);
+
+        $this->get(route('tools.tool2'))
+            ->assertSuccessful();
+
+        $this->get(route('tools.tool3'))
+            ->assertSuccessful();
     }
 
     public function test_admin_can_login(): void

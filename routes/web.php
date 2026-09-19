@@ -13,16 +13,16 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/', fn () => redirect()->route('tools.tool1'))->name('home');
+Route::get('/', fn () => redirect()->route('tools.tool1'))->name('home');
 
-    Route::get('/tool-1', Tool1Controller::class)->name('tools.tool1');
+Route::get('/tool-1', Tool1Controller::class)->name('tools.tool1');
+Route::get('/tool-2', Tool2Controller::class)->name('tools.tool2');
+Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
+
+Route::middleware('auth')->group(function () {
     Route::patch('/tool-1/ideas/{startupIdea}', [Tool1Controller::class, 'update'])
         ->middleware(EnsureUserCanEditStartupIdeas::class)
         ->name('tools.tool1.update');
-
-    Route::get('/tool-2', Tool2Controller::class)->name('tools.tool2');
-    Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
 
     Route::post('/logout', LogoutController::class)->name('logout');
 });
