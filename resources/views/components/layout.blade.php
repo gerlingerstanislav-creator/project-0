@@ -19,7 +19,7 @@
     </button>
 
     <aside id="sidebar" class="sidebar">
-        <div class="sidebar__brand">Tools</div>
+        <div class="sidebar__brand">STools</div>
 
         <nav class="sidebar__nav" aria-label="Основная навигация">
             <a href="{{ url('/tool-1') }}" class="sidebar__link {{ request()->is('tool-1') ? 'is-active' : '' }}"><span>1</span> Идеи стартапов</a>

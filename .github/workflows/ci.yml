@@ -120,9 +120,9 @@ jobs:
           script: |
             set -e
             export DEBIAN_FRONTEND=noninteractive
-            APP_DIR="/var/www/test"
+            APP_DIR="/var/www/stools"
 
-            # Laravel 13 requires PHP 8.3+. Keep CI and production aligned on PHP 8.5.
+            # Keep the application directory aligned with the STools project name.\n            if [ -d /var/www/test ] && [ ! -d "$APP_DIR" ]; then\n              mv /var/www/test "$APP_DIR"\n            fi\n\n            # Laravel 13 requires PHP 8.3+. Keep CI and production aligned on PHP 8.5.
             if ! command -v php8.5 >/dev/null 2>&1; then
               apt-get update
               apt-get install -y software-properties-common ca-certificates lsb-release apt-transport-https
@@ -159,7 +159,7 @@ jobs:
               sed -i 's#^APP_URL=.*#APP_URL=http://${{ vars.VPS_HOST }}#' .env
               sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env
               sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env
-              sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/test/database/database.sqlite#' .env
+              sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/stools/database/database.sqlite#' .env
             fi
 
             mkdir -p database
@@ -181,7 +181,7 @@ jobs:
             php artisan storage:link || true
 
             # Configure Nginx to serve only Laravel public/.
-            cat > /etc/nginx/sites-available/test <<'NGINX'
+            cat > /etc/nginx/sites-available/stools <<'NGINX'
             server {
                 listen 80 default_server;
                 listen [::]:80 default_server;
@@ -212,7 +212,7 @@ jobs:
                 }
             }
             NGINX
-            ln -sf /etc/nginx/sites-available/test /etc/nginx/sites-enabled/test
+            ln -sf /etc/nginx/sites-available/stools /etc/nginx/sites-enabled/stools
             rm -f /etc/nginx/sites-enabled/default
 
             chown -R www-data:www-data storage bootstrap/cache
@@ -248,7 +248,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          PROJECT_NAME: ${{ github.event.repository.name }}
+          PROJECT_NAME: STools
         run: |
           set -e
 

@@ -1,7 +1,7 @@
 {
-  "name": "gerlingerstanislav-creator/test",
+  "name": "gerlingerstanislav-creator/stools",
   "type": "project",
-  "description": "Laravel application",
+  "description": "STools Laravel application",
   "require": {
     "php": "^8.3",
     "laravel/framework": "^13.0",
