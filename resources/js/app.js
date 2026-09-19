@@ -54,6 +54,13 @@ document.querySelectorAll('[data-startup-idea]').forEach((idea) => {
         }
     };
 
+    title.addEventListener('click', (event) => {
+        if (idea.classList.contains('is-editing')) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
+
     editButton.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
