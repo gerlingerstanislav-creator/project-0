@@ -264,7 +264,9 @@ jobs:
           esac
 
           COMMIT_TITLE="$(printf '%s\n' "$COMMIT_MESSAGE" | head -n 1)"
-          COMMIT_TITLE="$(python3 -c 'import os; s=os.environ["COMMIT_TITLE"]; print(s if len(s) <= 48 else s[:45] + "…")')"
+          if [ -n "$COMMIT_TITLE" ] && [ "${#COMMIT_TITLE}" -gt 48 ]; then
+            COMMIT_TITLE="${COMMIT_TITLE:0:45}…"
+          fi
 
           curl --fail --silent --show-error -X POST \
             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
