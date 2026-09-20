@@ -18,7 +18,9 @@ class WeatherController
                 'longitude' => 48.3866,
                 'photo' => 'https://cdn.tripster.ru/photos/42b7f940-ca5a-480b-8708-5c6e7984921d.jpg',
                 'camera' => 'https://cam-world.ru/en/cams/ulyanovsk-sobornaya-ploshchad-00000599',
-                'cameraLive' => false,
+                'cameraStream' => 'https://restreamer.simdev.ru/ab4b9ca61a3e8709/stream.m3u8',
+                'cameraLive' => true,
+                'cameraType' => 'hls',
             ],
             [
                 'id' => 'moscow',
