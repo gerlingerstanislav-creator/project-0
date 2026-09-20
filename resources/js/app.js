@@ -157,7 +157,7 @@ if (beerGame) {
 
 const weatherApp = document.querySelector('[data-weather-app]');
 if (weatherApp) {
-    const cities = JSON.parse(atob(weatherApp.dataset.cities));
+    const resorts = JSON.parse(atob(weatherApp.dataset.cities));
     const refreshInterval = 60 * 1000;
 
     const weatherDescriptions = {
@@ -171,109 +171,76 @@ if (weatherApp) {
     };
 
     const formatDate = (date, index) => {
-        const formatted = new Intl.DateTimeFormat('ru-RU', {
-            day: 'numeric',
-            month: 'long',
-        }).format(new Date(date + 'T12:00:00'));
-
-        return index === 0 ? 'Сегодня, ' + formatted : 'Завтра, ' + formatted;
+        const formatted = new Intl.DateTimeFormat('ru-RU', { weekday: 'short', day: 'numeric', month: 'short' })
+            .format(new Date(date + 'T12:00:00'));
+        return index === 0 ? 'Сегодня' : formatted.replace('.', '');
     };
 
     const iconFor = (code) => code >= 95 ? '⚡' : code >= 80 ? '🌧️' : code >= 71 ? '❄️' : code >= 51 ? '🌦️' : code >= 1 ? '⛅' : '☀️';
 
-    const renderForecast = (data) => {
-        const daily = data.daily;
-
-        return daily.time.map((date, index) => {
-            const temperature = daily.temperature_2m_max[index];
-            const code = daily.weather_code[index];
-            const rain = daily.precipitation_probability_max[index];
-
-            return `
-                <div class="weather-row">
-                    <span class="weather-row__date">${formatDate(date, index)}</span>
-                    <span class="weather-row__temperature">🌡️ ${Number.isFinite(temperature) ? Math.round(temperature) + '°C' : '—'}</span>
-                    <span class="weather-row__condition"><span class="weather-row__icon" aria-hidden="true">${iconFor(code)}</span> ${weatherDescriptions[code] ?? 'Погодные условия'}</span>
-                    <span class="weather-row__rain">${Number.isFinite(rain) ? 'Осадки ' + rain + '%' : ''}</span>
-                </div>
-            `;
-        }).join('');
-    };
-
-    const renderError = () => '<p class="weather-card__error">Не удалось получить актуальный прогноз. Обновим данные через минуту.</p>';
+    const renderForecast = (data) => data.daily.time.map((date, index) => {
+        const max = data.daily.temperature_2m_max[index];
+        const min = data.daily.temperature_2m_min[index];
+        const code = data.daily.weather_code[index];
+        const rain = data.daily.precipitation_probability_max[index];
+        return `<div class="weather-day">
+            <span class="weather-day__date">${formatDate(date, index)}</span>
+            <span class="weather-day__icon" aria-hidden="true">${iconFor(code)}</span>
+            <span class="weather-day__temperature">${Number.isFinite(max) ? Math.round(max) : '—'}° <small>${Number.isFinite(min) ? Math.round(min) : '—'}°</small></span>
+            <span class="weather-day__condition">${weatherDescriptions[code] ?? 'Погодные условия'}</span>
+            <span class="weather-day__rain">${Number.isFinite(rain) ? rain + '%' : '—'}</span>
+        </div>`).join('');
 
     const loadWeather = async () => {
-        await Promise.all(cities.map(async (city) => {
+        await Promise.all(resorts.map(async (resort) => {
             const url = new URL('https://api.open-meteo.com/v1/forecast');
             url.search = new URLSearchParams({
-                latitude: city.latitude,
-                longitude: city.longitude,
-                daily: 'weather_code,temperature_2m_max,precipitation_probability_max',
-                forecast_days: '2',
+                latitude: resort.latitude,
+                longitude: resort.longitude,
+                daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+                forecast_days: '7',
                 timezone: 'auto',
             });
 
+            const target = document.querySelector(`[data-weather-forecast="${resort.id}"]`);
             try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('weather_request_failed');
-
-                const data = await response.json();
-                const target = document.querySelector(`[data-weather-forecast="${city.id}"]`);
-
-                if (target) {
-                    target.innerHTML = renderForecast(data);
-                }
+                target.innerHTML = renderForecast(await response.json());
             } catch {
-                const target = document.querySelector(`[data-weather-forecast="${city.id}"]`);
-
-                if (target) {
-                    target.innerHTML = renderError();
-                }
+                target.innerHTML = '<p class="weather-card__error">Не удалось получить актуальный прогноз.</p>';
             }
         }));
     };
 
     loadWeather();
     window.setInterval(loadWeather, refreshInterval);
-
-    if (weatherApp.querySelector('[data-camera-retry="true"]')) {
-        window.setInterval(() => window.location.reload(), refreshInterval);
-    }
 }
 
+document.querySelectorAll('[data-camera-carousel]').forEach((carousel) => {
+    const resort = resorts?.find((item) => item.id === carousel.closest('.ski-card')?.querySelector('[data-weather-forecast]')?.dataset.weatherForecast);
+    const cameras = resort?.cameras ?? [];
+    if (cameras.length < 2) return;
 
-const hlsVideos = document.querySelectorAll('[data-hls-src]');
-if (hlsVideos.length) {
-    const loadHls = () => new Promise((resolve, reject) => {
-        if (window.Hls) return resolve(window.Hls);
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.6.2/dist/hls.min.js';
-        script.onload = () => resolve(window.Hls);
-        script.onerror = reject;
-        document.head.appendChild(script);
+    let index = 0;
+    const name = carousel.querySelector('[data-camera-name]');
+    const link = carousel.querySelector('[data-camera-link]');
+    const source = carousel.querySelector('.ski-card__camera-source');
+    const counter = carousel.querySelector('[data-camera-index]');
+
+    const renderCamera = () => {
+        name.textContent = cameras[index].name;
+        link.href = cameras[index].url;
+        source.href = cameras[index].url;
+        counter.textContent = String(index + 1);
+    };
+
+    carousel.querySelector('[data-camera-prev]').addEventListener('click', () => {
+        index = (index - 1 + cameras.length) % cameras.length;
+        renderCamera();
     });
-
-    hlsVideos.forEach(async (video) => {
-        const src = video.dataset.hlsSrc;
-
-        try {
-            if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = src;
-                return;
-            }
-
-            const Hls = await loadHls();
-            if (!Hls?.isSupported()) throw new Error('hls_not_supported');
-
-            const hls = new Hls({
-                enableWorker: true,
-                lowLatencyMode: true,
-            });
-
-            hls.loadSource(src);
-            hls.attachMedia(video);
-        } catch {
-            video.outerHTML = '<div class="weather-card__camera-error">LIVE-поток временно недоступен. <a href="' + src + '" target="_blank" rel="noopener">Открыть поток</a></div>';
-        }
+    carousel.querySelector('[data-camera-next]').addEventListener('click', () => {
+        index = (index + 1) % cameras.length;
+        renderCamera();
     });
-}
+});

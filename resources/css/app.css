@@ -498,9 +498,18 @@ button, input { font: inherit; }
 .ski-page__status { color:#71717a; font-size:12px; line-height:1.5; text-align:right; }
 .ski-page__cards { display:grid; gap:18px; margin-top:36px; }
 .ski-card { overflow:hidden; border:1px solid #e4e4e7; border-radius:14px; background:#fff; }
-.ski-card__media { position:relative; height:330px; overflow:hidden; background:#111; }
-.ski-card__camera-frame { display:block; width:100%; height:100%; border:0; background:#111; }
-.ski-card__camera-label { position:absolute; left:12px; bottom:12px; padding:7px 10px; border-radius:6px; background:rgba(24,24,27,.88); color:#fff; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; text-decoration:none; }
+.ski-card__top { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(340px,1fr); }
+.ski-card__media { position:relative; min-height:330px; overflow:hidden; background:#111; }
+.ski-card__camera-placeholder { display:grid; height:100%; min-height:330px; place-items:center; align-content:center; gap:10px; padding:28px; color:#fff; text-align:center; background:radial-gradient(circle at 50% 20%,#303036,#111113 70%); }
+.ski-card__camera-icon { width:54px; height:54px; display:grid; place-items:center; border:1px solid #52525b; border-radius:50%; font-size:22px; }
+.ski-card__camera-placeholder strong { font-size:18px; }
+.ski-card__camera-placeholder span { max-width:360px; color:#d4d4d8; font-size:12px; line-height:1.5; }
+.ski-card__camera-placeholder a,.ski-card__camera-source { color:#fff; font-size:11px; text-decoration:underline; text-underline-offset:3px; }
+.ski-card__camera-source { position:absolute; left:12px; bottom:12px; padding:7px 10px; border-radius:6px; background:rgba(24,24,27,.88); text-decoration:none; }
+.ski-card__camera-arrow { position:absolute; top:50%; z-index:2; width:38px; height:38px; border:1px solid rgba(255,255,255,.35); border-radius:50%; background:rgba(24,24,27,.72); color:#fff; font-size:28px; line-height:1; transform:translateY(-50%); cursor:pointer; }
+.ski-card__camera-arrow--prev { left:12px; }
+.ski-card__camera-arrow--next { right:12px; }
+.ski-card__camera-counter { position:absolute; right:12px; bottom:12px; padding:7px 10px; border-radius:6px; background:rgba(24,24,27,.88); color:#fff; font-size:11px; font-weight:700; }
 .ski-card__body { padding:26px; }
 .ski-card__heading { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
 .ski-card__title { margin:0; font-size:30px; line-height:1.05; }
@@ -510,34 +519,35 @@ button, input { font: inherit; }
 .ski-card__status--open::before { background:#16a34a; }
 .ski-card__status--closed::before { background:#ef4444; }
 .ski-card__status--season::before { background:#f59e0b; }
-.ski-card__meta { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+.ski-card__meta { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:22px; }
 .ski-card__meta-item { padding:13px 14px; border:1px solid #e4e4e7; border-radius:9px; background:#fafafa; }
 .ski-card__meta-label { color:#71717a; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
 .ski-card__meta-value { margin-top:5px; color:#18181b; font-size:14px; font-weight:650; line-height:1.35; }
-.ski-card__forecast { display:grid; gap:0; margin-top:22px; border-top:1px solid #e4e4e7; }
-.ski-card__forecast .weather-row { display:grid; grid-template-columns:1.35fr .75fr 1.35fr .7fr; align-items:center; gap:12px; min-height:52px; padding:9px 0; border-bottom:1px solid #e4e4e7; font-size:14px; }
-.ski-card__forecast .weather-row__date { font-weight:650; }
-.ski-card__forecast .weather-row__temperature { font-weight:700; white-space:nowrap; }
-.ski-card__forecast .weather-row__condition { display:flex; align-items:center; gap:6px; }
-.ski-card__forecast .weather-row__icon { font-size:19px; line-height:1; }
-.ski-card__forecast .weather-row__rain { color:#71717a; font-size:12px; text-align:right; white-space:nowrap; }
-.ski-card__updated { margin-top:14px; color:#a1a1aa; font-size:11px; }
-.ski-card__offline { display:grid; height:100%; place-items:center; align-content:center; gap:10px; color:#fff; text-align:center; }
-.ski-card__offline strong { font-size:18px; letter-spacing:.06em; }
-.ski-card__offline a { color:#fff; font-size:11px; text-decoration:underline; text-underline-offset:3px; }
+.ski-card__forecast { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); margin:0 26px; border-top:1px solid #e4e4e7; border-bottom:1px solid #e4e4e7; }
+.weather-day { min-width:0; display:grid; gap:7px; padding:14px 10px; border-right:1px solid #e4e4e7; text-align:center; }
+.weather-day:last-child { border-right:0; }
+.weather-day__date { font-size:11px; font-weight:700; text-transform:capitalize; }
+.weather-day__icon { font-size:22px; line-height:1; }
+.weather-day__temperature { font-size:14px; font-weight:800; white-space:nowrap; }
+.weather-day__temperature small { color:#a1a1aa; font-size:11px; font-weight:600; }
+.weather-day__condition { min-height:30px; color:#71717a; font-size:10px; line-height:1.35; }
+.weather-day__rain { color:#71717a; font-size:10px; }
+.ski-card__updated { padding:14px 26px 20px; color:#a1a1aa; font-size:11px; }
+.weather-card__error { grid-column:1 / -1; padding:16px 0; color:#71717a; font-size:12px; }
+@media (max-width:900px) {
+ .ski-card__top { grid-template-columns:1fr; }
+ .ski-card__media,.ski-card__camera-placeholder { min-height:260px; }
+ .ski-card__forecast { overflow-x:auto; grid-template-columns:repeat(7,minmax(105px,1fr)); }
+}
 @media (max-width:700px) {
-    .ski-page__intro { display:block; }
-    .ski-page__status { margin-top:10px; text-align:left; }
-    .ski-page__cards { margin-top:24px; gap:12px; }
-    .ski-card__media { height:220px; }
-    .ski-card__body { padding:20px 16px; }
-    .ski-card__heading { display:block; }
-    .ski-card__title { font-size:24px; }
-    .ski-card__status { margin-top:12px; }
-    .ski-card__meta { grid-template-columns:1fr; gap:8px; margin-top:18px; }
-    .ski-card__forecast .weather-row { grid-template-columns:1fr auto; gap:6px 10px; padding:12px 0; }
-    .ski-card__forecast .weather-row__date { grid-column:1 / -1; }
-    .ski-card__forecast .weather-row__condition { grid-column:1; }
-    .ski-card__forecast .weather-row__rain { grid-column:2; grid-row:2; }
-    .ski-card__forecast .weather-row__temperature { grid-column:2; grid-row:1; text-align:right; }
+ .ski-page__intro { display:block; }
+ .ski-page__status { margin-top:10px; text-align:left; }
+ .ski-page__cards { margin-top:24px; gap:12px; }
+ .ski-card__body { padding:20px 16px; }
+ .ski-card__heading { display:block; }
+ .ski-card__title { font-size:24px; }
+ .ski-card__status { margin-top:12px; }
+ .ski-card__meta { grid-template-columns:1fr; gap:8px; margin-top:18px; }
+ .ski-card__forecast { margin:0 16px; }
+ .ski-card__updated { padding:12px 16px 16px; }
 }
