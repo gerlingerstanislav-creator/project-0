@@ -3,7 +3,7 @@
 @endphp
 
 <x-layout title="Идеи для стартапов">
-    <section class="page startup-ideas">
+    <section class="page startup-ideas" data-startup-ideas-page>
         <p class="page__eyebrow">Page 01</p>
         <h1>Идеи для стартапов</h1>
         <p class="page__description">
@@ -53,7 +53,3 @@
         </div>
     </section>
 </x-layout>
-
-@push('scripts')
-    @vite('resources/js/startup-ideas.js')
-@endpush
