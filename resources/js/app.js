@@ -216,53 +216,73 @@ if (weatherApp) {
 
     loadWeather();
     window.setInterval(loadWeather, refreshInterval);
-}
 
-    document.querySelectorAll('[data-camera-carousel]').forEach((carousel) => {
-        const resort = resorts.find((item) => item.id === carousel.closest('.ski-card')?.querySelector('[data-weather-forecast]')?.dataset.weatherForecast);
-        const cameras = resort?.cameras ?? [];
-        const frame = carousel.querySelector('[data-camera-frame]');
-        const placeholder = carousel.querySelector('[data-camera-placeholder]');
-        const name = carousel.querySelector('[data-camera-name]');
-        const link = carousel.querySelector('[data-camera-link]');
-        const source = carousel.querySelector('.ski-card__camera-source');
-        const counter = carousel.querySelector('[data-camera-index]');
 
-        if (!frame || !placeholder || !name || !link || !source || cameras.length === 0) return;
+const cameraCarousels = document.querySelectorAll('[data-camera-carousel]');
 
-        let index = 0;
+cameraCarousels.forEach((carousel) => {
+    const resortId = carousel.closest('.ski-card')?.querySelector('[data-weather-forecast]')?.dataset.weatherForecast;
+    const resort = resorts.find((item) => item.id === resortId);
+    const cameras = resort?.cameras ?? [];
+    const frame = carousel.querySelector('[data-camera-frame]');
+    const image = carousel.querySelector('[data-camera-image]');
+    const placeholder = carousel.querySelector('[data-camera-placeholder]');
+    const loading = carousel.querySelector('[data-camera-loading]');
+    const name = carousel.querySelector('[data-camera-name]');
+    const message = carousel.querySelector('[data-camera-message]');
+    const link = carousel.querySelector('[data-camera-link]');
+    const source = carousel.querySelector('[data-camera-source]');
+    const counter = carousel.querySelector('[data-camera-index]');
 
-        const renderCamera = () => {
-            const camera = cameras[index];
-            name.textContent = camera.name;
-            link.href = camera.url;
-            source.href = camera.url;
+    if (!frame || !image || !placeholder || !loading || !name || !message || !link || !source || cameras.length === 0) return;
 
-            if (camera.playerUrl) {
-                frame.src = camera.playerUrl;
-                frame.hidden = false;
-                placeholder.hidden = true;
-            } else {
-                frame.src = 'about:blank';
-                frame.hidden = true;
-                placeholder.hidden = false;
-            }
+    let index = 0;
 
-            if (counter) {
-                counter.textContent = String(index + 1);
-            }
-        };
+    const renderCamera = () => {
+        const camera = cameras[index];
+        const type = camera.type ?? (camera.playerUrl ? 'video' : camera.imageUrl ? 'image' : 'external');
 
+        loading.hidden = true;
+        frame.hidden = true;
+        image.hidden = true;
+        placeholder.hidden = true;
+        frame.removeAttribute('src');
+        image.removeAttribute('src');
+
+        name.textContent = camera.name;
+        link.href = camera.url;
+        source.href = camera.url;
+        source.textContent = type === 'external' ? 'Открыть все камеры ↗' : 'Источник камеры ↗';
+
+        if (type === 'video' && camera.playerUrl) {
+            frame.src = camera.playerUrl;
+            frame.title = `Трансляция камеры ${camera.name}`;
+            frame.hidden = false;
+        } else if (type === 'image' && camera.imageUrl) {
+            image.src = `${camera.imageUrl}${camera.imageUrl.includes('?') ? '&' : '?'}v=${Date.now()}`;
+            image.alt = camera.name;
+            image.hidden = false;
+        } else {
+            message.textContent = 'Камера доступна на официальной странице курорта. Откройте источник для просмотра актуальной трансляции.';
+            placeholder.hidden = false;
+        }
+
+        if (counter) counter.textContent = String(index + 1);
+    };
+
+    renderCamera();
+
+    if (cameras.length < 2) return;
+
+    carousel.querySelector('[data-camera-prev]')?.addEventListener('click', () => {
+        index = (index - 1 + cameras.length) % cameras.length;
         renderCamera();
-
-        if (cameras.length < 2) return;
-
-        carousel.querySelector('[data-camera-prev]').addEventListener('click', () => {
-            index = (index - 1 + cameras.length) % cameras.length;
-            renderCamera();
-        });
-        carousel.querySelector('[data-camera-next]').addEventListener('click', () => {
-            index = (index + 1) % cameras.length;
-            renderCamera();
-        });
     });
+
+    carousel.querySelector('[data-camera-next]')?.addEventListener('click', () => {
+        index = (index + 1) % cameras.length;
+        renderCamera();
+    });
+});
+
+}

@@ -14,27 +14,30 @@
                 <article class="ski-card">
                     <div class="ski-card__top">
                         <div class="ski-card__media" data-camera-carousel data-camera-count="{{ count($resort['cameras']) }}">
+                            <div class="ski-card__camera-loading" data-camera-loading>Загружаем камеру…</div>
                             <iframe
                                 class="ski-card__camera-frame"
                                 data-camera-frame
-                                src="{{ $resort['cameras'][0]['playerUrl'] ?? 'about:blank' }}"
-                                title="Трансляция камеры {{ $resort['cameras'][0]['name'] }}"
+                                title="Трансляция камеры"
                                 allow="autoplay; fullscreen; picture-in-picture"
                                 allowfullscreen
-                                {{ isset($resort['cameras'][0]['playerUrl']) ? '' : 'hidden' }}
+                                hidden
                             ></iframe>
-                            <div class="ski-card__camera-placeholder" data-camera-placeholder {{ isset($resort['cameras'][0]['playerUrl']) ? 'hidden' : '' }}>
+                            <img class="ski-card__camera-image" data-camera-image alt="" hidden>
+                            <div class="ski-card__camera-placeholder" data-camera-placeholder hidden>
                                 <div class="ski-card__camera-icon">◉</div>
-                                <strong data-camera-name>{{ $resort['cameras'][0]['name'] }}</strong>
-                                <span>Прямой видеопоток этой камеры недоступен для безопасного встраивания.</span>
-                                <a data-camera-link href="{{ $resort['cameras'][0]['url'] }}" target="_blank" rel="noopener">Открыть камеру ↗</a>
+                                <strong data-camera-name>Камера курорта</strong>
+                                <span data-camera-message>Прямой видеопоток этой камеры недоступен для безопасного встраивания.</span>
+                                <a data-camera-link href="#" target="_blank" rel="noopener">Открыть камеру ↗</a>
                             </div>
+
                             @if (count($resort['cameras']) > 1)
                                 <button class="ski-card__camera-arrow ski-card__camera-arrow--prev" type="button" data-camera-prev aria-label="Предыдущая камера">‹</button>
                                 <button class="ski-card__camera-arrow ski-card__camera-arrow--next" type="button" data-camera-next aria-label="Следующая камера">›</button>
                                 <div class="ski-card__camera-counter"><span data-camera-index>1</span> / {{ count($resort['cameras']) }}</div>
                             @endif
-                            <a class="ski-card__camera-source" href="{{ $resort['cameras'][0]['url'] }}" target="_blank" rel="noopener">Источник камер ↗</a>
+
+                            <a class="ski-card__camera-source" data-camera-source href="{{ $resort['cameras'][0]['url'] }}" target="_blank" rel="noopener">Источник камер ↗</a>
                         </div>
 
                         <div class="ski-card__body">
@@ -56,7 +59,6 @@
                                     <div class="ski-card__meta-value">{{ $resort['currentTemperature'] !== null ? round($resort['currentTemperature']) . '°C' : '—' }}</div>
                                 </div>
                             </div>
-                        </div>
                         </div>
                     </div>
 

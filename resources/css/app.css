@@ -501,6 +501,10 @@ button, input { font: inherit; }
 .ski-card__top { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(340px,1fr); }
 .ski-card__media { position:relative; min-height:330px; overflow:hidden; background:#111; }
 .ski-card__camera-frame { display:block; width:100%; height:100%; min-height:330px; border:0; background:#111; }
+.ski-card__camera-image { display:block; width:100%; height:100%; min-height:330px; object-fit:cover; background:#111; }
+.ski-card__camera-loading { position:absolute; inset:0; z-index:1; display:grid; place-items:center; min-height:330px; color:#d4d4d8; font-size:12px; background:#111; }
+.ski-card__camera-loading[hidden] { display:none; }
+.ski-card__camera-image[hidden] { display:none; }
 .ski-card__camera-frame[hidden],.ski-card__camera-placeholder[hidden] { display:none; }
 .ski-card__camera-placeholder { display:grid; height:100%; min-height:330px; place-items:center; align-content:center; gap:10px; padding:28px; color:#fff; text-align:center; background:radial-gradient(circle at 50% 20%,#303036,#111113 70%); }
 .ski-card__camera-icon { width:54px; height:54px; display:grid; place-items:center; border:1px solid #52525b; border-radius:50%; font-size:22px; }
@@ -539,7 +543,7 @@ button, input { font: inherit; }
 .weather-card__error { grid-column:1 / -1; padding:16px 0; color:#71717a; font-size:12px; }
 @media (max-width:900px) {
  .ski-card__top { grid-template-columns:1fr; }
- .ski-card__media,.ski-card__camera-frame,.ski-card__camera-placeholder { min-height:260px; }
+  .ski-card__media,.ski-card__camera-frame,.ski-card__camera-image,.ski-card__camera-placeholder,.ski-card__camera-loading { min-height:260px; }
  .ski-card__forecast { overflow-x:auto; grid-template-columns:repeat(7,minmax(105px,1fr)); }
 }
 @media (max-width:700px) {
