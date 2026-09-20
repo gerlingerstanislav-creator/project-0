@@ -12,7 +12,12 @@
         <div class="weather-page__cards">
             @foreach ($cities as $city)
                 <article class="weather-card">
-                    @if ($city['cameraLive'])
+                    @if ($city['cameraLive'] && ($city['cameraType'] ?? null) === 'hls')
+                        <div class="weather-card__photo-link weather-card__photo-link--live">
+                            <video class="weather-card__camera-video" data-hls-src="{{ $city['cameraStream'] }}" autoplay muted playsinline controls preload="metadata" poster="{{ $city['photo'] }}"></video>
+                            <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Источник камеры</a>
+                        </div>
+                    @elseif ($city['cameraLive'])
                         <a class="weather-card__photo-link weather-card__photo-link--live" href="{{ $city['camera'] }}" target="_blank" rel="noopener" aria-label="Открыть актуальную веб-камеру: {{ $city['name'] }}">
                             <iframe class="weather-card__camera-frame" src="{{ $city['camera'] }}" title="Актуальная веб-камера: {{ $city['name'] }}" loading="lazy"></iframe>
                             <span class="weather-card__camera-label">LIVE · камера</span>
