@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Tools;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class WeatherController
 {
-    public function __invoke(): View
+    public function __invoke(): Response
     {
         $resorts = [
             [
@@ -134,7 +135,7 @@ class WeatherController
         }
         unset($resort);
 
-        return view('tools.weather', [
+        return Inertia::render('SkiResort', [
             'title' => 'Горнолыжные курорты',
             'resorts' => $resorts,
         ]);
