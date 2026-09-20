@@ -15,27 +15,25 @@ defineProps({
 });
 
 const editingId = ref(null);
-const draftTitle = ref('');
-const draftDescription = ref('');
+const form = useForm({
+    title: '',
+    description: '',
+});
 
 const startEditing = (idea) => {
     editingId.value = idea.id;
-    draftTitle.value = idea.title;
-    draftDescription.value = idea.description;
+    form.title = idea.title;
+    form.description = idea.description;
+    form.clearErrors();
 };
 
 const cancelEditing = () => {
     editingId.value = null;
-    draftTitle.value = '';
-    draftDescription.value = '';
+    form.reset();
+    form.clearErrors();
 };
 
 const saveEditing = (idea) => {
-    const form = useForm({
-        title: draftTitle.value,
-        description: draftDescription.value,
-    });
-
     form.patch(`/tool-1/ideas/${idea.id}`, {
         preserveScroll: true,
         onSuccess: cancelEditing,
@@ -61,7 +59,7 @@ const saveEditing = (idea) => {
                 <details v-for="idea in ideas" :key="idea.id" class="startup-idea">
                     <summary class="startup-idea__title">
                         <span class="startup-idea__title-text">
-                            {{ editingId === idea.id ? draftTitle : idea.title }}
+                            {{ editingId === idea.id ? form.title : idea.title }}
                         </span>
                         <span class="startup-idea__icon" aria-hidden="true">+</span>
                     </summary>
@@ -79,11 +77,13 @@ const saveEditing = (idea) => {
                     <div v-if="editingId === idea.id" class="startup-idea__description">
                         <label class="startup-idea__field">
                             <span>Название</span>
-                            <input v-model="draftTitle" type="text" maxlength="255">
+                            <input v-model="form.title" type="text" maxlength="255">
+                            <small v-if="form.errors.title">{{ form.errors.title }}</small>
                         </label>
                         <label class="startup-idea__field">
                             <span>Описание</span>
-                            <textarea v-model="draftDescription" rows="10"></textarea>
+                            <textarea v-model="form.description" rows="10"></textarea>
+                            <small v-if="form.errors.description">{{ form.errors.description }}</small>
                         </label>
                     </div>
 
@@ -102,6 +102,7 @@ const saveEditing = (idea) => {
                         <button
                             class="startup-idea__button"
                             type="button"
+                            :disabled="form.processing"
                             @click="saveEditing(idea)"
                         >
                             Сохранить
