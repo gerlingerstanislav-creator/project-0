@@ -53,3 +53,7 @@
         </div>
     </section>
 </x-layout>
+
+@push('scripts')
+    @vite('resources/js/startup-ideas.js')
+@endpush
