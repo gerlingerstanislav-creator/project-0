@@ -28,7 +28,7 @@ class WeatherController
                 'longitude' => 37.6173,
                 'photo' => 'https://hostel24.org/upload/ammina.optimizer/jpg-webp/q80/upload/medialibrary/644/8vgq0vjsp290qhozpy1l504ugqmmnmti.webp',
                 'camera' => 'https://www.geocam.ru/en/online/taganskaya-square-webcam/',
-                'cameraLive' => false,
+                'cameraLive' => true,
             ],
             [
                 'id' => 'munich',
