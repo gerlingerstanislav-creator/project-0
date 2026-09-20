@@ -19,7 +19,7 @@
                         </div>
                     @elseif ($city['cameraLive'])
                         <div class="weather-card__photo-link weather-card__photo-link--live">
-                            <iframe class="weather-card__camera-frame" src="{{ $city['camera'] }}" title="Актуальная веб-камера: {{ $city['name'] }}" loading="eager" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                            <iframe class="weather-card__camera-frame" src="{{ $city['cameraEmbed'] ?? $city['camera'] }}" title="Актуальная веб-камера: {{ $city['name'] }}" loading="eager" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                             <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Открыть источник камеры ↗</a>
                         </div>
                     @else
