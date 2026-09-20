@@ -262,7 +262,7 @@ jobs:
             echo "=== HTTPS diagnostics on VPS ==="
             ss -ltnp | grep -E ':(80|443)\s' || true
             nginx -T 2>/dev/null | grep -E 'listen .*443|server_name .*project-0\.duckdns\.org' || true
-            curl --fail --silent --show-error --max-time 15 https://127.0.0.1/up -H 'Host: project-0.duckdns.org' >/dev/null
+            curl --fail --silent --show-error --max-time 15 --resolve project-0.duckdns.org:443:127.0.0.1 https://project-0.duckdns.org/up >/dev/null
             echo "Local HTTPS health check passed"
             echo "=== End HTTPS diagnostics ==="
 
