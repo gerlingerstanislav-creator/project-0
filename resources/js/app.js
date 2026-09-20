@@ -19,3 +19,15 @@ if (toggle && sidebar && backdrop) {
         link.addEventListener('click', () => setMenuState(false));
     });
 }
+
+if (document.querySelector('[data-startup-ideas-page]')) {
+    import('./startup-ideas.js');
+}
+
+if (document.querySelector('[data-beer-game-page]')) {
+    import('./beer-game.js');
+}
+
+if (document.querySelector('[data-weather-app]')) {
+    import('./ski-resort.js');
+}
