@@ -26,9 +26,9 @@
                         <div class="weather-card__body">
                             <div class="weather-card__header">
                                 <div><h2>{{ $city['name'] }}</h2><p>{{ $city['region'] }}</p></div>
-                                <div class="weather-card__current-temp">—</div>
+                                <div class="weather-card__current-temp">{{ $city['currentTemperature'] !== null ? round($city['currentTemperature']) . '°C' : '—' }}</div>
                             </div>
-                            <div class="weather-card__condition">Загружаем актуальные данные…</div>
+                            <div class="weather-card__condition">Актуальная температура</div>
                         </div>
                     </article>
                 </div>
