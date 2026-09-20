@@ -24,9 +24,13 @@ Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
 Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
 Route::get('/ski-resort', WeatherController::class)->name('tools.ski-resort');
 
+Route::get('/push/config', [PushSubscriptionController::class, 'config'])->name('push.config');
+
 Route::middleware('auth')->group(function () {
     Route::post('/push/subscriptions', [PushSubscriptionController::class, 'store'])
         ->name('push.subscriptions.store');
+
+    Route::post('/push/test', [PushSubscriptionController::class, 'test'])->name('push.test');
 
     Route::delete('/push/subscriptions', [PushSubscriptionController::class, 'destroy'])
         ->name('push.subscriptions.destroy');
