@@ -51,14 +51,18 @@ class WeatherController
                 if (($city['cameraType'] ?? null) === 'hls') {
                     try {
                         $streamResponse = Http::timeout(3)->get($city['cameraStream']);
+                        $playlist = strtolower($streamResponse->body());
+
                         $city['cameraLive'] = $streamResponse->successful()
-                            && str_contains(strtolower($streamResponse->body()), '#extm3u');
+                            && str_contains($playlist, '#extm3u')
+                            && ! str_contains($playlist, '#ext-x-endlist');
                     } catch (\Throwable) {
                         $city['cameraLive'] = false;
                     }
                 }
             }
             unset($city);
+
             foreach ($cities as &$city) {
                 try {
                     $response = Http::acceptJson()
