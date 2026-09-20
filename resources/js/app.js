@@ -1,4 +1,5 @@
 import '../css/app.css';
+import './pwa.js';
 
 const bootLegacyPageScripts = () => {
     const toggle = document.querySelector('.menu-toggle');
