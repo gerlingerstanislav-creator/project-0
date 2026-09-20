@@ -218,30 +218,51 @@ if (weatherApp) {
     window.setInterval(loadWeather, refreshInterval);
 }
 
-document.querySelectorAll('[data-camera-carousel]').forEach((carousel) => {
-    const resort = resorts?.find((item) => item.id === carousel.closest('.ski-card')?.querySelector('[data-weather-forecast]')?.dataset.weatherForecast);
-    const cameras = resort?.cameras ?? [];
-    if (cameras.length < 2) return;
+    document.querySelectorAll('[data-camera-carousel]').forEach((carousel) => {
+        const resort = resorts.find((item) => item.id === carousel.closest('.ski-card')?.querySelector('[data-weather-forecast]')?.dataset.weatherForecast);
+        const cameras = resort?.cameras ?? [];
+        const frame = carousel.querySelector('[data-camera-frame]');
+        const placeholder = carousel.querySelector('[data-camera-placeholder]');
+        const name = carousel.querySelector('[data-camera-name]');
+        const link = carousel.querySelector('[data-camera-link]');
+        const source = carousel.querySelector('.ski-card__camera-source');
+        const counter = carousel.querySelector('[data-camera-index]');
 
-    let index = 0;
-    const name = carousel.querySelector('[data-camera-name]');
-    const link = carousel.querySelector('[data-camera-link]');
-    const source = carousel.querySelector('.ski-card__camera-source');
-    const counter = carousel.querySelector('[data-camera-index]');
+        if (!frame || !placeholder || !name || !link || !source || cameras.length === 0) return;
 
-    const renderCamera = () => {
-        name.textContent = cameras[index].name;
-        link.href = cameras[index].url;
-        source.href = cameras[index].url;
-        counter.textContent = String(index + 1);
-    };
+        let index = 0;
 
-    carousel.querySelector('[data-camera-prev]').addEventListener('click', () => {
-        index = (index - 1 + cameras.length) % cameras.length;
+        const renderCamera = () => {
+            const camera = cameras[index];
+            name.textContent = camera.name;
+            link.href = camera.url;
+            source.href = camera.url;
+
+            if (camera.playerUrl) {
+                frame.src = camera.playerUrl;
+                frame.hidden = false;
+                placeholder.hidden = true;
+            } else {
+                frame.src = 'about:blank';
+                frame.hidden = true;
+                placeholder.hidden = false;
+            }
+
+            if (counter) {
+                counter.textContent = String(index + 1);
+            }
+        };
+
         renderCamera();
+
+        if (cameras.length < 2) return;
+
+        carousel.querySelector('[data-camera-prev]').addEventListener('click', () => {
+            index = (index - 1 + cameras.length) % cameras.length;
+            renderCamera();
+        });
+        carousel.querySelector('[data-camera-next]').addEventListener('click', () => {
+            index = (index + 1) % cameras.length;
+            renderCamera();
+        });
     });
-    carousel.querySelector('[data-camera-next]').addEventListener('click', () => {
-        index = (index + 1) % cameras.length;
-        renderCamera();
-    });
-});

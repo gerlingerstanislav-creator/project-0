@@ -14,10 +14,19 @@
                 <article class="ski-card">
                     <div class="ski-card__top">
                         <div class="ski-card__media" data-camera-carousel data-camera-count="{{ count($resort['cameras']) }}">
-                            <div class="ski-card__camera-placeholder">
+                            <iframe
+                                class="ski-card__camera-frame"
+                                data-camera-frame
+                                src="{{ $resort['cameras'][0]['playerUrl'] ?? 'about:blank' }}"
+                                title="Трансляция камеры {{ $resort['cameras'][0]['name'] }}"
+                                allow="autoplay; fullscreen; picture-in-picture"
+                                allowfullscreen
+                                {{ isset($resort['cameras'][0]['playerUrl']) ? '' : 'hidden' }}
+                            ></iframe>
+                            <div class="ski-card__camera-placeholder" data-camera-placeholder {{ isset($resort['cameras'][0]['playerUrl']) ? 'hidden' : '' }}>
                                 <div class="ski-card__camera-icon">◉</div>
                                 <strong data-camera-name>{{ $resort['cameras'][0]['name'] }}</strong>
-                                <span>Прямой поток этой камеры нельзя безопасно встроить на страницу без iframe целого сайта.</span>
+                                <span>Прямой видеопоток этой камеры недоступен для безопасного встраивания.</span>
                                 <a data-camera-link href="{{ $resort['cameras'][0]['url'] }}" target="_blank" rel="noopener">Открыть камеру ↗</a>
                             </div>
                             @if (count($resort['cameras']) > 1)
@@ -47,6 +56,7 @@
                                     <div class="ski-card__meta-value">{{ $resort['currentTemperature'] !== null ? round($resort['currentTemperature']) . '°C' : '—' }}</div>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
 

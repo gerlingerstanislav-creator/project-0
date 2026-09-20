@@ -17,7 +17,7 @@ class WeatherController
                 'latitude' => 52.9237,
                 'longitude' => 87.9865,
                 'cameras' => [
-                    ['name' => 'Все камеры', 'url' => 'https://dirsheregesh.ru/cameras'],
+                    ['name' => 'Каскад. Олимпия-Экспресс нижняя станция', 'url' => 'https://www.dirsheregesh.ru/cameras/player/kaskad-olimpiia-ekspress-nizniaia-stanciia', 'playerUrl' => 'https://www.dirsheregesh.ru/cameras/player/kaskad-olimpiia-ekspress-nizniaia-stanciia'],
                     ['name' => 'Сектор A', 'url' => 'https://dirsheregesh.ru/cameras?sectors%5B%5D=A'],
                     ['name' => 'Сектор B', 'url' => 'https://dirsheregesh.ru/cameras?sectors%5B%5D=B'],
                     ['name' => 'Сектор E', 'url' => 'https://dirsheregesh.ru/cameras?sectors%5B%5D=E'],
@@ -112,13 +112,13 @@ class WeatherController
 
             if (now()->between($openDate, $closeDate)) {
                 $resort['status'] = 'open';
-                $resort['statusLabel'] = 'Сезон открыт';
+                $resort['statusLabel'] = 'Активен';
             } elseif (now()->lt($openDate)) {
                 $resort['status'] = 'closed';
-                $resort['statusLabel'] = 'До открытия сезона';
+                $resort['statusLabel'] = 'Не активен';
             } else {
                 $resort['status'] = 'closed';
-                $resort['statusLabel'] = 'Сезон завершён';
+                $resort['statusLabel'] = 'Не активен';
             }
         }
         unset($resort);
