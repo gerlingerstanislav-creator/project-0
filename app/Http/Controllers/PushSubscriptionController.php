@@ -44,7 +44,7 @@ class PushSubscriptionController extends Controller
         foreach (PushSubscription::where('user_id', $request->user()->id)->get() as $subscription) {
             if ($webPush->sendToSubscription($subscription, [
                 'title' => 'project-0',
-                'body' => 'Пуш-уведомления работают 🎉',
+                'body' => 'тестовое пуш-уведомление',
                 'url' => '/tool-1',
             ])) {
                 $sent++;
