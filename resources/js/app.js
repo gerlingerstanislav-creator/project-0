@@ -235,6 +235,10 @@ if (weatherApp) {
 
     loadWeather();
     window.setInterval(loadWeather, refreshInterval);
+
+    if (weatherApp.querySelector('[data-camera-retry="true"]')) {
+        window.setInterval(() => window.location.reload(), refreshInterval);
+    }
 }
 
 
