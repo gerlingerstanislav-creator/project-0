@@ -1,7 +1,4 @@
 import '../css/app.css';
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
 const bootLegacyPageScripts = () => {
     const toggle = document.querySelector('.menu-toggle');
@@ -40,19 +37,7 @@ const bootLegacyPageScripts = () => {
 };
 
 if (document.getElementById('app')) {
-    createInertiaApp({
-        resolve: (name) => resolvePageComponent(
-            `./pages/${name}.vue`,
-            import.meta.glob('./pages/**/*.vue'),
-        ),
-        setup({ el, App, props, plugin }) {
-            createApp({
-                render: () => h(App, props),
-            })
-                .use(plugin)
-                .mount(el);
-        },
-    });
+    import('./inertia-app.js');
 } else {
     bootLegacyPageScripts();
 }
