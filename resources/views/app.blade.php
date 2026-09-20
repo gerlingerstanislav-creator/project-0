@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon-96.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
-    <title inertia>{{ $title ?? 'Инструменты' }}</title>
+    <title inertia>{{ $title ?? 'project-0 — инструменты' }}</title>
     @vite('resources/js/app.js')
     @inertiaHead
 </head>
