@@ -38,17 +38,28 @@ const closeMenu = () => { menuOpen.value = false; };
         <div class="sidebar__brand">STools</div>
 
         <nav class="sidebar__nav" aria-label="Основная навигация">
-            <Link
-                v-for="link in links"
-                :key="link.href"
-                :href="link.href"
-                class="sidebar__link"
-                :class="{ 'is-active': isActive(link.href) }"
-                @click="closeMenu"
-            >
-                <span>{{ link.number }}</span>
-                {{ link.label }}
-            </Link>
+            <template v-for="link in links" :key="link.href">
+                <Link
+                    v-if="link.href === '/tool-1'"
+                    :href="link.href"
+                    class="sidebar__link"
+                    :class="{ 'is-active': isActive(link.href) }"
+                    @click="closeMenu"
+                >
+                    <span>{{ link.number }}</span>
+                    {{ link.label }}
+                </Link>
+                <a
+                    v-else
+                    :href="link.href"
+                    class="sidebar__link"
+                    :class="{ 'is-active': isActive(link.href) }"
+                    @click="closeMenu"
+                >
+                    <span>{{ link.number }}</span>
+                    {{ link.label }}
+                </a>
+            </template>
         </nav>
 
         <div class="sidebar__account">
@@ -58,14 +69,13 @@ const closeMenu = () => { menuOpen.value = false; };
                 <div class="sidebar__account-role">
                     {{ user.role === 'admin' ? 'Администратор' : user.role === 'editor' ? 'Редактор' : 'Наблюдатель' }}
                 </div>
-                <Link href="/logout" method="post" as="button" class="sidebar__logout" @click="closeMenu">
-                    Выйти
-                </Link>
+                <form method="POST" action="/logout">
+                    <input type="hidden" name="_token" :value="page.props.csrfToken">
+                    <button type="submit" class="sidebar__logout" @click="closeMenu">Выйти</button>
+                </form>
             </template>
 
-            <Link v-else href="/login" class="sidebar__login" @click="closeMenu">
-                Войти
-            </Link>
+            <a v-else href="/login" class="sidebar__login" @click="closeMenu">Войти</a>
         </div>
     </aside>
 
