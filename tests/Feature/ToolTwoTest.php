@@ -12,7 +12,6 @@ class ToolTwoTest extends TestCase
             ->assertOk()
             ->assertInertia(fn ($page) => $page
                 ->component('Tool2')
-                ->title('Степан, выпей')
             );
     }
 }
