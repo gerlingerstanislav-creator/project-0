@@ -1,55 +1,72 @@
-@php($cityJson = base64_encode(json_encode($cities, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)))
+@php($resortJson = base64_encode(json_encode($resorts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)))
 <x-layout>
-    <section class="page weather-page" data-weather-app data-cities="{{ $cityJson }}">
-        <div class="weather-page__intro">
+    <section class="page ski-page" data-weather-app data-cities="{{ $resortJson }}">
+        <div class="ski-page__intro">
             <div>
-                <h1>Погода</h1>
-                <p class="page__description">Погода на сегодня и завтра для Ульяновска, Москвы и Мюнхена.</p>
+                <h1>Горнолыжные курорты</h1>
+                <p class="page__description">Погода, камеры и состояние горнолыжного сезона на курортах Шерегеш и Красная Поляна.</p>
             </div>
-            <div class="weather-page__status">Обновление автоматически<br>каждую минуту</div>
+            <div class="ski-page__status">Погода обновляется автоматически<br>каждую минуту</div>
         </div>
 
-        <div class="weather-page__cards">
-            @foreach ($cities as $city)
-                <article class="weather-card">
-                    @if ($city['cameraLive'] && ($city['cameraType'] ?? null) === 'hls')
-                        <div class="weather-card__photo-link weather-card__photo-link--live">
-                            <video class="weather-card__camera-video" data-hls-src="{{ $city['cameraStream'] }}" autoplay muted playsinline controls preload="metadata" poster="{{ $city['photo'] }}"></video>
-                            <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Источник камеры ↗</a>
-                        </div>
-                    @elseif ($city['cameraLive'])
-                        <div class="weather-card__photo-link weather-card__photo-link--live{{ in_array($city['id'], ['moscow', 'sheregesh', 'sochi'], true) ? ' weather-card__photo-link--cropped' : '' }}">
-                            <iframe class="weather-card__camera-frame{{ in_array($city['id'], ['moscow', 'sheregesh', 'sochi'], true) ? ' weather-card__camera-frame--cropped weather-card__camera-frame--' . $city['id'] : '' }}" src="{{ $city['cameraEmbed'] ?? $city['camera'] }}" title="Актуальная веб-камера: {{ $city['name'] }}" loading="eager" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-                            <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Открыть источник камеры ↗</a>
-                        </div>
-                    @else
-                        <div class="weather-card__camera-offline" data-camera-retry="{{ ($city['cameraType'] ?? null) === 'hls' ? 'true' : 'false' }}">
-                            <span>CAMERA OFFLINE</span>
-                            <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Проверить источник камеры ↗</a>
-                        </div>
-                    @endif
+        <div class="ski-page__cards">
+            @foreach ($resorts as $resort)
+                <article class="ski-card">
+                    <div class="ski-card__media">
+                        @if ($resort['cameraLive'])
+                            <iframe
+                                class="ski-card__camera-frame"
+                                src="{{ $resort['cameraEmbed'] }}"
+                                title="Веб-камеры: {{ $resort['name'] }}"
+                                loading="eager"
+                                allow="autoplay; fullscreen; picture-in-picture"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                            ></iframe>
+                            <a class="ski-card__camera-label" href="{{ $resort['camera'] }}" target="_blank" rel="noopener">Все камеры ↗</a>
+                        @else
+                            <div class="ski-card__offline">
+                                <strong>КАМЕРЫ OFFLINE</strong>
+                                <a href="{{ $resort['camera'] }}" target="_blank" rel="noopener">Открыть источник ↗</a>
+                            </div>
+                        @endif
+                    </div>
 
-                    <div class="weather-card__body">
-                        <div class="weather-card__header">
+                    <div class="ski-card__body">
+                        <div class="ski-card__heading">
                             <div>
-                                <div class="weather-card__city-line">
-                                    <h2>{{ $city['name'] }}</h2>
-                                    <span class="weather-card__current-temp">{{ $city['currentTemperature'] !== null ? round($city['currentTemperature']) . '°C' : '—' }}</span>
-                                </div>
-                                <p>{{ $city['region'] }}</p>
+                                <h2 class="ski-card__title">{{ $resort['name'] }}</h2>
+                                <p class="ski-card__region">{{ $resort['region'] }}</p>
+                            </div>
+                            <span class="ski-card__status ski-card__status--{{ $resort['status'] }}">
+                                {{ $resort['statusLabel'] }}
+                            </span>
+                        </div>
+
+                        <div class="ski-card__meta">
+                            <div class="ski-card__meta-item">
+                                <div class="ski-card__meta-label">Открытие сезона</div>
+                                <div class="ski-card__meta-value">{{ $resort['seasonStart'] }}</div>
+                            </div>
+                            <div class="ski-card__meta-item">
+                                <div class="ski-card__meta-label">Закрытие сезона</div>
+                                <div class="ski-card__meta-value">{{ $resort['seasonEnd'] }}</div>
+                            </div>
+                            <div class="ski-card__meta-item">
+                                <div class="ski-card__meta-label">Сейчас</div>
+                                <div class="ski-card__meta-value">{{ $resort['currentTemperature'] !== null ? round($resort['currentTemperature']) . '°C' : '—' }}</div>
                             </div>
                         </div>
 
-                        <div class="weather-card__forecast" data-weather-forecast="{{ $city['id'] }}">
-                            <div class="weather-row weather-row--loading">Загружаем актуальный прогноз…</div>
+                        <div class="ski-card__forecast" data-weather-forecast="{{ $resort['id'] }}">
+                            <div class="weather-row weather-row--loading">Загружаем прогноз…</div>
                         </div>
 
-                        <div class="weather-card__updated">Данные обновляются автоматически каждую минуту · источник: Open-Meteo</div>
+                        <div class="ski-card__updated">{{ $resort['seasonDescription'] }} · источник погоды: Open-Meteo</div>
                     </div>
                 </article>
             @endforeach
         </div>
 
-        <p class="page__eyebrow">06 / WEATHER</p>
+        <p class="page__eyebrow">06 / SKI RESORTS</p>
     </section>
 </x-layout>
