@@ -1,6 +1,6 @@
-# STools
+# project-0
 
-**STools** — веб-приложение на Laravel 13 с небольшими инструментами в едином SPA-интерфейсе.
+**project-0** — веб-приложение на Laravel 13 с небольшими инструментами в едином SPA-интерфейсе.
 
 ## Возможности
 
@@ -38,7 +38,7 @@ Frontend построен на **Inertia.js + Vue 3**:
 - Стили — resources/css/app.css.
 - Vite собирает production frontend.
 
-Для будущих push-уведомлений уже подготовлена PWA-основа:
+PWA и Web Push уже реализованы:
 
 - public/site.webmanifest;
 - public/sw.js;
