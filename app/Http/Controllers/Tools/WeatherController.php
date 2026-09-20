@@ -21,9 +21,7 @@ class WeatherController
                 'cameraLive' => true,
                 'seasonStart' => 'ноябрь 2026',
                 'seasonEnd' => 'апрель 2027',
-                'seasonExact' => false,
-                'seasonDescription' => 'Официально курорт указывает сезон катания с ноября по апрель.',
-                'status' => 'season',
+                'seasonDescription' => 'Сезон катания: ноябрь — апрель.',
             ],
             [
                 'id' => 'krasnaya-polyana',
@@ -36,13 +34,48 @@ class WeatherController
                 'cameraLive' => true,
                 'seasonStart' => 'декабрь 2026',
                 'seasonEnd' => 'май 2027',
-                'seasonExact' => false,
-                'seasonDescription' => 'Для сезона 2026/27 точные даты открытия пока не опубликованы.',
-                'status' => 'season',
+                'seasonDescription' => 'Зимняя эксплуатация обычно проходит с декабря по май.',
+            ],
+            [
+                'id' => 'rosa-khutor',
+                'name' => 'Роза Хутор',
+                'region' => 'Сочи, Краснодарский край, Россия',
+                'latitude' => 43.66,
+                'longitude' => 40.32,
+                'camera' => 'https://rosakhutor.com/',
+                'cameraEmbed' => 'https://rosakhutor.com/',
+                'cameraLive' => true,
+                'seasonStart' => 'декабрь 2026',
+                'seasonEnd' => 'май 2027',
+                'seasonDescription' => 'Зимний горнолыжный сезон обычно приходится на декабрь — май.',
+            ],
+            [
+                'id' => 'gazprom',
+                'name' => 'Газпром',
+                'region' => 'Лаура + Альпика, Сочи, Россия',
+                'latitude' => 43.69,
+                'longitude' => 40.27,
+                'camera' => 'https://gazprom-resort.ru/',
+                'cameraEmbed' => 'https://gazprom-resort.ru/',
+                'cameraLive' => true,
+                'seasonStart' => 'декабрь 2026',
+                'seasonEnd' => 'май 2027',
+                'seasonDescription' => 'Горнолыжные зоны курорта — Лаура и Альпика; зимняя эксплуатация с декабря по май.',
+            ],
+            [
+                'id' => 'bigwood',
+                'name' => 'Большой Вудъявр',
+                'region' => 'Кировск, Мурманская область, Россия',
+                'latitude' => 67.6151,
+                'longitude' => 33.6723,
+                'camera' => 'https://bigwood.ru/cameras/',
+                'cameraEmbed' => 'https://bigwood.ru/cameras/',
+                'cameraLive' => true,
+                'seasonStart' => 'ноябрь 2026',
+                'seasonEnd' => 'май 2027',
+                'seasonDescription' => 'Продолжительный горнолыжный сезон — с ноября по конец мая.',
             ],
         ];
-
-        $today = now()->startOfDay();
 
         foreach ($resorts as &$resort) {
             $resort['currentTemperature'] = null;
@@ -61,26 +94,27 @@ class WeatherController
                     $resort['currentTemperature'] = $response->json('current.temperature_2m');
                 }
             } catch (\Throwable) {
-                // Weather is optional; the resort page remains usable if Open-Meteo is unavailable.
+                // Weather is optional.
             }
 
-            if ($resort['id'] === 'sheregesh') {
-                $open = now()->year . '-11-01';
-                $close = (now()->year + 1) . '-04-30';
-            } else {
-                $open = now()->year . '-12-01';
-                $close = (now()->year + 1) . '-05-09';
-            }
+            $year = now()->year;
+            $schedule = match ($resort['id']) {
+                'sheregesh', 'bigwood' => ['open' => "$year-11-01", 'close' => ($year + 1) . '-05-31'],
+                default => ['open' => "$year-12-01", 'close' => ($year + 1) . '-05-31'],
+            };
 
-            $openDate = now()->createFromFormat('Y-m-d', $open)->startOfDay();
-            $closeDate = now()->createFromFormat('Y-m-d', $close)->endOfDay();
+            $openDate = now()->createFromFormat('Y-m-d', $schedule['open'])->startOfDay();
+            $closeDate = now()->createFromFormat('Y-m-d', $schedule['close'])->endOfDay();
 
-            if ($today->between($openDate, $closeDate)) {
+            if (now()->between($openDate, $closeDate)) {
                 $resort['status'] = 'open';
                 $resort['statusLabel'] = 'Сезон открыт';
+            } elseif (now()->lt($openDate)) {
+                $resort['status'] = 'closed';
+                $resort['statusLabel'] = 'До открытия сезона';
             } else {
                 $resort['status'] = 'closed';
-                $resort['statusLabel'] = $today->lt($openDate) ? 'До открытия сезона' : 'Сезон завершён';
+                $resort['statusLabel'] = 'Сезон завершён';
             }
         }
         unset($resort);
