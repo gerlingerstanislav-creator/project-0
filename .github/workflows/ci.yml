@@ -161,7 +161,7 @@ jobs:
               cp .env.example .env
               sed -i 's/^APP_ENV=.*/APP_ENV=production/' .env
               sed -i 's/^APP_DEBUG=.*/APP_DEBUG=false/' .env
-              sed -i 's#^APP_URL=.*#APP_URL=http://${{ vars.VPS_HOST }}#' .env
+              sed -i 's#^APP_URL=.*#APP_URL=https://project-0.duckdns.org#' .env
               sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env
               sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env
               sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/stools/database/database.sqlite#' .env
@@ -194,12 +194,15 @@ jobs:
             php artisan optimize
             php artisan storage:link || true
 
+            # Keep production URL aligned with the public HTTPS hostname.
+            sed -i 's#^APP_URL=.*#APP_URL=https://project-0.duckdns.org#' .env
+
             # Configure Nginx to serve only Laravel public/.
             cat > /etc/nginx/sites-available/stools <<'NGINX'
             server {
                 listen 80 default_server;
                 listen [::]:80 default_server;
-                server_name ${{ vars.VPS_HOST }} _;
+                server_name project-0.duckdns.org ${{ vars.VPS_HOST }};
                 root /var/www/stools/public;
                 index index.php;
                 charset utf-8;
@@ -233,6 +236,19 @@ jobs:
             chmod -R ug+rwX storage bootstrap/cache
             nginx -t
             systemctl enable nginx php8.5-fpm
+
+            # Install Certbot and obtain/renew the Let's Encrypt certificate.
+            # The DuckDNS hostname is already pointed at the fixed VPS IP, so no
+            # DuckDNS API token is required for the HTTP-01 challenge.
+            apt-get install -y certbot python3-certbot-nginx
+            if [ ! -f /etc/letsencrypt/live/project-0.duckdns.org/fullchain.pem ]; then
+              certbot --nginx -d project-0.duckdns.org --non-interactive --agree-tos --register-unsafely-without-email --redirect
+            else
+              certbot renew --quiet
+            fi
+
+            systemctl enable certbot.timer >/dev/null 2>&1 || true
+            systemctl start certbot.timer >/dev/null 2>&1 || true
             systemctl reload php8.5-fpm || systemctl restart php8.5-fpm
             systemctl reload nginx || systemctl restart nginx
             php artisan queue:restart || true
@@ -242,13 +258,13 @@ jobs:
       - name: Health check
         run: |
           for i in 1 2 3 4 5; do
-            if curl --fail --silent --show-error --max-time 10 http://${{ vars.VPS_HOST }}/up > /dev/null; then
+            if curl --fail --silent --show-error --max-time 15 https://project-0.duckdns.org/up > /dev/null;
               echo "Health check passed"
               exit 0
             fi
             sleep 5
           done
-          echo "Health check failed: http://${{ vars.VPS_HOST }}/up"
+          echo "Health check failed: https://project-0.duckdns.org/up"
           exit 1
 
   notify:
