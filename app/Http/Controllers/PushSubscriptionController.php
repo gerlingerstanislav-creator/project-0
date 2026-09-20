@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PushSubscription;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Services\WebPushService;
 
 class PushSubscriptionController extends Controller
 {
@@ -27,6 +28,29 @@ class PushSubscriptionController extends Controller
         );
 
         return response()->json(['subscribed' => true, 'id' => $subscription->id]);
+    }
+
+    public function config(): JsonResponse
+    {
+        return response()->json([
+            'publicKey' => config('webpush.public_key'),
+            'enabled' => filled(config('webpush.public_key')) && filled(config('webpush.private_key')),
+        ]);
+    }
+
+    public function test(Request $request, WebPushService $webPush): JsonResponse
+    {
+        $sent = 0;
+        foreach (PushSubscription::where('user_id', $request->user()->id)->get() as $subscription) {
+            if ($webPush->sendToSubscription($subscription, [
+                'title' => 'STools',
+                'body' => 'Пуш-уведомления работают 🎉',
+                'url' => '/tool-1',
+            ])) {
+                $sent++;
+            }
+        }
+        return response()->json(['sent' => $sent]);
     }
 
     public function destroy(Request $request): JsonResponse
