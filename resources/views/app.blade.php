@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('icon-192.svg') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon-96.png') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <title inertia>{{ $title ?? 'project-0 — инструменты' }}</title>
