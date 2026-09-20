@@ -23,10 +23,10 @@
                             <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Открыть источник камеры ↗</a>
                         </div>
                     @else
-                        <a class="weather-card__photo-link" href="{{ $city['camera'] }}" target="_blank" rel="noopener" aria-label="Открыть веб-камеру: {{ $city['name'] }}">
-                            <img class="weather-card__photo" src="{{ $city['photo'] }}" alt="{{ $city['name'] }}" loading="lazy">
-                            <span class="weather-card__camera-label">Открыть LIVE ↗</span>
-                        </a>
+                        <div class="weather-card__camera-offline">
+                            <span>CAMERA OFFLINE</span>
+                            <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Проверить источник камеры ↗</a>
+                        </div>
                     @endif
 
                     <div class="weather-card__body">
