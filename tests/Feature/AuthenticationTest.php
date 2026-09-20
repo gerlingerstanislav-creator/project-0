@@ -22,10 +22,13 @@ class AuthenticationTest extends TestCase
             );
 
         $this->get(route('tools.tool2'))
-            ->assertSuccessful();
+            ->assertInertia(fn ($page) => $page->component('Tool2'));
 
         $this->get(route('tools.tool3'))
-            ->assertSuccessful();
+            ->assertInertia(fn ($page) => $page->component('Tool3'));
+
+        $this->get(route('login'))
+            ->assertInertia(fn ($page) => $page->component('Login'));
     }
 
     public function test_admin_can_login(): void
