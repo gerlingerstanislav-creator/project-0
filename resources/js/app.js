@@ -153,3 +153,99 @@ if (beerGame) {
     });
     render();
 }
+
+
+const weatherApp = document.querySelector('[data-weather-app]');
+if (weatherApp) {
+    const cities = JSON.parse(weatherApp.dataset.cities);
+    const refreshInterval = 10 * 60 * 1000;
+
+    const weatherDescriptions = {
+        0: 'Ясно', 1: 'Преимущественно ясно', 2: 'Переменная облачность', 3: 'Пасмурно',
+        45: 'Туман', 48: 'Изморозь и туман', 51: 'Морось', 53: 'Морось', 55: 'Сильная морось',
+        56: 'Ледяная морось', 57: 'Сильная ледяная морось', 61: 'Небольшой дождь', 63: 'Дождь',
+        65: 'Сильный дождь', 66: 'Ледяной дождь', 67: 'Сильный ледяной дождь', 71: 'Небольшой снег',
+        73: 'Снег', 75: 'Сильный снег', 77: 'Снежные зёрна', 80: 'Ливни', 81: 'Ливни',
+        82: 'Сильные ливни', 85: 'Снегопад', 86: 'Сильный снегопад', 95: 'Гроза',
+        96: 'Гроза с градом', 99: 'Сильная гроза с градом',
+    };
+
+    const formatDay = (date) => new Intl.DateTimeFormat('ru-RU', {
+        weekday: 'short', day: 'numeric', month: 'short',
+    }).format(new Date(date + 'T12:00:00'));
+
+    const iconFor = (code) => code >= 95 ? '⚡' : code >= 51 ? '🌧️' : code >= 71 ? '❄️' : code >= 1 ? '⛅' : '☀️';
+
+    const renderForecast = (daily) => daily.time.map((date, index) => `
+        <div class="weather-card__forecast-item">
+            <div class="weather-card__forecast-date">${formatDay(date)}</div>
+            <div class="weather-card__forecast-icon" aria-hidden="true">${iconFor(daily.weather_code[index])}</div>
+            <div class="weather-card__forecast-temp">${Math.round(daily.temperature_2m_max[index])}° / ${Math.round(daily.temperature_2m_min[index])}°</div>
+            <div class="weather-card__forecast-rain">${daily.precipitation_probability_max[index] ?? 0}% осадков</div>
+        </div>
+    `).join('');
+
+    const renderCity = (city, data) => {
+        const current = data.current;
+        const description = weatherDescriptions[current.weather_code] ?? 'Погодные условия';
+        const updatedAt = new Date(current.time).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+
+        return `
+            <article class="weather-card">
+                <img class="weather-card__photo" src="${city.photo}" alt="${city.name}" loading="lazy">
+                <div class="weather-card__body">
+                    <div class="weather-card__header">
+                        <div><h2>${city.name}</h2><p>${city.region}</p></div>
+                        <div class="weather-card__current-temp">${Math.round(current.temperature_2m)}°</div>
+                    </div>
+                    <div class="weather-card__condition">${description}</div>
+                    <div class="weather-card__metrics">
+                        <div><span>Ощущается</span><strong>${Math.round(current.apparent_temperature)}°</strong></div>
+                        <div><span>Ветер</span><strong>${Math.round(current.wind_speed_10m)} км/ч</strong></div>
+                        <div><span>Влажность</span><strong>${Math.round(current.relative_humidity_2m)}%</strong></div>
+                    </div>
+                    <div class="weather-card__forecast">${renderForecast(data.daily)}</div>
+                    <div class="weather-card__updated">Обновлено в ${updatedAt} · источник: Open-Meteo</div>
+                </div>
+            </article>
+        `;
+    };
+
+    const renderError = (city) => `
+        <article class="weather-card weather-card--error">
+            <img class="weather-card__photo" src="${city.photo}" alt="${city.name}" loading="lazy">
+            <div class="weather-card__body">
+                <div class="weather-card__header"><div><h2>${city.name}</h2><p>${city.region}</p></div></div>
+                <p class="weather-card__error">Не удалось получить актуальные погодные данные. Попробуйте обновить страницу.</p>
+            </div>
+        </article>
+    `;
+
+    const loadWeather = async () => {
+        await Promise.all(cities.map(async (city) => {
+            const url = new URL('https://api.open-meteo.com/v1/forecast');
+            url.search = new URLSearchParams({
+                latitude: city.latitude,
+                longitude: city.longitude,
+                current: 'temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m',
+                daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+                forecast_days: '5',
+                timezone: 'auto',
+            });
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('weather_request_failed');
+                const data = await response.json();
+                const target = document.querySelector(`[data-weather-city="${city.id}"]`);
+                if (target) target.innerHTML = renderCity(city, data);
+            } catch {
+                const target = document.querySelector(`[data-weather-city="${city.id}"]`);
+                if (target) target.innerHTML = renderError(city);
+            }
+        }));
+    };
+
+    loadWeather();
+    window.setInterval(loadWeather, refreshInterval);
+}
