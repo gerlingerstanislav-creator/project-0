@@ -1,5 +1,5 @@
 <x-layout title="Степан, выпей">
-    <section class="page beer-game-page">
+    <section class="page beer-game-page" data-beer-game-page>
         <p class="page__eyebrow">Page 02</p>
         <h1>Степан, выпей</h1>
         <p class="page__description">Нажми на бутылку, чтобы налить пиво в стакан. В стакане помещается до четырёх глотков.</p>
@@ -24,7 +24,3 @@
         </div>
     </section>
 </x-layout>
-
-@push('scripts')
-    @vite('resources/js/beer-game.js')
-@endpush
