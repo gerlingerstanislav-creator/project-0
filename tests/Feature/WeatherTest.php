@@ -15,7 +15,7 @@ class WeatherTest extends TestCase
             ]),
         ]);
 
-        $response = $this->get('/weather');
+        $response = $this->get('/ski-resort');
 
         $response->assertOk()
             ->assertSee('data-camera-carousel', false)

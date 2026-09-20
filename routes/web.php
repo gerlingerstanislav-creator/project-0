@@ -14,5 +14,5 @@ Route::get('/tool-1',Tool1Controller::class)->name('tools.tool1');
 Route::get('/tool-2',Tool2Controller::class)->name('tools.tool2');
 Route::get('/tool-3',Tool3Controller::class)->name('tools.tool3');
 Route::get('/manager-cheat-sheets',ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
-Route::get('/weather',WeatherController::class)->name('tools.weather');
+Route::get('/ski-resort',WeatherController::class)->name('tools.ski-resort');
 Route::middleware('auth')->group(function(){Route::patch('/tool-1/ideas/{startupIdea}',[Tool1Controller::class,'update'])->middleware(EnsureUserCanEditStartupIdeas::class)->name('tools.tool1.update');Route::post('/logout',LogoutController::class)->name('logout');});
