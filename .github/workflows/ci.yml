@@ -115,18 +115,8 @@ jobs:
           set -e
           sudo apt-get update -qq
           sudo apt-get install -y -qq sshpass
-          for attempt in 1 2 3 4 5; do
-            echo "Uploading release to VPS (attempt $attempt/5)..."
-            if base64 -w 0 release.tar.gz | sshpass -p "$VPS_PASSWORD" ssh               -o StrictHostKeyChecking=no               -o UserKnownHostsFile=/dev/null               -o ConnectTimeout=30               -o ServerAliveInterval=10               -o ServerAliveCountMax=3               "$VPS_USERNAME@$VPS_HOST"               'base64 -d > /tmp/release.tar.gz'; then
-              echo "Release uploaded successfully"
-              exit 0
-            fi
-            if [ "$attempt" -lt 5 ]; then
-              sleep 10
-            fi
-          done
-          echo "Release upload failed after 5 attempts"
-          exit 1
+          base64 -w 0 release.tar.gz | sshpass -p "$VPS_PASSWORD" ssh             -o StrictHostKeyChecking=no             -o UserKnownHostsFile=/dev/null             -o ConnectTimeout=30             -o ServerAliveInterval=10             -o ServerAliveCountMax=3             "$VPS_USERNAME@$VPS_HOST"             'base64 -d > /tmp/release.tar.gz'
+          echo "Release uploaded successfully"
 
       - name: Bootstrap and deploy
         uses: appleboy/ssh-action@v1
@@ -257,6 +247,8 @@ jobs:
             fi
 
             if command -v ufw >/dev/null 2>&1; then
+              # Keep SSH reachable before enabling/reloading the firewall.
+              ufw allow 22/tcp
               ufw allow 80/tcp
               ufw allow 443/tcp
               ufw --force enable || true
