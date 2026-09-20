@@ -44,7 +44,7 @@ if (typeof window !== 'undefined') { refreshPushState(); window.addEventListener
     </button>
 
     <aside id="sidebar" class="sidebar" :class="{ 'is-open': menuOpen }">
-        <div class="sidebar__brand">STools</div>
+        <div class="sidebar__brand">project-0</div>
 
         <nav class="sidebar__nav" aria-label="Основная навигация">
             <template v-for="link in links" :key="link.href">
