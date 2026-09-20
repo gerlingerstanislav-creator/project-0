@@ -18,16 +18,19 @@
                             <span class="weather-card__camera-label">LIVE · камера</span>
                         </a>
                     @else
-                        <a class="weather-card__photo-link" href="{{ $city['camera'] }}" target="_blank" rel="noopener" aria-label="Проверить веб-камеру: {{ $city['name'] }}">
+                        <a class="weather-card__photo-link" href="{{ $city['camera'] }}" target="_blank" rel="noopener" aria-label="Открыть веб-камеру: {{ $city['name'] }}">
                             <img class="weather-card__photo" src="{{ $city['photo'] }}" alt="{{ $city['name'] }}" loading="lazy">
-                            <span class="weather-card__camera-label">Камера сейчас недоступна</span>
+                            <span class="weather-card__camera-label">Открыть LIVE</span>
                         </a>
                     @endif
 
                     <div class="weather-card__body">
                         <div class="weather-card__header">
                             <div>
-                                <h2>{{ $city['name'] }}</h2>
+                                <div class="weather-card__city-line">
+                                    <h2>{{ $city['name'] }}</h2>
+                                    <span class="weather-card__current-temp">{{ $city['currentTemperature'] !== null ? round($city['currentTemperature']) . '°C' : '—' }}</span>
+                                </div>
                                 <p>{{ $city['region'] }}</p>
                             </div>
                         </div>
