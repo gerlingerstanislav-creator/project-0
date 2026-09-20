@@ -9,7 +9,8 @@
     "vite": "^7.0.0",
     "laravel-vite-plugin": "^2.0.0",
     "tailwindcss": "^4.0.0",
-    "@tailwindcss/vite": "^4.0.0"
+    "@tailwindcss/vite": "^4.0.0",
+    "@vitejs/plugin-vue": "^6.0.9"
   },
   "dependencies": {
     "@inertiajs/vue3": "^3.0.0",
