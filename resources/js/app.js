@@ -158,7 +158,7 @@ if (beerGame) {
 const weatherApp = document.querySelector('[data-weather-app]');
 if (weatherApp) {
     const cities = JSON.parse(atob(weatherApp.dataset.cities));
-    const refreshInterval = 10 * 60 * 1000;
+    const refreshInterval = 60 * 1000;
 
     const weatherDescriptions = {
         0: 'Ясно', 1: 'Преимущественно ясно', 2: 'Переменная облачность', 3: 'Пасмурно',
@@ -211,7 +211,7 @@ if (weatherApp) {
                         </tbody>
                     </table>
                 </div>
-                <div class="weather-card__updated">Данные обновляются автоматически · источник: Open-Meteo</div>
+                <div class="weather-card__updated">Данные обновляются автоматически каждую минуту · источник: Open-Meteo</div>
             </article>
         `;
     };
@@ -232,6 +232,7 @@ if (weatherApp) {
             url.search = new URLSearchParams({
                 latitude: city.latitude,
                 longitude: city.longitude,
+                current: 'temperature_2m,weather_code',
                 daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
                 forecast_days: '2',
                 timezone: 'auto',
