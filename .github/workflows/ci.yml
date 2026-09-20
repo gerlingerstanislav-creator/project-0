@@ -243,9 +243,9 @@ jobs:
               certbot --nginx -d project-0.duckdns.org --non-interactive --agree-tos --register-unsafely-without-email --redirect
             else
               certbot renew --quiet
+              certbot install --cert-name project-0.duckdns.org --nginx --redirect
             fi
 
-            # Make sure the public web ports are reachable when UFW is installed.
             if command -v ufw >/dev/null 2>&1; then
               ufw allow 80/tcp
               ufw allow 443/tcp
