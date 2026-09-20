@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Tools;
 
 use App\Http\Controllers\Controller;
 use App\Models\StartupIdea;
-use App\Http\Middleware\EnsureUserCanEditStartupIdeas;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -24,7 +23,7 @@ class Tool1Controller extends Controller
         ]);
     }
 
-    public function update(Request $request, StartupIdea $startupIdea): JsonResponse
+    public function update(Request $request, StartupIdea $startupIdea): RedirectResponse
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -33,8 +32,6 @@ class Tool1Controller extends Controller
 
         $startupIdea->update($validated);
 
-        return response()->json([
-            'idea' => $startupIdea->fresh(),
-        ]);
+        return back();
     }
 }
