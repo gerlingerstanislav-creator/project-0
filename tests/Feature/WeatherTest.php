@@ -18,15 +18,12 @@ class WeatherTest extends TestCase
         $response = $this->get('/ski-resort');
 
         $response->assertOk()
-            ->assertSee('data-camera-carousel', false)
-            ->assertSee('data-camera-count="6"', false)
-            ->assertSee('data-camera-count="5"', false);
+            ->assertInertia(fn ($page) => $page
+                ->component('SkiResort')
+                ->has('resorts', 5)
+            );
 
-        preg_match('/data-cities="([^"]+)"/', $response->getContent(), $matches);
-
-        $this->assertNotEmpty($matches[1]);
-
-        $resorts = json_decode(base64_decode($matches[1]), true, 512, JSON_THROW_ON_ERROR);
+        $resorts = $response->viewData('page')['props']['resorts'] ?? [];
 
         $bigwood = collect($resorts)->firstWhere('id', 'bigwood');
         $gazprom = collect($resorts)->firstWhere('id', 'gazprom');
