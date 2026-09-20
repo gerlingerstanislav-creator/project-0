@@ -18,8 +18,8 @@
                             <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Источник камеры ↗</a>
                         </div>
                     @elseif ($city['cameraLive'])
-                        <div class="weather-card__photo-link weather-card__photo-link--live{{ $city['id'] === 'moscow' ? ' weather-card__photo-link--moscow' : '' }}">
-                            <iframe class="weather-card__camera-frame{{ $city['id'] === 'moscow' ? ' weather-card__camera-frame--moscow' : '' }}" src="{{ $city['cameraEmbed'] ?? $city['camera'] }}" title="Актуальная веб-камера: {{ $city['name'] }}" loading="eager" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                        <div class="weather-card__photo-link weather-card__photo-link--live{{ in_array($city['id'], ['moscow', 'sheregesh', 'sochi'], true) ? ' weather-card__photo-link--cropped' : '' }}">
+                            <iframe class="weather-card__camera-frame{{ in_array($city['id'], ['moscow', 'sheregesh', 'sochi'], true) ? ' weather-card__camera-frame--cropped weather-card__camera-frame--' . $city['id'] : '' }}" src="{{ $city['cameraEmbed'] ?? $city['camera'] }}" title="Актуальная веб-камера: {{ $city['name'] }}" loading="eager" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                             <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Открыть источник камеры ↗</a>
                         </div>
                     @else
