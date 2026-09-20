@@ -1,9 +1,14 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
+import { getPushState, subscribeToPush, unsubscribeFromPush } from '../push.js';
 
 const page = usePage();
 const menuOpen = ref(false);
+const pushState = ref('unknown');
+const pushBusy = ref(false);
+const pushError = ref('');
+const installAvailable = ref(false);
 
 const user = computed(() => page.props.auth?.user ?? null);
 const currentPath = computed(() => page.url.split('?')[0]);
@@ -18,6 +23,10 @@ const links = [
 
 const isActive = (href) => currentPath.value === href;
 const closeMenu = () => { menuOpen.value = false; };
+const refreshPushState = async () => { try { pushState.value = await getPushState(); } catch { pushState.value = 'unsupported'; } };
+const togglePush = async () => { pushBusy.value = true; pushError.value = ''; try { if (pushState.value === 'subscribed') await unsubscribeFromPush(); else await subscribeToPush(); await refreshPushState(); } catch (error) { pushError.value = error.message; } finally { pushBusy.value = false; } };
+const requestInstall = () => window.dispatchEvent(new Event('pwa-install-request'));
+if (typeof window !== 'undefined') { refreshPushState(); window.addEventListener('pwa-install-available', () => { installAvailable.value = true; }); }
 </script>
 
 <template>
@@ -58,6 +67,9 @@ const closeMenu = () => { menuOpen.value = false; };
                 <div class="sidebar__account-role">
                     {{ user.role === 'admin' ? 'Администратор' : user.role === 'editor' ? 'Редактор' : 'Наблюдатель' }}
                 </div>
+                <button v-if="pushState === 'available' || pushState === 'subscribed'" type="button" class="sidebar__push" :disabled="pushBusy" @click="togglePush">{{ pushBusy ? 'Подключение…' : pushState === 'subscribed' ? 'Отключить уведомления' : 'Включить уведомления' }}</button>
+                <button v-if="installAvailable" type="button" class="sidebar__push" @click="requestInstall">Установить приложение</button>
+                <small v-if="pushError" class="sidebar__push-error">{{ pushError }}</small>
                 <form method="POST" action="/logout">
                     <input type="hidden" name="_token" :value="page.props.csrfToken">
                     <button type="submit" class="sidebar__logout" @click="closeMenu">Выйти</button>
