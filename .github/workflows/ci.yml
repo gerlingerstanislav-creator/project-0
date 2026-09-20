@@ -266,6 +266,19 @@ jobs:
 
             echo "Deployment completed successfully"
 
+
+      - name: Health check
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl --fail --silent --show-error --max-time 15 https://project-0.duckdns.org/up > /dev/null; then
+              echo "Health check passed"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Health check failed: https://project-0.duckdns.org/up"
+          exit 1
+
       - name: Notify admin about successful deploy
         uses: appleboy/ssh-action@v1
         with:
@@ -279,18 +292,6 @@ jobs:
             set -e
             cd /var/www/stools
             php artisan push:deploy-success
-
-      - name: Health check
-        run: |
-          for i in 1 2 3 4 5; do
-            if curl --fail --silent --show-error --max-time 15 https://project-0.duckdns.org/up > /dev/null;
-              echo "Health check passed"
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "Health check failed: https://project-0.duckdns.org/up"
-          exit 1
 
   notify:
     name: Telegram notification
