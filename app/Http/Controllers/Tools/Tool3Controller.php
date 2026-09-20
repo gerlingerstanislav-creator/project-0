@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Tools;
 
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class Tool3Controller extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(): Response
     {
-        return view('tools.tool3');
+        return Inertia::render('Tool3');
     }
 }
