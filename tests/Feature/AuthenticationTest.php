@@ -16,7 +16,10 @@ class AuthenticationTest extends TestCase
     {
         $this->get(route('tools.tool1'))
             ->assertSuccessful()
-            ->assertDontSee('data-edit-button', false);
+            ->assertInertia(fn ($page) => $page
+                ->component('Tool1')
+                ->where('canEditIdeas', false)
+            );
 
         $this->get(route('tools.tool2'))
             ->assertSuccessful();
@@ -96,11 +99,17 @@ class AuthenticationTest extends TestCase
 
         $this->actingAs($admin)
             ->get(route('tools.tool1'))
-            ->assertSee('data-edit-button', false);
+            ->assertInertia(fn ($page) => $page
+                ->component('Tool1')
+                ->where('canEditIdeas', true)
+            );
 
         $this->actingAs($viewer)
             ->get(route('tools.tool1'))
-            ->assertDontSee('data-edit-button', false);
+            ->assertInertia(fn ($page) => $page
+                ->component('Tool1')
+                ->where('canEditIdeas', false)
+            );
     }
 
     public function test_viewer_cannot_update_startup_ideas(): void
