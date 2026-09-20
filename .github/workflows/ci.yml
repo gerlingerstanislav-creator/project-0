@@ -122,7 +122,12 @@ jobs:
             export DEBIAN_FRONTEND=noninteractive
             APP_DIR="/var/www/stools"
 
-            # Keep the application directory aligned with the STools project name.\n            if [ -d /var/www/test ] && [ ! -d "$APP_DIR" ]; then\n              mv /var/www/test "$APP_DIR"\n            fi\n\n            # Laravel 13 requires PHP 8.3+. Keep CI and production aligned on PHP 8.5.
+            # Keep the application directory aligned with the STools project name.
+            if [ -d /var/www/test ] && [ ! -d "$APP_DIR" ]; then
+              mv /var/www/test "$APP_DIR"
+            fi
+
+            # Laravel 13 requires PHP 8.3+. Keep CI and production aligned on PHP 8.5.
             if ! command -v php8.5 >/dev/null 2>&1; then
               apt-get update
               apt-get install -y software-properties-common ca-certificates lsb-release apt-transport-https
