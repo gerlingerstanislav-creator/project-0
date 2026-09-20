@@ -171,7 +171,12 @@ jobs:
             touch database/database.sqlite
             mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
 
-            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+            if [ -f composer.lock ] && composer check-platform-reqs --no-interaction >/dev/null 2>&1 && composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
+  composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+else
+  rm -f composer.lock
+  composer update --no-dev --no-interaction --prefer-dist --optimize-autoloader
+fi
 
             if ! grep -q '^APP_KEY=base64:' .env; then
               php artisan key:generate --force
