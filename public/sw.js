@@ -1,4 +1,4 @@
-const CACHE = 'stools-shell-v2';
+const CACHE = 'project-0-shell-v2';
 const OFFLINE = '/offline.html';
 const SHELL = ['/', '/tool-1', '/tool-2', '/tool-3', '/manager-cheat-sheets', '/ski-resort', OFFLINE];
 
@@ -19,7 +19,7 @@ self.addEventListener('fetch', event => {
     }).catch(() => caches.match(event.request).then(cached => cached || caches.match(OFFLINE))));
 });
 self.addEventListener('push', event => {
-    let data = {title: 'STools', body: 'Новое уведомление', url: '/'};
+    let data = {title: 'project-0', body: 'Новое уведомление', url: '/'};
     try { if (event.data) data = {...data, ...event.data.json()}; } catch {}
     event.waitUntil(self.registration.showNotification(data.title, {
         body: data.body, icon: '/favicon-96.png', badge: '/favicon-96.png', data: {url: data.url},
