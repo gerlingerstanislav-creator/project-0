@@ -6,8 +6,13 @@ use Tests\TestCase;
 
 class ToolTwoTest extends TestCase
 {
-    public function test_beer_game_page_is_public_and_contains_game_controls(): void
+    public function test_beer_game_page_is_public_and_renders_inertia_page(): void
     {
-        $this->get('/tool-2')->assertOk()->assertSee('Степан, выпей')->assertSee('data-beer-bottle', false)->assertSee('data-beer-cup', false);
+        $this->get('/tool-2')
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->component('Tool2')
+                ->title('Степан, выпей')
+            );
     }
 }
