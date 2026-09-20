@@ -190,6 +190,7 @@ if (weatherApp) {
             <span class="weather-day__condition">${weatherDescriptions[code] ?? 'Погодные условия'}</span>
             <span class="weather-day__rain">${Number.isFinite(rain) ? rain + '%' : '—'}</span>
         </div>`).join('');
+    };
 
     const loadWeather = async () => {
         await Promise.all(resorts.map(async (resort) => {
