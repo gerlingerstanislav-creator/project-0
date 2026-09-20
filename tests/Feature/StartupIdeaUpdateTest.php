@@ -26,7 +26,7 @@ class StartupIdeaUpdateTest extends TestCase
             'description' => 'Старое описание',
         ]);
 
-        $response = $this->actingAs($user)->patchJson(route('tools.tool1.update', $idea), [
+        $response = $this->actingAs($user)->patch(route('tools.tool1.update', $idea), [
             'title' => 'Новое название',
             'description' => 'Новое описание',
         ]);
