@@ -623,3 +623,8 @@ button, input { font: inherit; }
     .weather-row__rain { grid-column:2; grid-row:2; }
     .weather-row__temperature { grid-column:2; grid-row:1; text-align:right; }
 }
+
+.weather-card__camera-offline { display:grid; min-height:300px; place-items:center; align-content:center; gap:10px; background:#111; color:#fff; text-align:center; }
+.weather-card__camera-offline > span { font-size:18px; font-weight:800; letter-spacing:.08em; }
+.weather-card__camera-offline .weather-card__camera-label { position:static; background:transparent; padding:0; font-size:11px; }
+@media (max-width:700px) { .weather-card__camera-offline { min-height:220px; } }
