@@ -31,10 +31,7 @@ class StartupIdeaUpdateTest extends TestCase
             'description' => 'Новое описание',
         ]);
 
-        $response
-            ->assertSuccessful()
-            ->assertJsonPath('idea.title', 'Новое название')
-            ->assertJsonPath('idea.description', 'Новое описание');
+        $response->assertRedirect();
 
         $this->assertDatabaseHas('startup_ideas', [
             'id' => $idea->id,
@@ -58,10 +55,16 @@ class StartupIdeaUpdateTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->patchJson(route('tools.tool1.update', $idea), [
+            ->patch(route('tools.tool1.update', $idea), [
                 'title' => 'Новое название',
                 'description' => 'Новое описание',
             ])
-            ->assertSuccessful();
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('startup_ideas', [
+            'id' => $idea->id,
+            'title' => 'Новое название',
+            'description' => 'Новое описание',
+        ]);
     }
 }
