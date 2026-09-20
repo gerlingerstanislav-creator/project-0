@@ -157,7 +157,7 @@ if (beerGame) {
 
 const weatherApp = document.querySelector('[data-weather-app]');
 if (weatherApp) {
-    const cities = JSON.parse(weatherApp.dataset.cities);
+    const cities = JSON.parse(atob(weatherApp.dataset.cities));
     const refreshInterval = 10 * 60 * 1000;
 
     const weatherDescriptions = {
