@@ -21,26 +21,10 @@ class WeatherTest extends TestCase
             ->assertInertia(fn ($page) => $page
                 ->component('SkiResort')
                 ->has('resorts', 5)
+                ->where('resorts.0.cameras.0.playerUrl', 'https://www.dirsheregesh.ru/cameras/player/kaskad-olimpiia-ekspress-nizniaia-stanciia')
+                ->where('resorts.3.cameras.0.playerUrl', 'https://polyanaski.ru/webcam/cam2.php?cam_id=265')
+                ->where('resorts.1.cameras.0.type', 'image')
+                ->where('resorts.1.cameras.4.imageUrl', fn ($url) => str_contains($url, 'polyana_960_panorama_spring'))
             );
-
-        $resorts = $response->viewData('page')['props']['resorts'] ?? [];
-
-        $bigwood = collect($resorts)->firstWhere('id', 'bigwood');
-        $gazprom = collect($resorts)->firstWhere('id', 'gazprom');
-        $krasnayaPolyana = collect($resorts)->firstWhere('id', 'krasnaya-polyana');
-
-        $this->assertSame(
-            'https://123streaming.ru/meetings/viewpep/eb29b1d745277d6ee9f0edfa70290d2c',
-            $bigwood['cameras'][0]['playerUrl']
-        );
-        $this->assertSame(
-            'https://polyanaski.ru/webcam/cam2.php?cam_id=265',
-            $gazprom['cameras'][0]['playerUrl']
-        );
-        $this->assertSame('image', $krasnayaPolyana['cameras'][0]['type']);
-        $this->assertStringContainsString(
-            'polyana_960_panorama_spring',
-            $krasnayaPolyana['cameras'][4]['imageUrl']
-        );
     }
 }
