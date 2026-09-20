@@ -24,3 +24,7 @@
         </div>
     </section>
 </x-layout>
+
+@push('scripts')
+    @vite('resources/js/beer-game.js')
+@endpush
