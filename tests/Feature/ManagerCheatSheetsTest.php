@@ -25,14 +25,16 @@ class ManagerCheatSheetsTest extends TestCase
             ->assertSee('Проверить факт.');
     }
 
-    public function test_weather_page_is_public_and_contains_all_cities(): void
+    public function test_weather_page_is_public_and_contains_all_ski_resorts(): void
     {
         $this->get('/weather')
             ->assertOk()
-            ->assertSee('Погода')
-            ->assertSee('Ульяновск')
-            ->assertSee('Москва')
-            ->assertSee('Мюнхен')
-            ->assertSee('Обновление автоматически');
+            ->assertSee('Горнолыжные курорты')
+            ->assertSee('Шерегеш')
+            ->assertSee('Красная Поляна')
+            ->assertSee('Роза Хутор')
+            ->assertSee('Газпром')
+            ->assertSee('Большой Вудъявр')
+            ->assertSee('Погода обновляется автоматически');
     }
 }
