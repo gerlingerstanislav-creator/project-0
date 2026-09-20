@@ -192,6 +192,8 @@ if (weatherApp) {
                     <div>
                         <h2>${city.name}</h2>
                         <p>${city.region}</p>
+                        <div class="weather-card__current-temp">${Number.isFinite(data.current?.temperature_2m) ? Math.round(data.current.temperature_2m) + "°C" : "—"}</div>
+                        <div class="weather-card__condition">${weatherDescriptions[data.current?.weather_code] ?? "Погодные условия"} · сейчас</div>
                     </div>
                 </div>
                 <div class="weather-table-wrap">
