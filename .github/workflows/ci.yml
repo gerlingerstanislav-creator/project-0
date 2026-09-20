@@ -96,6 +96,17 @@ jobs:
         with:
           name: laravel-release-${{ github.sha }}
 
+      - name: Update DuckDNS record
+        env:
+          DUCKDNS_TOKEN: ${{ secrets.DUCKDNS_TOKEN }}
+        run: |
+          set -e
+          test -n "$DUCKDNS_TOKEN"
+          response="$(curl --fail --silent --show-error --retry 3 \
+            "https://www.duckdns.org/update?domains=project-0&token=${DUCKDNS_TOKEN}&ip=45.137.42.239")"
+          test "$response" = "OK"
+          echo "DuckDNS record updated"
+
       - name: Upload release to VPS
         uses: appleboy/scp-action@v1
         with:
