@@ -53,7 +53,7 @@ class WeatherController
                         $streamResponse = Http::timeout(3)->get($city['cameraStream']);
                         $city['cameraLive'] = $streamResponse->successful()
                             && str_contains(strtolower($streamResponse->body()), '#extm3u');
-                    } catch (\\Throwable) {
+                    } catch (\Throwable) {
                         $city['cameraLive'] = false;
                     }
                 }
