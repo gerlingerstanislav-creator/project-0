@@ -23,7 +23,7 @@
                             <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Открыть источник камеры ↗</a>
                         </div>
                     @else
-                        <div class="weather-card__camera-offline">
+                        <div class="weather-card__camera-offline" data-camera-retry="{{ ($city['cameraType'] ?? null) === 'hls' ? 'true' : 'false' }}">
                             <span>CAMERA OFFLINE</span>
                             <a class="weather-card__camera-label" href="{{ $city['camera'] }}" target="_blank" rel="noopener">Проверить источник камеры ↗</a>
                         </div>
