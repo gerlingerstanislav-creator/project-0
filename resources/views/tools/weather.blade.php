@@ -4,7 +4,7 @@
         <div class="weather-page__intro">
             <div>
                 <h1>Погода</h1>
-                <p class="page__description">Актуальные погодные данные и прогноз на 5 дней для Ульяновска, Москвы и Мюнхена.</p>
+                <p class="page__description">Погода на сегодня и завтра для Ульяновска, Москвы и Мюнхена.</p>
             </div>
             <div class="weather-page__status">Обновление автоматически<br>каждые 10 минут</div>
         </div>
