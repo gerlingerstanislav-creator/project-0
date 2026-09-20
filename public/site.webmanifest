@@ -1,6 +1,6 @@
 {
-  "name": "STools — инструменты",
-  "short_name": "STools",
+  "name": "project-0 — инструменты",
+  "short_name": "project-0",
   "start_url": "/tool-1",
   "scope": "/",
   "display": "standalone",
@@ -8,6 +8,6 @@
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "lang": "ru",
-  "description": "Набор инструментов STools",
+  "description": "Набор инструментов project-0",
   "icons": [{"src": "/favicon-96.png", "sizes": "96x96", "type": "image/png", "purpose": "any maskable"}]
 }
