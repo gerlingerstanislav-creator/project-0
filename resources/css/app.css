@@ -268,6 +268,41 @@ button, input { font: inherit; }
     outline-offset: 4px;
     border-radius: 4px;
 }
+.startup-idea__field {
+    display: grid;
+    gap: 7px;
+    margin: 0 0 16px;
+    color: #3f3f46;
+    font-size: 13px;
+    font-weight: 650;
+}
+.startup-idea__field input,
+.startup-idea__field textarea {
+    width: 100%;
+    padding: 10px 11px;
+    border: 1px solid #d4d4d8;
+    border-radius: 7px;
+    background: #fff;
+    color: #18181b;
+    font: inherit;
+    font-weight: 400;
+    line-height: 1.5;
+    outline: none;
+}
+.startup-idea__field input:focus,
+.startup-idea__field textarea:focus {
+    border-color: #71717a;
+    box-shadow: 0 0 0 3px rgba(113, 113, 122, .12);
+}
+.startup-idea__field textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+.startup-idea__field small {
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 500;
+}
 .startup-idea__actions {
     display: flex;
     align-items: center;
