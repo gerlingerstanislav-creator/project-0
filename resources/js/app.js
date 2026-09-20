@@ -172,61 +172,35 @@ if (weatherApp) {
 
     const formatDate = (date, index) => {
         const formatted = new Intl.DateTimeFormat('ru-RU', {
-            weekday: 'long',
             day: 'numeric',
             month: 'long',
         }).format(new Date(date + 'T12:00:00'));
 
-        return index === 0 ? 'Сегодня, ' + formatted.replace(/^[а-яё]+, /, '') : 'Завтра, ' + formatted.replace(/^[а-яё]+, /, '');
+        return index === 0 ? 'Сегодня, ' + formatted : 'Завтра, ' + formatted;
     };
 
     const iconFor = (code) => code >= 95 ? '⚡' : code >= 80 ? '🌧️' : code >= 71 ? '❄️' : code >= 51 ? '🌦️' : code >= 1 ? '⛅' : '☀️';
 
-    const renderCity = (city, data) => {
+    const renderForecast = (data) => {
         const daily = data.daily;
 
-        return `
-            <article class="weather-card">
-                <div class="weather-card__top">
-                    <img class="weather-card__photo" src="${city.photo}" alt="${city.name}" loading="lazy">
-                    <div>
-                        <h2>${city.name}</h2>
-                        <p>${city.region}</p>
-                        <div class="weather-card__current-temp">${Number.isFinite(data.current?.temperature_2m) ? Math.round(data.current.temperature_2m) + "°C" : "—"}</div>
-                        <div class="weather-card__condition">${weatherDescriptions[data.current?.weather_code] ?? "Погодные условия"} · сейчас</div>
-                    </div>
+        return daily.time.map((date, index) => {
+            const temperature = daily.temperature_2m_max[index];
+            const code = daily.weather_code[index];
+            const rain = daily.precipitation_probability_max[index];
+
+            return `
+                <div class="weather-row">
+                    <span class="weather-row__date">${formatDate(date, index)}</span>
+                    <span class="weather-row__temperature">🌡️ ${Number.isFinite(temperature) ? Math.round(temperature) + '°C' : '—'}</span>
+                    <span class="weather-row__condition"><span class="weather-row__icon" aria-hidden="true">${iconFor(code)}</span> ${weatherDescriptions[code] ?? 'Погодные условия'}</span>
+                    <span class="weather-row__rain">${Number.isFinite(rain) ? 'Осадки ' + rain + '%' : ''}</span>
                 </div>
-                <div class="weather-table-wrap">
-                    <table class="weather-table">
-                        <thead>
-                            <tr><th>Дата</th><th>Погода</th><th>Температура</th><th>Осадки</th></tr>
-                        </thead>
-                        <tbody>
-                            ${daily.time.map((date, index) => `
-                                <tr>
-                                    <th scope="row">${formatDate(date, index)}</th>
-                                    <td><span class="weather-table__icon" aria-hidden="true">${iconFor(daily.weather_code[index])}</span> ${weatherDescriptions[daily.weather_code[index]] ?? 'Погодные условия'}</td>
-                                    <td><strong>${Math.round(daily.temperature_2m_max[index])}°</strong> / ${Math.round(daily.temperature_2m_min[index])}°</td>
-                                    <td>${daily.precipitation_probability_max[index] ?? 0}%</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="weather-card__updated">Данные обновляются автоматически каждую минуту · источник: Open-Meteo</div>
-            </article>
-        `;
+            `;
+        }).join('');
     };
 
-    const renderError = (city) => `
-        <article class="weather-card weather-card--error">
-            <div class="weather-card__top">
-                <img class="weather-card__photo" src="${city.photo}" alt="${city.name}" loading="lazy">
-                <div><h2>${city.name}</h2><p>${city.region}</p></div>
-            </div>
-            <p class="weather-card__error">Не удалось получить актуальный прогноз. Попробуйте обновить страницу.</p>
-        </article>
-    `;
+    const renderError = () => '<p class="weather-card__error">Не удалось получить актуальный прогноз. Обновим данные через минуту.</p>';
 
     const loadWeather = async () => {
         await Promise.all(cities.map(async (city) => {
@@ -234,8 +208,7 @@ if (weatherApp) {
             url.search = new URLSearchParams({
                 latitude: city.latitude,
                 longitude: city.longitude,
-                current: 'temperature_2m,weather_code',
-                daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+                daily: 'weather_code,temperature_2m_max,precipitation_probability_max',
                 forecast_days: '2',
                 timezone: 'auto',
             });
@@ -243,12 +216,19 @@ if (weatherApp) {
             try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('weather_request_failed');
+
                 const data = await response.json();
-                const target = document.querySelector(`[data-weather-city="${city.id}"]`);
-                if (target) target.innerHTML = renderCity(city, data);
+                const target = document.querySelector(`[data-weather-forecast="${city.id}"]`);
+
+                if (target) {
+                    target.innerHTML = renderForecast(data);
+                }
             } catch {
-                const target = document.querySelector(`[data-weather-city="${city.id}"]`);
-                if (target) target.innerHTML = renderError(city);
+                const target = document.querySelector(`[data-weather-forecast="${city.id}"]`);
+
+                if (target) {
+                    target.innerHTML = renderError();
+                }
             }
         }));
     };
