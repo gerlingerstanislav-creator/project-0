@@ -74,7 +74,3 @@
         <p class="page__eyebrow">06 / SKI RESORTS</p>
     </section>
 </x-layout>
-
-@push('scripts')
-    @vite('resources/js/ski-resort.js')
-@endpush
