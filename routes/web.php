@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\PushSubscriptionController;
+use Inertia\Inertia;
 use App\Http\Controllers\Tools\ManagerCheatSheetsController;
 use App\Http\Controllers\Tools\Tool1Controller;
 use App\Http\Controllers\Tools\Tool2Controller;
@@ -23,6 +24,7 @@ Route::get('/tool-2', Tool2Controller::class)->name('tools.tool2');
 Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
 Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
 Route::get('/ski-resort', WeatherController::class)->name('tools.ski-resort');
+Route::get('/tests', fn () => Inertia::render('Tests'))->middleware('auth')->name('tests');
 
 Route::get('/push/config', [PushSubscriptionController::class, 'config'])->name('push.config');
 
