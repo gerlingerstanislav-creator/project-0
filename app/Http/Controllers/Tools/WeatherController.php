@@ -19,7 +19,7 @@ class WeatherController
                 'photo' => 'https://cdn.tripster.ru/photos/42b7f940-ca5a-480b-8708-5c6e7984921d.jpg',
                 'camera' => 'https://cam-world.ru/en/cams/ulyanovsk-sobornaya-ploshchad-00000599',
                 'cameraStream' => 'https://restreamer.simdev.ru/ab4b9ca61a3e8709/stream.m3u8',
-                'cameraLive' => true,
+                'cameraLive' => false,
                 'cameraType' => 'hls',
             ],
             [
@@ -29,7 +29,8 @@ class WeatherController
                 'latitude' => 55.7558,
                 'longitude' => 37.6173,
                 'photo' => 'https://hostel24.org/upload/ammina.optimizer/jpg-webp/q80/upload/medialibrary/644/8vgq0vjsp290qhozpy1l504ugqmmnmti.webp',
-                'camera' => 'https://www.geocam.ru/en/online/taganskaya-square-webcam/',
+                'camera' => 'https://www.geocam.ru/online/taganskaya-square-webcam/',
+                'cameraEmbed' => 'https://www.geocam.ru/online/taganskaya-square-webcam/',
                 'cameraLive' => true,
             ],
             [
@@ -46,6 +47,18 @@ class WeatherController
         ];
 
         if (! app()->runningUnitTests()) {
+            foreach ($cities as &$city) {
+                if (($city['cameraType'] ?? null) === 'hls') {
+                    try {
+                        $streamResponse = Http::timeout(3)->get($city['cameraStream']);
+                        $city['cameraLive'] = $streamResponse->successful()
+                            && str_contains(strtolower($streamResponse->body()), '#extm3u');
+                    } catch (\\Throwable) {
+                        $city['cameraLive'] = false;
+                    }
+                }
+            }
+            unset($city);
             foreach ($cities as &$city) {
                 try {
                     $response = Http::acceptJson()
