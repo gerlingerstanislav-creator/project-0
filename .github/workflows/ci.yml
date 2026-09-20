@@ -107,16 +107,26 @@ jobs:
           echo "DuckDNS record updated"
 
       - name: Upload release to VPS
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ vars.VPS_HOST }}
-          username: ${{ vars.VPS_USERNAME }}
-          password: ${{ secrets.VPS_PASSWORD }}
-          port: 22
-          source: release.tar.gz
-          target: /tmp
-          timeout: 30s
-          command_timeout: 10m
+        env:
+          VPS_HOST: ${{ vars.VPS_HOST }}
+          VPS_USERNAME: ${{ vars.VPS_USERNAME }}
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        run: |
+          set -e
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq sshpass
+          for attempt in 1 2 3 4 5; do
+            echo "Uploading release to VPS (attempt $attempt/5)..."
+            if base64 -w 0 release.tar.gz | sshpass -p "$VPS_PASSWORD" ssh               -o StrictHostKeyChecking=no               -o UserKnownHostsFile=/dev/null               -o ConnectTimeout=30               -o ServerAliveInterval=10               -o ServerAliveCountMax=3               "$VPS_USERNAME@$VPS_HOST"               'base64 -d > /tmp/release.tar.gz'; then
+              echo "Release uploaded successfully"
+              exit 0
+            fi
+            if [ "$attempt" -lt 5 ]; then
+              sleep 10
+            fi
+          done
+          echo "Release upload failed after 5 attempts"
+          exit 1
 
       - name: Bootstrap and deploy
         uses: appleboy/ssh-action@v1
