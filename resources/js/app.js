@@ -236,3 +236,40 @@ if (weatherApp) {
     loadWeather();
     window.setInterval(loadWeather, refreshInterval);
 }
+
+
+const hlsVideos = document.querySelectorAll('[data-hls-src]');
+if (hlsVideos.length) {
+    const loadHls = () => new Promise((resolve, reject) => {
+        if (window.Hls) return resolve(window.Hls);
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.6.2/dist/hls.min.js';
+        script.onload = () => resolve(window.Hls);
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+
+    hlsVideos.forEach(async (video) => {
+        const src = video.dataset.hlsSrc;
+
+        try {
+            if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = src;
+                return;
+            }
+
+            const Hls = await loadHls();
+            if (!Hls?.isSupported()) throw new Error('hls_not_supported');
+
+            const hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+            });
+
+            hls.loadSource(src);
+            hls.attachMedia(video);
+        } catch {
+            video.outerHTML = '<div class="weather-card__camera-error">LIVE-поток временно недоступен. <a href="' + src + '" target="_blank" rel="noopener">Открыть поток</a></div>';
+        }
+    });
+}
