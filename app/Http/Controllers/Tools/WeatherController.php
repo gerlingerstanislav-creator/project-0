@@ -40,6 +40,7 @@ class WeatherController
                 'longitude' => 11.5820,
                 'photo' => 'https://www.worldplacesexplained.com/r2/og/places/munich-preview.webp',
                 'camera' => 'https://www.munich.travel/en/webcam',
+                'cameraEmbed' => 'https://webtv.feratel.com/webtv/?cam=3017',
                 'cameraLive' => true,
             ],
         ];
