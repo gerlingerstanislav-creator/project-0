@@ -27,7 +27,7 @@ class ManagerCheatSheetsTest extends TestCase
 
     public function test_weather_page_is_public_and_contains_all_ski_resorts(): void
     {
-        $this->get('/weather')
+        $this->get('/ski-resort')
             ->assertOk()
             ->assertSee('Горнолыжные курорты')
             ->assertSee('Шерегеш')
