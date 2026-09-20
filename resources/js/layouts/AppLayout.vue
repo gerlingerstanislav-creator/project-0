@@ -40,7 +40,6 @@ const closeMenu = () => { menuOpen.value = false; };
         <nav class="sidebar__nav" aria-label="Основная навигация">
             <template v-for="link in links" :key="link.href">
                 <Link
-                    v-if="link.href === '/tool-1'"
                     :href="link.href"
                     class="sidebar__link"
                     :class="{ 'is-active': isActive(link.href) }"
@@ -49,16 +48,6 @@ const closeMenu = () => { menuOpen.value = false; };
                     <span>{{ link.number }}</span>
                     {{ link.label }}
                 </Link>
-                <a
-                    v-else
-                    :href="link.href"
-                    class="sidebar__link"
-                    :class="{ 'is-active': isActive(link.href) }"
-                    @click="closeMenu"
-                >
-                    <span>{{ link.number }}</span>
-                    {{ link.label }}
-                </a>
             </template>
         </nav>
 
@@ -80,7 +69,11 @@ const closeMenu = () => { menuOpen.value = false; };
     </aside>
 
     <main class="content">
-        <slot />
+        <Transition name="page" mode="out-in" appear>
+            <div :key="page.component" class="page-transition">
+                <slot />
+            </div>
+        </Transition>
     </main>
 
     <button
