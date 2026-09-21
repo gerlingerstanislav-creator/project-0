@@ -1,0 +1,41 @@
+:root {
+    --ds-color-background: #f4f4f5;
+    --ds-color-surface: #ffffff;
+    --ds-color-surface-subtle: #fafafa;
+    --ds-color-foreground: #18181b;
+    --ds-color-foreground-muted: #71717a;
+    --ds-color-foreground-subtle: #a1a1aa;
+    --ds-color-border: #e4e4e7;
+    --ds-color-border-strong: #a1a1aa;
+    --ds-color-accent: #18181b;
+    --ds-color-accent-hover: #27272a;
+    --ds-color-on-accent: #ffffff;
+    --ds-color-danger: #b91c1c;
+    --ds-color-danger-surface: #fef2f2;
+    --ds-color-danger-border: #fecaca;
+    --ds-color-focus: rgba(113, 113, 122, .28);
+
+    --ds-radius-sm: 6px;
+    --ds-radius-md: 8px;
+    --ds-radius-lg: 12px;
+    --ds-radius-xl: 16px;
+    --ds-radius-pill: 999px;
+
+    --ds-space-1: 4px;
+    --ds-space-2: 8px;
+    --ds-space-3: 12px;
+    --ds-space-4: 16px;
+    --ds-space-5: 20px;
+    --ds-space-6: 24px;
+    --ds-space-8: 32px;
+    --ds-space-10: 40px;
+
+    --ds-font-size-xs: 11px;
+    --ds-font-size-sm: 13px;
+    --ds-font-size-md: 15px;
+    --ds-font-size-lg: 18px;
+    --ds-font-size-xl: 30px;
+
+    --ds-duration-fast: 150ms;
+    --ds-duration-normal: 200ms;
+}
