@@ -82,3 +82,10 @@
     .ds-page-header__actions { margin-top:var(--ds-space-4); }
     .ds-input { font-size:16px; }
 }
+
+.ds-catalog { max-width: 1000px; margin: 0 auto; padding: 48px; }
+.ds-catalog__section { margin-top: 40px; }
+.ds-catalog__section h2 { margin: 0 0 16px; font-size: var(--ds-font-size-lg); }
+.ds-catalog__row { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+.ds-catalog__field { display:grid; gap:8px; max-width:420px; }
+@media (max-width:700px) { .ds-catalog { padding:28px 20px; } }
