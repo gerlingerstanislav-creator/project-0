@@ -7,6 +7,12 @@ import { usePush } from '../composables/usePush.js';
 const page = usePage();
 const menuOpen = ref(false);
 const { pushState, pushBusy, pushError, togglePush } = usePush();
+const installAvailable = ref(false);
+const user = computed(() => page.props.auth?.user ?? null);
+const currentPath = computed(() => page.url.split('?')[0]);
+const links = appLinks;
+const isActive = (href) => currentPath.value === href;
+const closeMenu = () => { menuOpen.value = false; };
 const requestInstall = () => window.dispatchEvent(new Event('pwa-install-request'));
 if (typeof window !== 'undefined') { window.addEventListener('pwa-install-available', () => { installAvailable.value = true; }); }
 </script>
