@@ -26,6 +26,7 @@ const visible = computed(() => {
     } else {
         list = list.filter((article) => selected.value.some((category) => article.categories.includes(category)));
     }
+    list = list.filter((article) => feedbackFor(article) !== 'less' && !sourceHidden(article));
     return [...list].sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
 });
 
