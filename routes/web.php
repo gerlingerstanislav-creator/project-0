@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tool-1', Tool1Controller::class)->name('tools.tool1');
     Route::get('/tool-2', Tool2Controller::class)->name('tools.tool2');
     Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
-    Route::get('/manager-cheat-sheets', [ManagerCheatSheetsController::class, '__invoke'])->name('tools.manager-cheat-sheets');
+    Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
     Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
     Route::get('/news', NewsController::class)->name('tools.news');
     Route::get('/tests', fn () => Inertia::render('Tests'))->name('tests');
