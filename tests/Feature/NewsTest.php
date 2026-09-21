@@ -1,12 +1,10 @@
-<?php
+namespace Tests\Feature;
 
-namespace Tests\\Feature;
-
-use App\\Models\\User;
-use Illuminate\\Support\\Facades\\Cache;
-use Illuminate\\Support\\Facades\\Hash;
-use Illuminate\\Support\\Facades\\Http;
-use Tests\\TestCase;
+use App\Models\User;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Tests\TestCase;
 
 class NewsTest extends TestCase
 {
