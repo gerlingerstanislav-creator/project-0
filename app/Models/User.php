@@ -14,15 +14,15 @@ class User extends Authenticatable
 
     public function canEditIdeas(): bool
     {
-        return in_array($this->role, ['admin', 'editor'], true);
+        return in_array($this->role, ['admin', 'moderator'], true);
     }
 
     public function roleLabel(): string
     {
         return match ($this->role) {
             'admin' => 'Админ',
-            'editor' => 'Редактор',
-            'viewer' => 'Просмотр',
+            'moderator' => 'Модератор',
+            'user' => 'Пользователь',
             default => 'Пользователь',
         };
     }
