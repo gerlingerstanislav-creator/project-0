@@ -1,33 +1,14 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
-import { getPushState, subscribeToPush, unsubscribeFromPush } from '../push.js';
+import { appLinks } from '../navigation.js';
+import { usePush } from '../composables/usePush.js';
 
 const page = usePage();
 const menuOpen = ref(false);
-const pushState = ref('unknown');
-const pushBusy = ref(false);
-const pushError = ref('');
-const installAvailable = ref(false);
-
-const user = computed(() => page.props.auth?.user ?? null);
-const currentPath = computed(() => page.url.split('?')[0]);
-
-const links = [
-    { href: '/tool-1', label: 'Идеи стартапов', number: '1' },
-    { href: '/tool-2', label: 'Инструмент 2', number: '2' },
-    { href: '/tool-3', label: 'Инструмент 3', number: '3' },
-    { href: '/manager-cheat-sheets', label: 'Менеджерские шпаргалки', number: '4' },
-    { href: '/ski-resort', label: 'Горнолыжные курорты', number: '5' },
-    { href: '/tests', label: 'Тесты', number: '6' },
-];
-
-const isActive = (href) => currentPath.value === href;
-const closeMenu = () => { menuOpen.value = false; };
-const refreshPushState = async () => { try { pushState.value = await getPushState(); } catch { pushState.value = 'unsupported'; } };
-const togglePush = async () => { pushBusy.value = true; pushError.value = ''; try { if (pushState.value === 'subscribed') await unsubscribeFromPush(); else await subscribeToPush(); await refreshPushState(); } catch (error) { pushError.value = error.message; } finally { pushBusy.value = false; } };
+const { pushState, pushBusy, pushError, togglePush } = usePush();
 const requestInstall = () => window.dispatchEvent(new Event('pwa-install-request'));
-if (typeof window !== 'undefined') { refreshPushState(); window.addEventListener('pwa-install-available', () => { installAvailable.value = true; }); }
+if (typeof window !== 'undefined') { window.addEventListener('pwa-install-available', () => { installAvailable.value = true; }); }
 </script>
 
 <template>
