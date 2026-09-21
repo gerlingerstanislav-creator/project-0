@@ -8,6 +8,6 @@ class ExampleTest extends TestCase
 {
     public function test_homepage_is_public(): void
     {
-        $this->get('/')->assertRedirect(route('tools.tool1'));
+        $this->get('/')->assertOk();
     }
 }
