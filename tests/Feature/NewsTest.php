@@ -48,8 +48,8 @@ class NewsTest extends TestCase
 
         $this->actingAs($user)->get('/news')
             ->assertInertia(fn ($page) => $page
-                ->where('articles.0.title_ru', 'Запускается новая модель ИИ')
-                ->where('articles.0.relevance', fn ($value) => $value >= 0.55)
+                ->where('articles.articles.0.title_ru', 'Запускается новая модель ИИ')
+                ->where('articles.articles.0.relevance', fn ($value) => $value >= 0.55)
             );
 
         putenv('TRANSLATION_API_URL');
