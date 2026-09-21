@@ -220,7 +220,6 @@ jobs:
               echo "VAPID keys generated on VPS"
             fi
 
-            # Ensure Laravel does not keep stale VAPID values in its config cache.
             php artisan config:clear
 
             if ! grep -q '^APP_KEY=base64:' .env; then
@@ -284,7 +283,6 @@ jobs:
             fi
 
             if command -v ufw >/dev/null 2>&1; then
-              # Keep SSH reachable before enabling/reloading the firewall.
               ufw allow 22/tcp
               ufw allow 80/tcp
               ufw allow 443/tcp
@@ -301,7 +299,9 @@ jobs:
             nginx -T 2>/dev/null | grep -E 'listen .*443|server_name .*project-0\.duckdns\.org' || true
             curl --fail --silent --show-error --max-time 15 --resolve project-0.duckdns.org:443:127.0.0.1 https://project-0.duckdns.org/up >/dev/null
             echo "Local HTTPS health check passed"
+
             php -r '
+              require "vendor/autoload.php";
               $app = require "bootstrap/app.php";
               $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
               if (!filled(config("webpush.public_key")) || !filled(config("webpush.private_key"))) {
