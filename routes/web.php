@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\Tools\ManagerCheatSheetsController;
+use App\Http\Controllers\Tools\NewsController;
 use App\Http\Controllers\Tools\SkiResortController;
 use App\Http\Controllers\Tools\Tool1Controller;
 use App\Http\Controllers\Tools\Tool2Controller;
@@ -25,18 +26,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
     Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
     Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
+    Route::get('/news', NewsController::class)->name('tools.news');
     Route::get('/tests', fn () => Inertia::render('Tests'))->name('tests');
     Route::get('/design-system', fn () => Inertia::render('DesignSystem'))->name('design-system');
 
     Route::get('/push/config', [PushSubscriptionController::class, 'config'])->name('push.config');
-
-    Route::post('/push/subscriptions', [PushSubscriptionController::class, 'store'])
-        ->name('push.subscriptions.store');
-
+    Route::post('/push/subscriptions', [PushSubscriptionController::class, 'store'])->name('push.subscriptions.store');
     Route::post('/push/test', [PushSubscriptionController::class, 'test'])->name('push.test');
-
-    Route::delete('/push/subscriptions', [PushSubscriptionController::class, 'destroy'])
-        ->name('push.subscriptions.destroy');
+    Route::delete('/push/subscriptions', [PushSubscriptionController::class, 'destroy'])->name('push.subscriptions.destroy');
 
     Route::patch('/tool-1/ideas/{startupIdea}', [Tool1Controller::class, 'update'])
         ->middleware(EnsureUserCanEditStartupIdeas::class)
