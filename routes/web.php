@@ -25,6 +25,7 @@ Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
 Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
 Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
 Route::get('/tests', fn () => Inertia::render('Tests'))->name('tests');
+Route::get('/design-system', fn () => Inertia::render('DesignSystem'))->name('design-system');
 
 Route::get('/push/config', [PushSubscriptionController::class, 'config'])->name('push.config');
 
