@@ -7,7 +7,6 @@ use App\Models\NewsFeedback;
 use App\Services\NewsAggregatorService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class NewsController extends Controller
 {
@@ -31,7 +30,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function feedback(Request $request): Response
+    public function feedback(Request $request)
     {
         $data = $request->validate([
             'scope' => ['required', 'in:article,source'],
@@ -63,7 +62,7 @@ class NewsController extends Controller
         return back();
     }
 
-    public function removeFeedback(Request $request): Response
+    public function removeFeedback(Request $request)
     {
         $data = $request->validate([
             'scope' => ['required', 'in:article,source'],
