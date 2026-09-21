@@ -491,7 +491,7 @@ button, input { font: inherit; }
 .beer-game__object:focus-visible { outline:3px solid #a1a1aa; outline-offset:7px; border-radius:12px; }
 .beer-game__bottle { width:130px; height:350px; transform-origin:50% 88%; }
 .beer-game__bottle:hover:not(:disabled) { transform:translateY(-8px) rotate(-2deg); }
-.beer-game__bottle.is-pouring { animation:beer-pour .7s cubic-bezier(.22,.75,.3,1) forwards; }
+.beer-game__bottle.is-pouring { animation:beer-pour .7s cubic-bezier(.22,.75,.3,1) forwards; z-index:3; }
 .beer-game__bottle-glass { position:absolute; left:18px; bottom:0; width:94px; height:245px; overflow:hidden; border:4px solid rgba(255,255,255,.72); border-radius:20px 20px 16px 16px; background:linear-gradient(90deg,rgba(28,70,42,.92),rgba(74,126,73,.86) 45%,rgba(18,60,34,.95)); box-shadow:inset 7px 0 10px rgba(255,255,255,.13),inset -9px 0 12px rgba(0,0,0,.18),0 14px 28px rgba(0,0,0,.16); }
 .beer-game__bottle-glass::after { content:""; position:absolute; inset:0 58% 0 0; background:rgba(255,255,255,.1); transform:skewX(-8deg); }
 .beer-game__beer--bottle { position:absolute; right:7px; bottom:7px; left:7px; height:var(--bottle-level,47%); border-radius:8px 8px 12px 12px; background:linear-gradient(180deg,#f3c85b,#b87319); box-shadow:inset 0 8px 0 rgba(255,255,255,.12); }
@@ -509,12 +509,12 @@ button, input { font: inherit; }
 .beer-game__sip-markers i { display:block; margin-top:18px; border-left:1px dashed rgba(24,24,27,.25); }
 .beer-game__hint { position:absolute; left:50%; bottom:calc(100% + 14px); padding:8px 12px; border-radius:999px; background:#18181b; color:#fff; font-size:13px; font-weight:700; white-space:nowrap; opacity:0; pointer-events:none; transform:translate(-50%,5px); transition:opacity .18s ease,transform .18s ease; }
 .beer-game__object:hover .beer-game__hint,.beer-game__object:focus-visible .beer-game__hint { opacity:1; transform:translate(-50%,0); }
-.beer-game__pour { position:absolute; left:calc(50% - 16px); bottom:192px; width:92px; height:110px; pointer-events:none; opacity:0; transform:rotate(-9deg); }
+.beer-game__pour { position:absolute; left:calc(50% + 22px); bottom:192px; width:92px; height:110px; pointer-events:none; opacity:0; transform:rotate(9deg); }
 .beer-game__pour span { display:block; width:8px; height:100%; border-radius:99px; background:linear-gradient(90deg,#b66e16,#f1c14e,#b66e16); box-shadow:0 0 7px rgba(241,193,78,.4); }
-.beer-game__pour.is-active { animation:beer-stream .7s ease-out forwards; }
+.beer-game__pour.is-active { animation:beer-stream .7s ease-out forwards; z-index:4; }
 .beer-game__new-bottle { display:block; margin:14px auto 0; padding:9px 14px; border:1px solid #18181b; border-radius:999px; background:#18181b; color:#fff; font-size:13px; font-weight:700; cursor:pointer; }\n.beer-game__new-bottle:hover { background:#27272a; }\n.beer-game__status { width:fit-content; min-width:120px; margin:10px auto 0; padding:9px 13px; border:1px solid #d4d4d8; border-radius:999px; background:#fff; color:#52525b; font-size:13px; font-weight:700; text-align:center; }
-@keyframes beer-pour { 0%{transform:rotate(0)} 35%{transform:rotate(-25deg) translate(-12px,4px)} 75%{transform:rotate(-31deg) translate(-15px,5px)} 100%{transform:rotate(0)} }
-@keyframes beer-stream { 0%{opacity:0;transform:rotate(-9deg) scaleY(.2);transform-origin:top} 20%{opacity:1} 75%{opacity:1} 100%{opacity:0;transform:rotate(-9deg) scaleY(1);transform-origin:top} }
+@keyframes beer-pour { 0%{transform:rotate(0)} 35%{transform:rotate(25deg) translate(12px,4px)} 75%{transform:rotate(31deg) translate(15px,5px)} 100%{transform:rotate(0)} }
+@keyframes beer-stream { 0%{opacity:0;transform:rotate(9deg) scaleY(.2);transform-origin:top} 20%{opacity:1} 75%{opacity:1} 100%{opacity:0;transform:rotate(9deg) scaleY(1);transform-origin:top} }
 @keyframes beer-drink { 0%{transform:translateY(0) rotate(0)} 35%{transform:translateY(-6px) rotate(3deg)} 70%{transform:translateY(-2px) rotate(-2deg)} 100%{transform:translateY(0) rotate(0)} }
 .beer-game__cup.is-drinking { animation:beer-drink .55s ease-in-out; }
 @media (max-width:700px) {

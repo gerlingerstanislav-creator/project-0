@@ -28,7 +28,7 @@ const drink = () => {
     if (glassBeer.value <= 0 || drinking.value) return;
     drinking.value = true;
     window.setTimeout(() => {
-        glassBeer.value -= 1;
+        glassBeer.value = 0;
         drinking.value = false;
     }, 550);
 };
