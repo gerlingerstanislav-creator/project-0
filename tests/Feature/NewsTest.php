@@ -1,29 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\\Feature;
 
-use App\Services\NewsAggregatorService;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
-use Tests\TestCase;
+use App\\Models\\User;
+use Illuminate\\Support\\Facades\\Cache;
+use Illuminate\\Support\\Facades\\Hash;
+use Illuminate\\Support\\Facades\\Http;
+use Tests\\TestCase;
 
 class NewsTest extends TestCase
 {
-    public function test_news_page_requires_authentication(): void
-    {
-        $this->get('/news')->assertRedirect('/login');
-    }
-
-    public function test_news_page_renders_aggregated_articles(): void
-    {
-        $this->actingAs($this->user())->get('/news')->assertOk();
-    }
-
-    protected function user()
-    {
-        return \App\Models\User::factory()->create();
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,5 +23,21 @@ class NewsTest extends TestCase
                 ['Content-Type' => 'application/rss+xml']
             ),
         ]);
+    }
+
+    public function test_news_page_requires_authentication(): void
+    {
+        $this->get('/news')->assertRedirect('/login');
+    }
+
+    public function test_news_page_renders_aggregated_articles(): void
+    {
+        $user = User::query()->create([
+            'username' => 'news-test',
+            'password' => Hash::make('password'),
+            'role' => 'user',
+        ]);
+
+        $this->actingAs($user)->get('/news')->assertOk();
     }
 }
