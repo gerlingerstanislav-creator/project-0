@@ -214,14 +214,15 @@ class NewsAggregatorService
         usort($result, fn (array $a, array $b) => $b['score'] <=> $a['score']);
 
         $translationTexts = [];
-        foreach (array_slice($result, 0, 40) as $article) {
+        $translationArticles = array_slice($result, 0, 8);
+        foreach ($translationArticles as $article) {
             $translationTexts[] = $article['title'];
             if ($article['description'] !== '') $translationTexts[] = $article['description'];
         }
 
         $translations = $this->translationService->translate($translationTexts);
         $translationIndex = 0;
-        foreach (array_slice($result, 0, 40, true) as $index => $article) {
+        foreach (array_slice($result, 0, 8, true) as $index => $article) {
             $result[$index]['title_ru'] = $translations[$translationIndex] ?? $article['title'];
             $translationIndex++;
             if ($article['description'] !== '') {
