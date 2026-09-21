@@ -11,7 +11,13 @@ const { pushState, pushBusy, pushError, togglePush } = usePush();
 const installAvailable = ref(false);
 const user = computed(() => page.props.auth?.user ?? null);
 const currentPath = computed(() => page.url.split('?')[0]);
-const links = appLinks;
+const links = computed(() => appLinks.filter((link) => {
+    if (user.value) {
+        return link.auth && (!link.roles || link.roles.includes(user.value.role));
+    }
+
+    return link.guest;
+}));
 const isActive = (href) => currentPath.value === href;
 const closeMenu = () => { menuOpen.value = false; };
 const requestInstall = () => window.dispatchEvent(new Event('pwa-install-request'));
@@ -69,7 +75,7 @@ if (typeof window !== 'undefined') { window.addEventListener('pwa-install-availa
                 </Button>
             </template>
 
-            <Link v-else href="/login" class="sidebar__login" @click="closeMenu">Войти</Link>
+
         </div>
     </aside>
 
