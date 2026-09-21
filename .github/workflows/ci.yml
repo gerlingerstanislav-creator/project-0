@@ -189,7 +189,7 @@ jobs:
               php -r '
               require "vendor/autoload.php";
               $path = ".env";
-              $keys = \Minishlink\WebPush\VAPID::createVapidKeys();
+              $keys = \Minishnik\WebPush\VAPID::createVapidKeys();
               $env = file_get_contents($path);
               if ($env === false) {
                   throw new RuntimeException("Unable to read .env");
@@ -199,10 +199,12 @@ jobs:
                   "VAPID_PRIVATE_KEY" => $keys["privateKey"],
               ] as $name => $value) {
                   $pattern = "/^" . preg_quote($name, "/") . "=.*$/m";
-                  $env = preg_replace($pattern, $name . "=" . $value, $env, 1, $count);
-                  if ($count !== 1) {
-                      throw new RuntimeException("Missing {$name} entry in .env");
+                  $replacement = $name . "=" . $value;
+                  $updated = preg_replace($pattern, $replacement, $env, 1, $count);
+                  if ($count === 0) {
+                      $updated = rtrim($updated) . PHP_EOL . $replacement . PHP_EOL;
                   }
+                  $env = $updated;
               }
               if (file_put_contents($path, $env) === false) {
                   throw new RuntimeException("Unable to write .env");
