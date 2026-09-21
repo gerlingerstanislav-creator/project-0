@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import { appLinks } from '../navigation.js';
 import { usePush } from '../composables/usePush.js';
+import Button from '../components/ui/Button.vue';
 
 const page = usePage();
 const menuOpen = ref(false);
@@ -55,16 +56,17 @@ if (typeof window !== 'undefined') { window.addEventListener('pwa-install-availa
                 <div class="sidebar__account-role">
                     {{ user.role === 'admin' ? 'Администратор' : user.role === 'editor' ? 'Редактор' : 'Наблюдатель' }}
                 </div>
-                <button v-if="pushState === 'available' || pushState === 'subscribed'" type="button" class="sidebar__push" :disabled="pushBusy" @click="togglePush">{{ pushBusy ? 'Подключение…' : pushState === 'subscribed' ? 'Отключить уведомления' : 'Включить уведомления' }}</button>
-                <button v-if="installAvailable" type="button" class="sidebar__push" @click="requestInstall">Установить приложение</button>
+                <Button v-if="pushState === 'available' || pushState === 'subscribed'" variant="secondary" type="button" class="sidebar__push" :disabled="pushBusy" @click="togglePush">{{ pushBusy ? 'Подключение…' : pushState === 'subscribed' ? 'Отключить уведомления' : 'Включить уведомления' }}</Button>
+                <Button v-if="installAvailable" variant="secondary" type="button" class="sidebar__push" @click="requestInstall">Установить приложение</Button>
                 <small v-if="pushError" class="sidebar__push-error">{{ pushError }}</small>
-                <button
+                <Button
                     type="button"
+                    variant="secondary"
                     class="sidebar__logout"
                     @click="router.post('/logout', {}, { preserveScroll: true, onSuccess: closeMenu })"
                 >
                     Выйти
-                </button>
+                </Button>
             </template>
 
             <Link v-else href="/login" class="sidebar__login" @click="closeMenu">Войти</Link>
