@@ -9,6 +9,8 @@ use Throwable;
 
 class NewsAggregatorService
 {
+    public function __construct(private readonly NewsTranslationService $translationService) {}
+
     private const SOURCES = [
         ['name' => 'TechCrunch', 'url' => 'https://techcrunch.com/feed/', 'quality' => 0.92, 'categories' => ['IT', 'AI', 'Стартапы', 'Бизнес']],
         ['name' => 'Ars Technica', 'url' => 'https://feeds.arstechnica.com/arstechnica/index', 'quality' => 0.94, 'categories' => ['IT', 'Наука', 'Бизнес']],
@@ -169,6 +171,29 @@ class NewsAggregatorService
         unset($article);
 
         usort($result, fn (array $a, array $b) => $b['score'] <=> $a['score']);
+
+        $translationTexts = [];
+        foreach (array_slice($result, 0, 40) as $article) {
+            $translationTexts[] = $article['title'];
+            if ($article['description'] !== '') {
+                $translationTexts[] = $article['description'];
+            }
+        }
+
+        $translations = $this->translationService->translate($translationTexts);
+        $translationIndex = 0;
+
+        foreach (array_slice($result, 0, 40, true) as $index => $article) {
+            $result[$index]['title_ru'] = $translations[$translationIndex] ?? $article['title'];
+            $translationIndex++;
+
+            if ($article['description'] !== '') {
+                $result[$index]['description_ru'] = $translations[$translationIndex] ?? $article['description'];
+                $translationIndex++;
+            } else {
+                $result[$index]['description_ru'] = '';
+            }
+        }
 
         return $result;
     }

@@ -15,6 +15,7 @@ const props = defineProps({
 const categories = ['Для тебя', 'IT', 'AI', 'Программирование', 'Стартапы', 'Бизнес', 'Управление', 'Наука', 'Мир', 'Политика', 'Спорт'];
 const selected = ref(props.selectedCategories.length ? props.selectedCategories : ['Для тебя']);
 const importance = ref(props.minImportance);
+const showOriginal = ref(false);
 
 const visible = computed(() => {
     let list = props.articles.filter((article) => article.importance >= importance.value);
@@ -95,6 +96,9 @@ const formatSources = (article) => article.source_count > 1
             </div>
 
             <div class="news-meta">
+                <button type="button" class="news-chip" :class="{ 'is-active': !showOriginal }" @click="showOriginal = !showOriginal">
+                    {{ showOriginal ? 'Показывать перевод' : 'Показывать оригинал' }}
+                </button>
                 <span>{{ visible.length }} новостей</span>
                 <span>{{ sources.length }} источников</span>
                 <span>Обновлено {{ updatedAt ? formatDate(updatedAt) : '—' }}</span>
@@ -110,10 +114,10 @@ const formatSources = (article) => article.source_count > 1
                     </div>
 
                     <h2 class="news-card__title">
-                        <a :href="article.url" target="_blank" rel="noopener noreferrer">{{ article.title }}</a>
+                        <a :href="article.url" target="_blank" rel="noopener noreferrer">{{ showOriginal || !article.title_ru ? article.title : article.title_ru }}</a>
                     </h2>
 
-                    <p v-if="article.description" class="news-card__description">{{ article.description }}</p>
+                    <p v-if="article.description" class="news-card__description">{{ showOriginal || !article.description_ru ? article.description : article.description_ru }}</p>
 
                     <div class="news-card__bottom">
                         <span>{{ formatSources(article) }}</span>
