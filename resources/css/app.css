@@ -707,3 +707,48 @@ button, input { font: inherit; }
  .news-card { padding:16px; }
  .news-card__title { font-size:17px; }
 }
+
+/* Cron scheduler */
+.cron-tabs{display:flex;gap:6px;margin-top:34px;padding:4px;border:1px solid var(--ds-color-border);border-radius:10px;width:max-content;background:var(--ds-color-surface-subtle)}
+.cron-tab{border:0;border-radius:7px;padding:9px 16px;background:transparent;color:var(--ds-color-foreground-muted);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.cron-tab.is-active{background:var(--ds-color-foreground);color:var(--ds-color-surface)}
+.cron-panel{display:grid;gap:22px;margin-top:14px;padding:22px;border:1px solid var(--ds-color-border);border-radius:14px;background:var(--ds-color-surface)}
+.cron-builder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.cron-field{display:grid;gap:7px}
+.cron-field span,.cron-label,.cron-section-title{color:var(--ds-color-foreground-muted);font-size:10px;font-weight:750;letter-spacing:.07em;text-transform:uppercase}
+.cron-field input,.cron-field select,.cron-input{width:100%;box-sizing:border-box;border:1px solid var(--ds-color-border);border-radius:8px;padding:11px 12px;background:var(--ds-color-surface);color:var(--ds-color-foreground);font:inherit}
+.cron-field input:focus,.cron-field select:focus,.cron-input:focus{outline:2px solid var(--ds-color-foreground);outline-offset:1px}
+.cron-result{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:18px;border-radius:10px;background:var(--ds-color-surface-subtle)}
+.cron-result>div{display:grid;gap:8px;align-content:start}
+.cron-result code,.cron-code-list code{display:block;width:max-content;max-width:100%;overflow:auto;padding:7px 9px;border-radius:6px;background:var(--ds-color-foreground);color:var(--ds-color-surface);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+.cron-runs{display:grid;gap:10px}
+.cron-run-list{display:grid;gap:7px}
+.cron-run-list span{padding:9px 11px;border:1px solid var(--ds-color-border);border-radius:7px;color:var(--ds-color-foreground);font-size:12px}
+.cron-example{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px;border:1px solid var(--ds-color-border);border-radius:10px;background:var(--ds-color-surface-subtle)}
+.cron-example div{display:grid;gap:4px}
+.cron-example span{color:var(--ds-color-foreground-muted);font-size:12px;line-height:1.45}
+.cron-secondary,.cron-add,.cron-remove,.cron-fix{border:1px solid var(--ds-color-border);border-radius:7px;padding:8px 11px;background:var(--ds-color-surface);color:var(--ds-color-foreground);font:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.cron-rules{display:grid;gap:12px}
+.cron-rule{display:grid;gap:9px;padding:16px;border:1px solid var(--ds-color-border);border-radius:10px}
+.cron-rule__head{display:flex;justify-content:space-between;align-items:center;color:var(--ds-color-foreground-muted);font-size:11px;font-weight:700}
+.cron-input{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.cron-input.is-invalid{border-color:#b91c1c}
+.cron-error{display:grid;gap:4px;padding:10px 12px;border-radius:8px;background:#fef2f2;color:#991b1b;font-size:11px;line-height:1.4}
+.cron-error .cron-fix{width:max-content;border-color:#fecaca;background:#fff}
+.cron-valid{color:#166534;font-size:11px;font-weight:700}
+.cron-rule__description{color:var(--ds-color-foreground-muted);font-size:12px}
+.cron-add{width:max-content}
+.cron-code-list{display:grid;gap:6px}
+.cron-reference{display:grid;gap:10px;padding-top:6px}
+.cron-reference__grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.cron-reference__grid span{padding:10px;border:1px solid var(--ds-color-border);border-radius:7px;color:var(--ds-color-foreground-muted);font-size:10px;line-height:1.4}
+.cron-reference__grid b{display:block;color:var(--ds-color-foreground);font-size:11px}
+.cron-empty,.cron-note{color:var(--ds-color-foreground-muted);font-size:11px;line-height:1.5}
+.cron-note{margin:14px 0 0}
+@media (max-width:700px){
+ .cron-tabs{width:100%;margin-top:26px}.cron-tab{flex:1}
+ .cron-panel{padding:16px}
+ .cron-builder,.cron-result{grid-template-columns:1fr}
+ .cron-example{display:grid}
+ .cron-reference__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
