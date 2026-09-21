@@ -1,4 +1,4 @@
-const CACHE = 'project-0-shell-v3';
+const CACHE = 'project-0-shell-v4';
 const OFFLINE = '/offline.html';
 const SHELL = ['/', '/tool-1', '/tool-2', '/tool-3', '/manager-cheat-sheets', '/ski-resort', OFFLINE];
 
