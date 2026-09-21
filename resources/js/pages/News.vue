@@ -5,7 +5,7 @@ import AppLayout from '../layouts/AppLayout.vue';
 import PageHeader from '../components/ui/PageHeader.vue';
 
 const props = defineProps({
-    articles: { type: Array, default: () => [] },
+    articles: { type: Object, default: () => ({ articles: [] }) },
     sources: { type: Array, default: () => [] },
     updatedAt: { type: String, default: '' },
     selectedCategories: { type: Array, default: () => [] },
@@ -20,7 +20,7 @@ const showOriginal = ref(false);
 const localFeedback = ref([...props.feedback]);
 
 const visible = computed(() => {
-    let list = props.articles.filter((article) => article.importance >= importance.value);
+    let list = (props.articles.articles ?? []).filter((article) => article.importance >= importance.value);
     if (selected.value.includes('Для тебя')) {
         list = list.filter((article) => article.relevance >= 0.55);
     } else {
