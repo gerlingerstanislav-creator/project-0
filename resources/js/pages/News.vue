@@ -35,18 +35,8 @@ const persistPreferences = () => {
     }, 300);
 };
 
-watch(selected, persistPreferences, { deep: true });
-watch(importance, persistPreferences);
-watch(pendingTranslations, syncTranslationPolling, { immediate: true });
-
-onMounted(() => syncTranslationPolling(pendingTranslations.value));
-
-onBeforeUnmount(() => {
-    if (preferenceTimer) clearTimeout(preferenceTimer);
-    if (translationTimer) clearInterval(translationTimer);
-});
-
 const pendingTranslations = computed(() => (props.articles.articles ?? []).some((article) => article.translation_pending));
+
 const refreshTranslations = () => {
     router.reload({
         only: ['articles', 'updatedAt'],
@@ -66,6 +56,17 @@ const syncTranslationPolling = (pending) => {
     }
 };
 
+watch(selected, persistPreferences, { deep: true });
+watch(importance, persistPreferences);
+watch(pendingTranslations, syncTranslationPolling, { immediate: true });
+
+onMounted(() => syncTranslationPolling(pendingTranslations.value));
+
+onBeforeUnmount(() => {
+    if (preferenceTimer) clearTimeout(preferenceTimer);
+    if (translationTimer) clearInterval(translationTimer);
+});
+
 const visible = computed(() => {
     let list = (props.articles.articles ?? []).filter((article) => article.importance >= importance.value);
     if (selected.value.includes('Для тебя')) {
@@ -75,7 +76,7 @@ const visible = computed(() => {
     }
     list = list.filter((article) => feedbackFor(article) !== 'less' && !sourceHidden(article));
     return [...list].sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-});
+};
 
 const toggleCategory = (category) => {
     if (category === 'Для тебя') { selected.value = ['Для тебя']; return; }
