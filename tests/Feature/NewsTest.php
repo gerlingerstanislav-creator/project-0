@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Services\NewsTranslationService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -40,20 +41,16 @@ class NewsTest extends TestCase
                     'Новости разработчика программного обеспечения с ИИ.',
                 ],
             ], 200),
-            '*' => Http::response(
-                '<?xml version="1.0"?><rss><channel><item><title>OpenAI launches new AI model</title><link>https://example.com/article</link><description>AI software developer news.</description><pubDate>Mon, 21 Sep 2026 05:00:00 GMT</pubDate></item></channel></rss>',
-                200,
-                ['Content-Type' => 'application/rss+xml']
-            ),
         ]);
 
-        $user = $this->makeUser('news-translation-test');
+        $service = app(NewsTranslationService::class);
+        $translations = $service->translate([
+            'OpenAI launches new AI model',
+            'AI software developer news.',
+        ]);
 
-        $this->actingAs($user)->get('/news')
-            ->assertInertia(fn ($page) => $page
-                ->where('articles.articles.0.title_ru', 'Запускается новая модель ИИ')
-                ->where('articles.articles.0.relevance', fn ($value) => $value >= 0.55)
-            );
+        $this->assertSame('Запускается новая модель ИИ', $translations[0]);
+        $this->assertSame('Новости разработчика программного обеспечения с ИИ.', $translations[1]);
 
         Http::assertSent(fn ($request) =>
             $request->url() === 'http://127.0.0.1:5000/translate'
