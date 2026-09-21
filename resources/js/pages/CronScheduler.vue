@@ -9,7 +9,7 @@ const preset = ref('daily');
 const time = ref('09:00');
 const weekday = ref('1');
 const monthDay = ref('1');
-const yearDate = ref('01-01');
+const yearDate = ref('2026-01-01');
 const interval = ref('15');
 const customRules = ref(['0 9,18 * * 1-5', '0 12 * * 0']);
 
@@ -108,7 +108,14 @@ function nextRuns(expression, count) {
     cursor.setSeconds(0,0); cursor.setMinutes(cursor.getMinutes()+1);
     for (let i=0; i<366*24*60 && result.length<count; i++) {
         const values = [cursor.getMinutes(),cursor.getHours(),cursor.getDate(),cursor.getMonth()+1,cursor.getDay()];
-        if (state.parsed.every((x,j) => x.values.has(values[j]))) result.push(new Date(cursor));
+        const minuteHourMonth = state.parsed.slice(0, 4).every((x,j) => x.values.has(values[j]));
+        const domAny = state.fields[2] === '*';
+        const dowAny = state.fields[4] === '*';
+        const dowValue = values[4] === 0 ? [0, 7] : [values[4]];
+        const domMatch = state.parsed[2].values.has(values[2]);
+        const dowMatch = dowValue.some(value => state.parsed[4].values.has(value));
+        const dayMatch = domAny && dowAny ? true : domAny ? dowMatch : dowAny ? domMatch : (domMatch || dowMatch);
+        if (minuteHourMonth && dayMatch) result.push(new Date(cursor));
         cursor.setMinutes(cursor.getMinutes()+1);
     }
     return result;
