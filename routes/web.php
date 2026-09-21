@@ -28,7 +28,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
     Route::get('/news', NewsController::class)->name('tools.news');
     Route::get('/tests', fn () => Inertia::render('Tests'))->name('tests');
-    Route::get('/design-system', fn () => Inertia::render('DesignSystem'))->name('design-system');
+    Route::get('/design-system', fn () => Inertia::render('DesignSystem'))
+        ->middleware(function ($request, $next) {
+            abort_unless(in_array($request->user()?->role, ['admin', 'moderator'], true), 403);
+
+            return $next($request);
+        })
+        ->name('design-system');
 
     Route::get('/push/config', [PushSubscriptionController::class, 'config'])->name('push.config');
     Route::post('/push/subscriptions', [PushSubscriptionController::class, 'store'])->name('push.subscriptions.store');
