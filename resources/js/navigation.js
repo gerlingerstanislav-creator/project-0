@@ -5,4 +5,5 @@ export const appLinks = [
     { href: '/manager-cheat-sheets', label: 'Менеджерские шпаргалки', number: '4' },
     { href: '/ski-resort', label: 'Горнолыжные курорты', number: '5' },
     { href: '/tests', label: 'Тесты', number: '6' },
+    { href: '/design-system', label: 'Дизайн-система', number: '7' },
 ];
