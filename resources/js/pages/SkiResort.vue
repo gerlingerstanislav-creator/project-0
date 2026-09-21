@@ -6,6 +6,7 @@ import AppLayout from '../layouts/AppLayout.vue';
 const props = defineProps({ resorts: { type: Array, default: () => [] } });
 const cameras = ref({});
 const forecasts = ref({});
+const temperatures = ref({});
 
 const camera = (id) => cameras.value[id] ?? 0;
 const setCamera = (id, index) => {
@@ -25,23 +26,43 @@ const weatherDescription = (code) => {
     return '—';
 };
 
-const loadForecast = async (resort) => {
+const loadWeather = async (resort) => {
     try {
         const params = new URLSearchParams({
-            latitude: resort.latitude, longitude: resort.longitude,
+            latitude: resort.latitude,
+            longitude: resort.longitude,
+            current: 'temperature_2m,weather_code',
             daily: 'weather_code,temperature_2m_max,temperature_2m_min',
-            timezone: 'auto', forecast_days: '5'
+            timezone: 'auto',
+            forecast_days: '5',
         });
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
+        if (!response.ok) throw new Error('Weather request failed');
         const data = await response.json();
+
+        temperatures.value[resort.id] = data.current?.temperature_2m ?? null;
         forecasts.value[resort.id] = data.daily?.time?.map((date, i) => ({
-            date, code: data.daily.weather_code[i], max: data.daily.temperature_2m_max[i], min: data.daily.temperature_2m_min[i]
+            date,
+            code: data.daily.weather_code[i],
+            max: data.daily.temperature_2m_max[i],
+            min: data.daily.temperature_2m_min[i],
         })) ?? [];
     } catch {
+        temperatures.value[resort.id] = null;
         forecasts.value[resort.id] = [];
     }
 };
-onMounted(() => props.resorts.forEach(loadForecast));
+
+const seasonStatus = (resort) => {
+    const year = new Date().getFullYear();
+    const openMonth = ['sheregesh', 'bigwood'].includes(resort.id) ? 10 : 11;
+    const open = new Date(year, openMonth, 1);
+    const close = new Date(year + 1, 4, 31, 23, 59, 59);
+    return new Date() >= open && new Date() <= close
+        ? { status: 'open', label: 'Активен' }
+        : { status: 'closed', label: 'Не активен' };
+};
+onMounted(() => props.resorts.forEach(loadWeather));
 </script>
 
 <template>
@@ -70,7 +91,7 @@ onMounted(() => props.resorts.forEach(loadForecast));
                         </div>
                         <div class="ski-card__body">
                             <div class="ski-card__heading"><div><h2 class="ski-card__title">{{ resort.name }}</h2><p class="ski-card__region">{{ resort.region }}</p></div><span :class="`ski-card__status ski-card__status--${resort.status}`">{{ resort.statusLabel }}</span></div>
-                            <div class="ski-card__meta"><div class="ski-card__meta-item"><div class="ski-card__meta-label">Сезон</div><div class="ski-card__meta-value">с {{ resort.seasonStart }} по {{ resort.seasonEnd }}</div></div><div class="ski-card__meta-item"><div class="ski-card__meta-label">Сейчас</div><div class="ski-card__meta-value">{{ resort.currentTemperature !== null ? Math.round(resort.currentTemperature) + '°C' : '—' }}</div></div></div>
+                            <div class="ski-card__meta"><div class="ski-card__meta-item"><div class="ski-card__meta-label">Сезон</div><div class="ski-card__meta-value">с {{ resort.seasonStart }} по {{ resort.seasonEnd }}</div></div><div class="ski-card__meta-item"><div class="ski-card__meta-label">Сейчас</div><div class="ski-card__meta-value">{{ temperatures[resort.id] !== null && temperatures[resort.id] !== undefined ? Math.round(temperatures[resort.id]) + '°C' : '—' }}</div></div></div>
                         </div>
                     </div>
                     <div class="ski-card__forecast">
