@@ -14,7 +14,6 @@ jobs:
   diagnostics:
     name: Read-only production database diagnostics
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Run diagnostics on production
         uses: appleboy/ssh-action@v1
