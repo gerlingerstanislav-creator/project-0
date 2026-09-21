@@ -1,6 +1,5 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import Button from '../components/ui/Button.vue';
 </script>
 
 <template>
@@ -14,9 +13,7 @@ import Button from '../components/ui/Button.vue';
                 Это личный набор инструментов проекта. Авторизуйтесь, чтобы получить доступ
                 к инструментам, материалам и дополнительным возможностям.
             </p>
-            <Link href="/login" class="home-card__login">
-                <Button>Авторизоваться</Button>
-            </Link>
+            <Link href="/login" class="home-card__login ds-button">Авторизоваться</Link>
         </section>
     </main>
 </template>
