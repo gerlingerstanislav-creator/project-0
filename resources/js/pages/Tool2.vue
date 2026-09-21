@@ -36,7 +36,7 @@ const sip = () => {
 };
 
 const beerLevel = computed(() => (glass.value ? Math.max(0, 100 - sips.value * 25) : 0));
-const label = computed(() => `${sips.value} / 4 глотка`);
+const label = computed(() => `${sips.value} / 4 ${sips.value === 1 ? 'глоток' : sips.value >= 2 && sips.value <= 4 ? 'глотка' : 'глотков'}`);
 </script>
 
 <template>
