@@ -32,17 +32,20 @@ class NewsTest extends TestCase
     {
         putenv('TRANSLATION_API_URL=http://127.0.0.1:5000');
 
-        Http::fake([
-            'http://127.0.0.1:5000/*' => Http::response([
-                ['translatedText' => 'Запускается новая модель ИИ'],
-                ['translatedText' => 'Новости разработчика программного обеспечения с ИИ.'],
-            ], 200),
-            '*' => Http::response(
+        Http::fake(function ($request) {
+            if (str_contains($request->url(), '127.0.0.1:5000/translate')) {
+                return Http::response([
+                    ['translatedText' => 'Запускается новая модель ИИ'],
+                    ['translatedText' => 'Новости разработчика программного обеспечения с ИИ.'],
+                ], 200);
+            }
+
+            return Http::response(
                 '<?xml version="1.0"?><rss><channel><item><title>OpenAI launches new AI model</title><link>https://example.com/article</link><description>AI software developer news.</description><pubDate>Mon, 21 Sep 2026 05:00:00 GMT</pubDate></item></channel></rss>',
                 200,
                 ['Content-Type' => 'application/rss+xml']
-            ),
-        ]);
+            );
+        });
 
         $user = $this->makeUser('news-translation-test');
 
@@ -77,7 +80,7 @@ class NewsTest extends TestCase
         $this->actingAs($user)->get('/news')
             ->assertInertia(fn ($page) => $page
                 ->where('feedback.0.action', 'more')
-                ->where('articles.0.relevance', fn ($value) => $value >= 0.55)
+                ->where('articles.articles.0.relevance', fn ($value) => $value >= 0.55)
             );
     }
 
