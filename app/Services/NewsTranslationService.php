@@ -27,7 +27,7 @@ class NewsTranslationService
             $missing[$index] = $text;
         }
 
-        $url = rtrim((string) env('TRANSLATION_API_URL', 'http://127.0.0.1:5000'), '/') . '/translate';
+        $url = rtrim((string) config('services.translation.url'), '/') . '/translate';
         if (! $missing || ! filter_var($url, FILTER_VALIDATE_URL)) return $result;
 
         foreach (array_chunk($missing, self::BATCH_SIZE, true) as $batch) {

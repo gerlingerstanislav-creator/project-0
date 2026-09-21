@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -30,7 +31,7 @@ class NewsTest extends TestCase
 
     public function test_news_translation_uses_libretranslate_when_configured(): void
     {
-        putenv('TRANSLATION_API_URL=http://127.0.0.1:5000');
+        Config::set('services.translation.url', 'http://127.0.0.1:5000');
 
         Http::fake(function ($request) {
             if (str_contains($request->url(), '127.0.0.1:5000/translate')) {
@@ -55,7 +56,7 @@ class NewsTest extends TestCase
                 ->where('articles.articles.0.relevance', fn ($value) => $value >= 0.55)
             );
 
-        putenv('TRANSLATION_API_URL');
+        Http::assertSent(fn ($request) => str_contains($request->url(), '127.0.0.1:5000/translate'));
     }
 
     public function test_news_feedback_changes_relevance_and_is_returned_to_page(): void
