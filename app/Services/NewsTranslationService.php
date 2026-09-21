@@ -18,51 +18,42 @@ class NewsTranslationService
         $missing = [];
 
         foreach ($texts as $index => $text) {
-            if ($text === '') {
-                continue;
-            }
-
+            if ($text === '') continue;
             $cached = Cache::get($this->cacheKey($text));
             if ($cached !== null) {
                 $result[$index] = $cached;
                 continue;
             }
-
             $missing[$index] = $text;
         }
 
-        $key = trim((string) env('DEEPL_AUTH_KEY', ''));
-        if ($key === '' || ! $missing) {
-            return $result;
-        }
+        $url = rtrim((string) env('TRANSLATION_API_URL', 'http://127.0.0.1:5000'), '/') . '/translate';
+        if (! $missing || ! filter_var($url, FILTER_VALIDATE_URL)) return $result;
 
         foreach (array_chunk($missing, self::BATCH_SIZE, true) as $batch) {
             try {
-                $response = Http::timeout(8)
+                $response = Http::timeout(12)
                     ->connectTimeout(3)
-                    ->withHeaders([
-                        'Authorization' => 'DeepL-Auth-Key ' . $key,
-                        'Content-Type' => 'application/json',
-                    ])
-                    ->post((string) env('DEEPL_API_URL', 'https://api-free.deepl.com/v2/translate'), [
-                        'text' => array_values($batch),
-                        'target_lang' => 'RU',
+                    ->acceptJson()
+                    ->post($url, [
+                        'q' => array_values($batch),
+                        'source' => 'en',
+                        'target' => 'ru',
+                        'format' => 'text',
                     ]);
 
-                if (! $response->successful()) {
-                    continue;
+                if (! $response->successful()) continue;
+
+                $translations = $response->json();
+                if (isset($translations['translatedText'])) {
+                    $translations = [$translations];
                 }
 
-                $translations = $response->json('translations', []);
                 $offset = 0;
-
                 foreach ($batch as $index => $original) {
-                    $translated = trim((string) ($translations[$offset]['text'] ?? ''));
+                    $translated = trim((string) ($translations[$offset]['translatedText'] ?? ''));
                     $offset++;
-
-                    if ($translated === '') {
-                        continue;
-                    }
+                    if ($translated === '') continue;
 
                     $result[$index] = $translated;
                     Cache::put($this->cacheKey($original), $translated, now()->addSeconds(self::CACHE_TTL));
