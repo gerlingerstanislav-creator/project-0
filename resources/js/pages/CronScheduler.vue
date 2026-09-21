@@ -29,7 +29,7 @@ const generatedCron = computed(() => {
     if (preset.value === 'monthly') return m + ' ' + h + ' ' + monthDay.value + ' * *';
     if (preset.value === 'yearly') {
         const p = yearDate.value.split('-');
-        return m + ' ' + h + ' ' + Number(p[1]) + ' ' + Number(p[0]) + ' *';
+        return m + ' ' + h + ' ' + Number(p[2]) + ' ' + Number(p[1]) + ' *';
     }
     if (preset.value === 'weekdays') return m + ' ' + h + ' * * 1-5';
     if (preset.value === 'weekends') return m + ' ' + h + ' * * 0,6';
@@ -148,7 +148,7 @@ const fixRule = index => {
                     <label v-if="!['interval','hourly'].includes(preset)" class="cron-field"><span>Время</span><input v-model="time" type="time"></label>
                     <label v-if="preset === 'weekly'" class="cron-field"><span>День недели</span><select v-model="weekday"><option v-for="[id,label] in weekdays" :key="id" :value="id">{{ label }}</option></select></label>
                     <label v-if="preset === 'monthly'" class="cron-field"><span>Число месяца</span><input v-model.number="monthDay" type="number" min="1" max="31"></label>
-                    <label v-if="preset === 'yearly'" class="cron-field"><span>Дата</span><input v-model="yearDate" type="month"></label>
+                    <label v-if="preset === 'yearly'" class="cron-field"><span>Дата</span><input v-model="yearDate" type="date"></label>
                     <label v-if="preset === 'interval'" class="cron-field"><span>Интервал, минут</span><select v-model="interval"><option v-for="value in [1,5,10,15,20,30]" :key="value" :value="String(value)">{{ value }}</option></select></label>
                 </div>
                 <div class="cron-result">
