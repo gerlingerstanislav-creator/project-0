@@ -1,1 +1,31 @@
-name: Database diagnostics\n\non:\n  workflow_dispatch:\n  issue_comment:\n    types: [created]\n\npermissions:\n  contents: read\n  issues: read\n\njobs:\n  diagnostics:\n    name: Read-only production database diagnostics\n    runs-on: ubuntu-latest\n    if: >-\n      github.event_name == 'workflow_dispatch' ||\n      (\n        github.event_name == 'issue_comment' &&\n        github.event.issue.pull_request == null &&\n        github.event.comment.body == '/db-diagnose' &&\n        github.event.comment.user.login == github.repository_owner\n      )\n    steps:\n      - name: Run diagnostics on production\n        uses: appleboy/ssh-action@v1\n        with:\n          host: ${{ vars.VPS_HOST }}\n          username: ${{ vars.VPS_USERNAME }}\n          password: ${{ secrets.VPS_PASSWORD }}\n          port: 22\n          timeout: 30s\n          command_timeout: 5m\n          script: |\n            set -e\n            cd /var/www/project-0\n            php artisan project:db-diagnostics --json\n
+name: Database diagnostics
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostics:
+    name: Read-only production database diagnostics
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Run diagnostics on production
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          timeout: 30s
+          command_timeout: 5m
+          script: |
+            set -e
+            cd /var/www/project-0
+            php artisan project:db-diagnostics --json
