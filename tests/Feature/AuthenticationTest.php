@@ -12,30 +12,29 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_can_view_tools_without_edit_controls(): void
+    public function test_guest_is_redirected_from_protected_pages(): void
     {
-        $this->get(route('tools.tool1'))
-            ->assertSuccessful()
-            ->assertInertia(fn ($page) => $page
-                ->component('Tool1')
-                ->where('canEditIdeas', false)
-            );
+        foreach ([
+            'tools.tool1',
+            'tools.tool2',
+            'tools.tool3',
+            'tools.manager-cheat-sheets',
+            'tools.ski-resort',
+            'tests',
+            'design-system',
+        ] as $route) {
+            $this->get(route($route))->assertRedirect(route('login'));
+        }
+    }
 
-        $this->get(route('tools.tool2'))
-            ->assertInertia(fn ($page) => $page->component('Tool2'));
-
-        $this->get(route('tools.tool3'))
-            ->assertInertia(fn ($page) => $page->component('Tool3'));
+    public function test_guest_can_view_login_and_homepage(): void
+    {
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page->component('Home'));
 
         $this->get(route('login'))
             ->assertInertia(fn ($page) => $page->component('Login'));
-    }
-
-    public function test_guest_can_view_tests_page(): void
-    {
-        $this->get(route('tests'))
-            ->assertOk()
-            ->assertInertia(fn ($page) => $page->component('Tests'));
     }
 
     public function test_admin_can_login(): void
@@ -54,20 +53,20 @@ class AuthenticationTest extends TestCase
         $this->assertAuthenticatedAs(User::where('username', 'admin')->first());
     }
 
-    public function test_editor_can_login(): void
+    public function test_moderator_can_login(): void
     {
         User::create([
-            'username' => 'editor',
-            'role' => 'editor',
+            'username' => 'moderator',
+            'role' => 'moderator',
             'password' => Hash::make('secret'),
         ]);
 
         $this->post(route('login.store'), [
-            'username' => 'editor',
+            'username' => 'moderator',
             'password' => 'secret',
         ])->assertRedirect(route('tools.tool1'));
 
-        $this->assertAuthenticatedAs(User::where('username', 'editor')->first());
+        $this->assertAuthenticatedAs(User::where('username', 'moderator')->first());
     }
 
     public function test_invalid_credentials_are_rejected(): void
@@ -87,7 +86,7 @@ class AuthenticationTest extends TestCase
             ->assertSessionHasErrors('username');
     }
 
-    public function test_only_admin_and_editor_see_edit_controls(): void
+    public function test_only_admin_and_moderator_see_edit_controls(): void
     {
         $idea = StartupIdea::create([
             'slug' => 'visibility-test',
@@ -101,37 +100,41 @@ class AuthenticationTest extends TestCase
             'password' => Hash::make('secret'),
         ]);
 
-        $viewer = User::create([
-            'username' => 'viewer',
-            'role' => 'viewer',
+        $moderator = User::create([
+            'username' => 'moderator',
+            'role' => 'moderator',
+            'password' => Hash::make('secret'),
+        ]);
+
+        $user = User::create([
+            'username' => 'user',
+            'role' => 'user',
             'password' => Hash::make('secret'),
         ]);
 
         $this->actingAs($admin)
             ->get(route('tools.tool1'))
-            ->assertInertia(fn ($page) => $page
-                ->component('Tool1')
-                ->where('canEditIdeas', true)
-            );
+            ->assertInertia(fn ($page) => $page->where('canEditIdeas', true));
 
-        $this->actingAs($viewer)
+        $this->actingAs($moderator)
             ->get(route('tools.tool1'))
-            ->assertInertia(fn ($page) => $page
-                ->component('Tool1')
-                ->where('canEditIdeas', false)
-            );
+            ->assertInertia(fn ($page) => $page->where('canEditIdeas', true));
+
+        $this->actingAs($user)
+            ->get(route('tools.tool1'))
+            ->assertInertia(fn ($page) => $page->where('canEditIdeas', false));
     }
 
-    public function test_viewer_cannot_update_startup_ideas(): void
+    public function test_user_cannot_update_startup_ideas(): void
     {
         $user = User::create([
-            'username' => 'viewer',
-            'role' => 'viewer',
+            'username' => 'user',
+            'role' => 'user',
             'password' => Hash::make('secret'),
         ]);
 
         $idea = StartupIdea::create([
-            'slug' => 'viewer-test',
+            'slug' => 'user-test',
             'title' => 'Название',
             'description' => 'Описание',
         ]);
