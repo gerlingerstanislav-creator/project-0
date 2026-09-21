@@ -128,9 +128,11 @@ jobs:
           script: |
             set -e
             export DEBIAN_FRONTEND=noninteractive
-            APP_DIR="/var/www/stools"
+            APP_DIR="/var/www/project-0"
 
-            if [ -d /var/www/test ] && [ ! -d "$APP_DIR" ]; then
+            if [ -d /var/www/stools ] && [ ! -d "$APP_DIR" ]; then
+              mv /var/www/stools "$APP_DIR"
+            elif [ -d /var/www/test ] && [ ! -d "$APP_DIR" ]; then
               mv /var/www/test "$APP_DIR"
             fi
 
@@ -167,7 +169,7 @@ jobs:
               sed -i 's#^APP_URL=.*#APP_URL=https://project-0.duckdns.org#' .env
               sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env
               sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=file/' .env
-              sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/stools/database/database.sqlite#' .env
+              sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/project-0/database/database.sqlite#' .env
             fi
 
             mkdir -p database
@@ -233,7 +235,7 @@ jobs:
                 listen 80 default_server;
                 listen [::]:80 default_server;
                 server_name project-0.duckdns.org ${{ vars.VPS_HOST }};
-                root /var/www/stools/public;
+                root /var/www/project-0/public;
                 index index.php;
                 charset utf-8;
                 add_header X-Frame-Options "SAMEORIGIN";
@@ -329,7 +331,7 @@ jobs:
           command_timeout: 5m
           script: |
             set -e
-            cd /var/www/stools
+            cd /var/www/project-0
             php artisan push:deploy-success
 
   notify:
