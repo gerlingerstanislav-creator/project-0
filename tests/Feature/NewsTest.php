@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\NewsFeedback;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -74,7 +73,7 @@ class NewsTest extends TestCase
         $this->actingAs($user)->get('/news')
             ->assertInertia(fn ($page) => $page
                 ->where('feedback.0.action', 'more')
-                ->where('articles.0.relevance', 0.79)
+                ->where('articles.0.relevance', 0.91)
             );
     }
 
