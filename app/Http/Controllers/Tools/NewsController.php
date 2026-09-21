@@ -7,6 +7,7 @@ use App\Models\NewsFeedback;
 use App\Services\NewsAggregatorService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class NewsController extends Controller
 {
