@@ -620,3 +620,48 @@ button, input { font: inherit; }
 .auth-card { border-radius: var(--ds-radius-xl); }
 .auth-form__input, .auth-form__submit { border-radius: var(--ds-radius-md); }
 .sidebar__link, .sidebar__login, .sidebar__logout { border-radius: var(--ds-radius-md); }
+
+
+/* PWA pull-to-refresh */
+.pwa-refresh-indicator {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid var(--ds-color-border);
+    border-radius: 999px;
+    background: var(--ds-color-surface);
+    color: var(--ds-color-foreground-muted);
+    font-size: 11px;
+    font-weight: 650;
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, calc(-100% - 8px));
+    transition: opacity .15s ease, transform .18s ease;
+}
+.pwa-refresh-indicator.is-visible {
+    opacity: 1;
+    transform: translate(-50%, min(80px, var(--pull-distance, 0px)));
+}
+.pwa-refresh-indicator.is-ready { color: var(--ds-color-foreground); }
+.pwa-refresh-indicator.is-refreshing { transform: translate(-50%, 14px); }
+.pwa-refresh-indicator__spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--ds-color-border);
+    border-top-color: var(--ds-color-foreground);
+    border-radius: 50%;
+}
+.pwa-refresh-indicator.is-refreshing .pwa-refresh-indicator__spinner {
+    animation: pwa-refresh-spin .7s linear infinite;
+}
+@keyframes pwa-refresh-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .pwa-refresh-indicator { transition: none; }
+    .pwa-refresh-indicator.is-refreshing .pwa-refresh-indicator__spinner { animation: none; }
+}
