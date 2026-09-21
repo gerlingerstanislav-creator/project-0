@@ -13,7 +13,7 @@ class NewsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Cache::forget('news-aggregator:feed');
+        Cache::flush();
         Http::fake([
             '*' => Http::response(
                 '<?xml version="1.0"?><rss><channel><item><title>OpenAI launches new AI model</title><link>https://example.com/article</link><description>AI software developer news.</description><pubDate>Mon, 21 Sep 2026 05:00:00 GMT</pubDate></item></channel></rss>',
@@ -34,7 +34,8 @@ class NewsTest extends TestCase
 
         Http::fake([
             'http://127.0.0.1:5000/*' => Http::response([
-                'translatedText' => 'Запускается новая модель ИИ',
+                ['translatedText' => 'Запускается новая модель ИИ'],
+                ['translatedText' => 'Новости разработчика программного обеспечения с ИИ.'],
             ], 200),
             '*' => Http::response(
                 '<?xml version="1.0"?><rss><channel><item><title>OpenAI launches new AI model</title><link>https://example.com/article</link><description>AI software developer news.</description><pubDate>Mon, 21 Sep 2026 05:00:00 GMT</pubDate></item></channel></rss>',
@@ -46,7 +47,10 @@ class NewsTest extends TestCase
         $user = $this->makeUser('news-translation-test');
 
         $this->actingAs($user)->get('/news')
-            ->assertInertia(fn ($page) => $page->where('articles.0.title_ru', 'Запускается новая модель ИИ'));
+            ->assertInertia(fn ($page) => $page
+                ->where('articles.0.title_ru', 'Запускается новая модель ИИ')
+                ->where('articles.0.relevance', fn ($value) => $value >= 0.55)
+            );
 
         putenv('TRANSLATION_API_URL');
     }
