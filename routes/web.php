@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
     Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
     Route::get('/news', NewsController::class)->name('tools.news');
+    Route::put('/news/preferences', [NewsController::class, 'savePreferences'])->name('tools.news.preferences');
     Route::post('/news/feedback', [NewsController::class, 'feedback'])->name('tools.news.feedback');
     Route::delete('/news/feedback', [NewsController::class, 'removeFeedback'])->name('tools.news.feedback.remove');
     Route::get('/tests', fn () => Inertia::render('Tests'))->name('tests');

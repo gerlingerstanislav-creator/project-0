@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tools;
 
 use App\Http\Controllers\Controller;
 use App\Models\NewsFeedback;
+use App\Models\NewsPreference;
 use App\Services\NewsAggregatorService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,18 +18,47 @@ class NewsController extends Controller
             ->where('user_id', $request->user()->id)
             ->get(['scope', 'target_key', 'action']);
 
+        $preference = NewsPreference::query()
+            ->where('user_id', $request->user()->id)
+            ->first();
+
         return Inertia::render('News', [
             'articles' => $aggregator->getFeed($request->user()),
             'sources' => $aggregator->sources(),
             'updatedAt' => now()->toIso8601String(),
-            'selectedCategories' => $request->array('categories'),
-            'minImportance' => (float) $request->input('importance', 0.45),
+            'selectedCategories' => $preference?->categories ?? ['Для тебя'],
+            'minImportance' => $preference?->min_importance ?? 0.45,
             'feedback' => $feedback->map(fn (NewsFeedback $item) => [
                 'scope' => $item->scope,
                 'targetKey' => $item->target_key,
                 'action' => $item->action,
             ])->values()->all(),
         ]);
+    }
+
+    public function savePreferences(Request $request)
+    {
+        $data = $request->validate([
+            'categories' => ['required', 'array', 'min:1'],
+            'categories.*' => ['string', 'max:40'],
+            'min_importance' => ['required', 'numeric', 'between:0.45,0.85'],
+        ]);
+
+        $categories = array_values(array_unique($data['categories']));
+
+        if (in_array('Для тебя', $categories, true)) {
+            $categories = ['Для тебя'];
+        }
+
+        NewsPreference::updateOrCreate(
+            ['user_id' => $request->user()->id],
+            [
+                'categories' => $categories,
+                'min_importance' => (float) $data['min_importance'],
+            ],
+        );
+
+        return back();
     }
 
     public function feedback(Request $request)

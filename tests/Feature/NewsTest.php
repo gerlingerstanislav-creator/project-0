@@ -73,6 +73,27 @@ class NewsTest extends TestCase
             );
     }
 
+    public function test_news_preferences_are_persisted_between_requests(): void
+    {
+        $user = $this->makeUser('news-preferences-test');
+
+        $this->actingAs($user)->put('/news/preferences', [
+            'categories' => ['AI', 'Стартапы'],
+            'min_importance' => 0.65,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('news_preferences', [
+            'user_id' => $user->id,
+            'min_importance' => 0.65,
+        ]);
+
+        $this->actingAs($user)->get('/news')
+            ->assertInertia(fn ($page) => $page
+                ->where('selectedCategories', ['AI', 'Стартапы'])
+                ->where('minImportance', 0.65)
+            );
+    }
+
     public function test_news_page_renders_aggregated_articles(): void
     {
         $this->actingAs($this->makeUser('news-test'))->get('/news')->assertOk();

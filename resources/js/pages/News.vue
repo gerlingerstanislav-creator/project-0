@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 import PageHeader from '../components/ui/PageHeader.vue';
@@ -18,6 +18,28 @@ const selected = ref(props.selectedCategories.length ? props.selectedCategories 
 const importance = ref(props.minImportance);
 const showOriginal = ref(false);
 const localFeedback = ref([...props.feedback]);
+let preferenceTimer = null;
+
+const persistPreferences = () => {
+    if (preferenceTimer) clearTimeout(preferenceTimer);
+
+    preferenceTimer = setTimeout(() => {
+        router.put('/news/preferences', {
+            categories: selected.value,
+            min_importance: importance.value,
+        }, {
+            preserveScroll: true,
+            preserveState: true,
+        });
+    }, 300);
+};
+
+watch(selected, persistPreferences, { deep: true });
+watch(importance, persistPreferences);
+
+onBeforeUnmount(() => {
+    if (preferenceTimer) clearTimeout(preferenceTimer);
+});
 
 const visible = computed(() => {
     let list = (props.articles.articles ?? []).filter((article) => article.importance >= importance.value);
