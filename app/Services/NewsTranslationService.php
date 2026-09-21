@@ -44,14 +44,21 @@ class NewsTranslationService
 
                 if (! $response->successful()) continue;
 
-                $translations = $response->json();
-                if (isset($translations['translatedText'])) {
-                    $translations = [$translations];
+                $payload = $response->json();
+                if (isset($payload['translatedText'])) {
+                    $translations = is_array($payload['translatedText'])
+                        ? $payload['translatedText']
+                        : [$payload['translatedText']];
+                } else {
+                    $translations = array_map(
+                        fn ($item) => is_array($item) ? ($item['translatedText'] ?? '') : (string) $item,
+                        is_array($payload) ? $payload : [],
+                    );
                 }
 
                 $offset = 0;
                 foreach ($batch as $index => $original) {
-                    $translated = trim((string) ($translations[$offset]['translatedText'] ?? ''));
+                    $translated = trim((string) ($translations[$offset] ?? ''));
                     $offset++;
                     if ($translated === '') continue;
 

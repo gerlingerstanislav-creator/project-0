@@ -33,20 +33,19 @@ class NewsTest extends TestCase
     {
         Config::set('services.translation.url', 'http://127.0.0.1:5000');
 
-        Http::fake(function ($request) {
-            if (str_contains($request->url(), '127.0.0.1:5000/translate')) {
-                return Http::response([
-                    ['translatedText' => 'Запускается новая модель ИИ'],
-                    ['translatedText' => 'Новости разработчика программного обеспечения с ИИ.'],
-                ], 200);
-            }
-
-            return Http::response(
+        Http::fake([
+            'http://127.0.0.1:5000/translate' => Http::response([
+                'translatedText' => [
+                    'Запускается новая модель ИИ',
+                    'Новости разработчика программного обеспечения с ИИ.',
+                ],
+            ], 200),
+            '*' => Http::response(
                 '<?xml version="1.0"?><rss><channel><item><title>OpenAI launches new AI model</title><link>https://example.com/article</link><description>AI software developer news.</description><pubDate>Mon, 21 Sep 2026 05:00:00 GMT</pubDate></item></channel></rss>',
                 200,
                 ['Content-Type' => 'application/rss+xml']
-            );
-        });
+            ),
+        ]);
 
         $user = $this->makeUser('news-translation-test');
 
@@ -56,7 +55,13 @@ class NewsTest extends TestCase
                 ->where('articles.articles.0.relevance', fn ($value) => $value >= 0.55)
             );
 
-        Http::assertSent(fn ($request) => str_contains($request->url(), '127.0.0.1:5000/translate'));
+        Http::assertSent(fn ($request) =>
+            $request->url() === 'http://127.0.0.1:5000/translate'
+            && $request['q'] === [
+                'OpenAI launches new AI model',
+                'AI software developer news.',
+            ]
+        );
     }
 
     public function test_news_feedback_changes_relevance_and_is_returned_to_page(): void
