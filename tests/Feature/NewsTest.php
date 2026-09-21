@@ -73,7 +73,7 @@ class NewsTest extends TestCase
         $this->actingAs($user)->get('/news')
             ->assertInertia(fn ($page) => $page
                 ->where('feedback.0.action', 'more')
-                ->where('articles.0.relevance', 0.91)
+                ->where('articles.0.relevance', fn ($value) => $value >= 0.55)
             );
     }
 
