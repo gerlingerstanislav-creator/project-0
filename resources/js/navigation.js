@@ -6,7 +6,7 @@ export const appLinks = [
     { href: '/manager-cheat-sheets', label: 'Менеджерские шпаргалки', number: '4', auth: true },
     { href: '/ski-resort', label: 'Горнолыжные курорты', number: '5', auth: true },
     { href: '/news', label: 'Новости', number: '6', auth: true },
-    { href: '/tests', label: 'Тесты', number: '7', auth: true },
-    { href: '/design-system', label: 'Дизайн-система', number: '8', auth: true, roles: ['admin', 'moderator'] },
+    { href: '/tests', label: 'Тесты', number: '7', auth: true },\n    { href: '/cron-scheduler', label: 'Конструктор расписаний', number: '8', auth: true },
+    { href: '/design-system', label: 'Дизайн-система', number: '9', auth: true, roles: ['admin', 'moderator'] },
     { href: '/login', label: 'Войти', number: '→', guest: true },
 ];
