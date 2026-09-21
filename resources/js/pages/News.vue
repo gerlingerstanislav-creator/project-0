@@ -76,7 +76,7 @@ const visible = computed(() => {
     }
     list = list.filter((article) => feedbackFor(article) !== 'less' && !sourceHidden(article));
     return [...list].sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-};
+});
 
 const toggleCategory = (category) => {
     if (category === 'Для тебя') { selected.value = ['Для тебя']; return; }
