@@ -1,18 +1,25 @@
 <script setup>
 import { ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 import Alert from '../components/ui/Alert.vue';
 import Button from '../components/ui/Button.vue';
 import Card from '../components/ui/Card.vue';
 import { subscribeToPush } from '../push.js';
 
+const page = usePage();
+const user = page.props.auth?.user ?? null;
 const busy = ref(false);
 const error = ref('');
 
 const sendTestPush = async () => {
     busy.value = true;
     error.value = '';
+
+    if (!user) {
+        error.value = 'Для push-тестов нужно войти в аккаунт.';
+        return;
+    }
 
     try {
         await subscribeToPush();
@@ -49,9 +56,13 @@ const sendTestPush = async () => {
             <p class="page__description">Проверка функций, которые мы сейчас собираем в приложении.</p>
 
             <Card class="tests-card">
-                <Button :disabled="busy" @click="sendTestPush">
+                <Button v-if="user" :disabled="busy" @click="sendTestPush">
                     {{ busy ? 'Отправка…' : 'Отправить тестовый push' }}
                 </Button>
+
+                <p v-else class="page__description">
+                    Для проверки push-уведомлений <Link href="/login">войдите в аккаунт</Link>.
+                </p>
 
                 <Alert v-if="error">{{ error }}</Alert>
             </Card>
