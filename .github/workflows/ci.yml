@@ -68,6 +68,17 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
+      - name: Generate npm lockfile
+        run: npm install --package-lock-only
+
+      - name: Upload npm lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-lock-${{ github.sha }}
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 3
+
       - name: Build assets
         run: npm run build
 
