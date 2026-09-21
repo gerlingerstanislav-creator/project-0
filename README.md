@@ -128,6 +128,8 @@ vendor/bin/phpunit
 
 ## CI/CD
 
+Push в main запускает GitHub Actions. Feature-тесты учитывают текущую модель доступа: защищённые разделы проверяются как для гостя, так и для авторизованного пользователя.
+
 Push в main запускает GitHub Actions:
 
 1. PHP 8.5 и PHPUnit.
