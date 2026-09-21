@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
+import PageHeader from '../components/ui/PageHeader.vue';
 
 const props = defineProps({ resorts: { type: Array, default: () => [] } });
 const cameras = ref({});
@@ -69,10 +70,9 @@ onMounted(() => props.resorts.forEach(loadWeather));
     <Head title="Горнолыжные курорты" />
     <AppLayout>
         <section class="page ski-page">
-            <div class="ski-page__intro">
-                <div><h1>Горнолыжные курорты</h1><p class="page__description">Погода, камеры и состояние горнолыжного сезона на горнолыжных курортах России.</p></div>
-                <div class="ski-page__status">Погода обновляется автоматически<br>каждую минуту</div>
-            </div>
+            <PageHeader title="Горнолыжные курорты" description="Погода, камеры и состояние горнолыжного сезона на горнолыжных курортах России.">
+                <template #actions><span class="ds-badge">Обновляется автоматически</span></template>
+            </PageHeader>
             <div class="ski-page__cards">
                 <article v-for="resort in props.resorts" :key="resort.id" class="ski-card">
                     <div class="ski-card__top">
