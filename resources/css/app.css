@@ -485,7 +485,8 @@ button, input { font: inherit; }
 /* Beer mini-game */
 .beer-game-page { overflow: hidden; }
 .beer-game { margin-top: 42px; padding: 34px 24px 28px; border: 1px solid var(--ds-color-border); border-radius: 16px; background: linear-gradient(180deg,#fafafa 0%,#f4f4f5 100%); }
-.beer-game__scene { position: relative; display:flex; align-items:flex-end; justify-content:center; gap:clamp(54px,12vw,150px); min-height:430px; padding:30px 10px 18px; }
+.beer-game__scene { position: relative; display:flex; align-items:flex-end; justify-content:center; gap:0; min-height:430px; padding:30px 10px 18px; }
+.beer-game__bottles { display:flex; align-items:flex-end; gap:clamp(54px,12vw,150px); }
 .beer-game__object { position:relative; flex:0 0 auto; border:0; background:transparent; cursor:pointer; transition:transform .2s ease,filter .2s ease; }
 .beer-game__object:disabled { cursor:default; }
 .beer-game__object:focus-visible { outline:3px solid #a1a1aa; outline-offset:7px; border-radius:12px; }
@@ -509,7 +510,7 @@ button, input { font: inherit; }
 .beer-game__sip-markers i { display:block; margin-top:18px; border-left:1px dashed rgba(24,24,27,.25); }
 .beer-game__hint { position:absolute; left:50%; bottom:calc(100% + 14px); padding:8px 12px; border-radius:999px; background:#18181b; color:#fff; font-size:13px; font-weight:700; white-space:nowrap; opacity:0; pointer-events:none; transform:translate(-50%,5px); transition:opacity .18s ease,transform .18s ease; }
 .beer-game__object:hover .beer-game__hint,.beer-game__object:focus-visible .beer-game__hint { opacity:1; transform:translate(-50%,0); }
-.beer-game__pour { position:absolute; left:calc(50% + 22px); bottom:192px; width:92px; height:110px; pointer-events:none; opacity:0; transform:rotate(-25deg); }
+.beer-game__pour { position:absolute; left:calc(50% + 22px - (var(--bottle-count) - 1) * (130px + clamp(54px,12vw,150px)) / 2); bottom:192px; width:92px; height:110px; pointer-events:none; opacity:0; transform:rotate(-25deg); }
 .beer-game__pour span { display:block; width:8px; height:100%; border-radius:99px; background:linear-gradient(90deg,#b66e16,#f1c14e,#b66e16); box-shadow:0 0 7px rgba(241,193,78,.4); }
 .beer-game__pour.is-active { animation:beer-stream .7s ease-out forwards; z-index:4; }
 .beer-game__new-bottle { display:block; margin:14px auto 0; padding:9px 14px; border:1px solid #18181b; border-radius:999px; background:#18181b; color:#fff; font-size:13px; font-weight:700; cursor:pointer; }\n.beer-game__new-bottle:hover { background:#27272a; }\n.beer-game__status { width:fit-content; min-width:120px; margin:10px auto 0; padding:9px 13px; border:1px solid #d4d4d8; border-radius:999px; background:#fff; color:#52525b; font-size:13px; font-weight:700; text-align:center; }
@@ -519,7 +520,8 @@ button, input { font: inherit; }
 .beer-game__cup.is-drinking { animation:beer-drink .55s ease-in-out; }
 @media (max-width:700px) {
  .beer-game { margin-top:28px; padding:22px 10px 20px; }
- .beer-game__scene { gap:24px; min-height:340px; padding:20px 0 10px; }
+ .beer-game__scene { min-height:340px; padding:20px 0 10px; }
+ .beer-game__bottles { gap:24px; }
  .beer-game__bottle { width:92px; height:280px; }
  .beer-game__bottle-glass { left:10px; width:72px; height:192px; }
  .beer-game__beer--bottle { right:5px; left:5px; bottom:5px; }
@@ -529,7 +531,7 @@ button, input { font: inherit; }
  .beer-game__cup { width:128px; height:210px; }
  .beer-game__cup-glass { right:5px; left:5px; height:150px; }
  .beer-game__hint { bottom:calc(100% + 9px); font-size:12px; }
- .beer-game__pour { left:calc(50% - 9px); bottom:148px; width:62px; height:82px; }
+ .beer-game__pour { left:calc(50% - 9px - (var(--bottle-count) - 1) * 116px / 2); bottom:148px; width:62px; height:82px; }
 }
 
 

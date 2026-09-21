@@ -3,25 +3,60 @@ import { computed, ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 
-const bottleOpen = ref(false);
-const bottleBeer = ref(4);
+const bottles = ref([
+    { id: 1, beer: 4, open: false },
+]);
+const activeBottleId = ref(1);
+const nextBottleId = ref(2);
 const glassBeer = ref(0);
 const pouring = ref(false);
+const pouringBottleId = ref(null);
 const drinking = ref(false);
 
-const openBottle = () => {
-    if (bottleOpen.value || bottleBeer.value <= 0) return;
-    bottleOpen.value = true;
+const activeBottle = computed(() => bottles.value.find((bottle) => bottle.id === activeBottleId.value));
+
+const openBottle = (bottle) => {
+    if (bottle.id !== activeBottleId.value || bottle.open || bottle.beer <= 0 || pouring.value) return;
+    bottle.open = true;
 };
 
-const pour = () => {
-    if (!bottleOpen.value || pouring.value || bottleBeer.value <= 0 || glassBeer.value >= 4) return;
+const pour = (bottle) => {
+    if (
+        bottle.id !== activeBottleId.value
+        || !bottle.open
+        || pouring.value
+        || bottle.beer <= 0
+        || glassBeer.value >= 4
+    ) {
+        return;
+    }
+
     pouring.value = true;
+    pouringBottleId.value = bottle.id;
+
     window.setTimeout(() => {
-        bottleBeer.value -= 1;
+        bottle.beer -= 1;
         glassBeer.value += 1;
         pouring.value = false;
+        pouringBottleId.value = null;
+
+        if (bottle.beer === 0) {
+            const newBottle = {
+                id: nextBottleId.value,
+                beer: 4,
+                open: false,
+            };
+
+            nextBottleId.value += 1;
+            bottles.value.unshift(newBottle);
+            activeBottleId.value = newBottle.id;
+        }
     }, 700);
+};
+
+const handleBottleClick = (bottle) => {
+    if (bottle.id !== activeBottleId.value) return;
+    bottle.open ? pour(bottle) : openBottle(bottle);
 };
 
 const drink = () => {
@@ -33,24 +68,20 @@ const drink = () => {
     }, 550);
 };
 
-const takeNewBottle = () => {
-    if (bottleBeer.value > 0 || pouring.value) return;
-    bottleBeer.value = 4;
-    bottleOpen.value = false;
-};
-
-const bottleLevel = computed(() => (bottleBeer.value / 4) * 100);
+const bottleLevel = (bottle) => (bottle.beer / 4) * 100;
 const glassLevel = computed(() => (glassBeer.value / 4) * 100);
-const bottleHint = computed(() => {
-    if (!bottleOpen.value) return 'Открыть бутылку';
-    if (bottleBeer.value <= 0) return 'Бутылка пустая';
+
+const bottleHint = (bottle) => {
+    if (bottle.id !== activeBottleId.value) return 'Пустая бутылка';
+    if (!bottle.open) return 'Открыть бутылку';
+    if (bottle.beer <= 0) return 'Бутылка пуста';
     if (glassBeer.value >= 4) return 'Стакан полный';
     return 'Налить';
-});
+};
+
 const status = computed(() => {
-    if (!bottleOpen.value) return 'Бутылка закрыта';
-    if (bottleBeer.value <= 0) return 'Бутылка пуста';
-    return `Бутылка: ${bottleBeer.value}/4 · Стакан: ${glassBeer.value}/4`;
+    if (!activeBottle.value?.open) return 'Бутылка закрыта';
+    return `Бутылка: ${activeBottle.value.beer}/4 · Стакан: ${glassBeer.value}/4`;
 });
 </script>
 
@@ -60,25 +91,36 @@ const status = computed(() => {
         <section class="page beer-game-page">
             <p class="page__eyebrow">Page 02</p>
             <h1>Степан, выпей</h1>
-            <p class="page__description">Открой бутылку, кликай по ней, чтобы наливать пиво в стакан, затем кликай по стакану, чтобы выпивать. Когда бутылка закончится, возьми новую.</p>
+            <p class="page__description">Открой бутылку, кликай по ней, чтобы наливать пиво в стакан, затем кликай по стакану, чтобы выпивать. Когда бутылка закончится, новая бутылка появится слева, а пустая останется на месте.</p>
             <div class="beer-game">
-                <div class="beer-game__scene" aria-label="Мини-игра с бутылкой пива и стаканом">
-                    <button
-                        class="beer-game__object beer-game__bottle"
-                        :class="{ 'is-pouring': pouring, 'is-open': bottleOpen }"
-                        type="button"
-                        :aria-label="bottleHint"
-                        :disabled="pouring || bottleBeer <= 0 || glassBeer >= 4"
-                        @click="bottleOpen ? pour() : openBottle()"
-                    >
-                        <span class="beer-game__bottle-glass">
-                            <span class="beer-game__beer beer-game__beer--bottle" :style="{ '--bottle-level': `${bottleLevel}%` }"></span>
-                            <span class="beer-game__bottle-label">BEER</span>
-                        </span>
-                        <span class="beer-game__neck"></span>
-                        <span class="beer-game__cap"></span>
-                        <span class="beer-game__hint">{{ bottleHint }}</span>
-                    </button>
+                <div
+                    class="beer-game__scene"
+                    :style="{ '--bottle-count': bottles.length }"
+                    aria-label="Мини-игра с бутылками пива и стаканом"
+                >
+                    <div class="beer-game__bottles">
+                        <button
+                            v-for="bottle in bottles"
+                            :key="bottle.id"
+                            class="beer-game__object beer-game__bottle"
+                            :class="{
+                                'is-pouring': pouringBottleId === bottle.id,
+                                'is-open': bottle.open,
+                            }"
+                            type="button"
+                            :aria-label="bottleHint(bottle)"
+                            :disabled="bottle.id !== activeBottleId || pouring || bottle.beer <= 0 || glassBeer >= 4"
+                            @click="handleBottleClick(bottle)"
+                        >
+                            <span class="beer-game__bottle-glass">
+                                <span class="beer-game__beer beer-game__beer--bottle" :style="{ '--bottle-level': `${bottleLevel(bottle)}%` }"></span>
+                                <span class="beer-game__bottle-label">BEER</span>
+                            </span>
+                            <span class="beer-game__neck"></span>
+                            <span class="beer-game__cap"></span>
+                            <span class="beer-game__hint">{{ bottleHint(bottle) }}</span>
+                        </button>
+                    </div>
 
                     <div class="beer-game__pour" :class="{ 'is-active': pouring }" aria-hidden="true"><span></span></div>
 
@@ -99,7 +141,6 @@ const status = computed(() => {
                     </button>
                 </div>
                 <div class="beer-game__status" aria-live="polite">{{ status }}</div>
-                <button v-if="bottleBeer === 0" class="beer-game__new-bottle" type="button" @click="takeNewBottle">Взять новую бутылку</button>
             </div>
         </section>
     </AppLayout>
