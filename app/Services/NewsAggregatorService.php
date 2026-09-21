@@ -38,7 +38,7 @@ class NewsAggregatorService
 
     public function getFeed(User $user): array
     {
-        $feed = Cache::remember('news-aggregator:feed', now()->addMinutes(5), function (): array {
+        $feed = Cache::remember('news-aggregator:feed:v2', now()->addMinutes(5), function (): array {
             $responses = Http::pool(function ($pool) {
                 return collect(self::SOURCES)->mapWithKeys(function (array $source) use ($pool) {
                     return [$source['name'] => $pool

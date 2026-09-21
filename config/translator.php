@@ -15,6 +15,6 @@ return [
         'enabled' => env('TRANSLATOR_CACHE', true),
         'store' => env('TRANSLATOR_CACHE_STORE'),
         'ttl' => env('TRANSLATOR_CACHE_TTL', 86400),
-        'prefix' => 'translator',
+        'prefix' => 'translator-v2',
     ],
 ];

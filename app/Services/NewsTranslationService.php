@@ -22,7 +22,8 @@ class NewsTranslationService
                 $texts,
                 array_keys($texts),
             );
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            report($exception);
             return $texts;
         }
     }
