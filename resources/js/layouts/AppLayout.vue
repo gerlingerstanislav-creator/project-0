@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import { getPushState, subscribeToPush, unsubscribeFromPush } from '../push.js';
 
 const page = usePage();
@@ -71,13 +71,16 @@ if (typeof window !== 'undefined') { refreshPushState(); window.addEventListener
                 <button v-if="pushState === 'available' || pushState === 'subscribed'" type="button" class="sidebar__push" :disabled="pushBusy" @click="togglePush">{{ pushBusy ? 'Подключение…' : pushState === 'subscribed' ? 'Отключить уведомления' : 'Включить уведомления' }}</button>
                 <button v-if="installAvailable" type="button" class="sidebar__push" @click="requestInstall">Установить приложение</button>
                 <small v-if="pushError" class="sidebar__push-error">{{ pushError }}</small>
-                <form method="POST" action="/logout">
-                    <input type="hidden" name="_token" :value="page.props.csrfToken">
-                    <button type="submit" class="sidebar__logout" @click="closeMenu">Выйти</button>
-                </form>
+                <button
+                    type="button"
+                    class="sidebar__logout"
+                    @click="router.post('/logout', {}, { preserveScroll: true, onSuccess: closeMenu })"
+                >
+                    Выйти
+                </button>
             </template>
 
-            <a v-else href="/login" class="sidebar__login" @click="closeMenu">Войти</a>
+            <Link v-else href="/login" class="sidebar__login" @click="closeMenu">Войти</Link>
         </div>
     </aside>
 

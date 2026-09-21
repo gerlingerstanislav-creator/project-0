@@ -31,6 +31,13 @@ class AuthenticationTest extends TestCase
             ->assertInertia(fn ($page) => $page->component('Login'));
     }
 
+    public function test_guest_can_view_tests_page(): void
+    {
+        $this->get(route('tests'))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page->component('Tests'));
+    }
+
     public function test_admin_can_login(): void
     {
         User::create([

@@ -24,7 +24,7 @@ Route::get('/tool-2', Tool2Controller::class)->name('tools.tool2');
 Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
 Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
 Route::get('/ski-resort', WeatherController::class)->name('tools.ski-resort');
-Route::get('/tests', fn (\Illuminate\Http\Request $request) => abort_unless($request->user()?->role === 'admin', 403) || Inertia::render('Tests'))->middleware('auth')->name('tests');
+Route::get('/tests', fn () => Inertia::render('Tests'))->name('tests');
 
 Route::get('/push/config', [PushSubscriptionController::class, 'config'])->name('push.config');
 

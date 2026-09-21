@@ -6,13 +6,14 @@
 
 ## Возможности
 
-В боковом меню доступны пять разделов:
+В боковом меню доступны шесть разделов:
 
 1. **Идеи стартапов** — список идей из SQLite. Роли **admin** и **editor** могут редактировать название и описание.
 2. **Степан, выпей** — интерактивная мини-игра со стаканом на четыре глотка.
 3. **Инструмент 3** — каркас третьего инструмента.
 4. **Менеджерские шпаргалки** — материалы из базы данных в раскрывающихся карточках.
 5. **Горнолыжные курорты** — /ski-resort с погодой, прогнозом и веб-камерами пяти российских курортов.
+6. **Тесты** — /tests для проверки PWA и push-уведомлений; сама страница публична, отправка тестового push требует авторизации.
 
 Публичный вход находится на /login. Просмотр основных разделов доступен без авторизации, а редактирование идей и управление push-подпиской требуют авторизации.
 
@@ -30,12 +31,12 @@
 
 ## Архитектура
 
-Frontend построен на **Inertia.js + Vue 3**:
+Frontend построен на **Inertia.js + Vue 3** и все пользовательские страницы рендерятся как Inertia/Vue-компоненты; Blade используется только как минимальный HTML-shell:
 
 - Laravel отвечает за маршруты, авторизацию, данные и серверные mutations.
 - Inertia передаёт страницы и props без отдельного frontend API.
 - Vue-компоненты находятся в resources/js/pages/.
-- Общий интерфейс находится в resources/js/components/.
+- Общий интерфейс находится в resources/js/layouts/.
 - Точка входа frontend — resources/js/app.js.
 - Стили — resources/css/app.css.
 - Vite собирает production frontend.
@@ -70,10 +71,10 @@ PWA и Web Push уже реализованы:
 - database/migrations/ — схема БД.
 - database/seeders/ — начальные данные.
 - resources/js/pages/ — Inertia/Vue страницы.
-- resources/js/components/ — общие Vue-компоненты.
+- resources/js/layouts/ — общий layout приложения.
 - resources/js/ — frontend entry и сервисные модули.
 - resources/css/ — стили.
-- resources/views/app.blade.php — минимальный Laravel shell для Inertia.
+- resources/views/app.blade.php — минимальный Laravel shell для Inertia; отдельные Blade-страницы приложения не используются.
 - routes/web.php — именованные веб-маршруты.
 - tests/Feature/ — feature-тесты.
 - .github/workflows/ci.yml — тестирование, сборка, release и deploy.
