@@ -696,6 +696,10 @@ button, input { font: inherit; }
 .news-card__bottom { margin-top:15px; padding-top:12px; border-top:1px solid var(--ds-color-border); color:var(--ds-color-foreground-muted); font-size:10px; }
 .news-card__why { justify-content:flex-start; margin-top:11px; color:var(--ds-color-foreground-muted); font-size:10px; }
 .news-card__why span:not(:first-child) { padding:4px 7px; border:1px solid var(--ds-color-border); border-radius:999px; }
+.news-card__feedback { display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+.news-feedback { padding:7px 10px; border:1px solid var(--ds-color-border); border-radius:999px; background:var(--ds-color-surface); color:var(--ds-color-foreground-muted); font-size:11px; cursor:pointer; }
+.news-feedback:hover,.news-feedback.is-active { border-color:var(--ds-color-foreground); color:var(--ds-color-foreground); }
+.news-feedback--muted { opacity:.8; }
 .news-empty { padding:28px; border:1px dashed var(--ds-color-border); border-radius:12px; color:var(--ds-color-foreground-muted); text-align:center; }
 .news-disclaimer { margin:18px 0 0; color:var(--ds-color-foreground-muted); font-size:11px; line-height:1.5; }
 @media (max-width:700px) {
