@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Tools;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class WeatherController
+class SkiResortController
 {
     public function __invoke(): Response
     {
@@ -91,8 +91,6 @@ class WeatherController
                 'seasonDescription' => 'Ориентировочный сезон катания: ноябрь — май.',
             ],
         ];
-
-        foreach ($resorts as &$resort) {
 
         return Inertia::render('SkiResort', [
             'title' => 'Горнолыжные курорты',
