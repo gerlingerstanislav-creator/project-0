@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\TranslateNewsArticle;
 use App\Models\User;
 use App\Services\NewsTranslationService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Queue;
 use Minhyung\LaravelTranslator\Facades\Translator;
 use Tests\TestCase;
 
@@ -16,6 +18,7 @@ class NewsTest extends TestCase
     {
         parent::setUp();
         Cache::flush();
+        Queue::fake();
         Translator::fake([
             'OpenAI launches new AI model' => 'Запускается новая модель ИИ',
             'AI software developer news.' => 'Новости разработчика программного обеспечения с ИИ.',
@@ -94,9 +97,14 @@ class NewsTest extends TestCase
             );
     }
 
-    public function test_news_page_renders_aggregated_articles(): void
+    public function test_news_page_queues_translation_without_waiting_for_it(): void
     {
-        $this->actingAs($this->makeUser('news-test'))->get('/news')->assertOk();
+        $this->actingAs($this->makeUser('news-test'))
+            ->get('/news')
+            ->assertOk();
+
+        $this->assertFalse(Cache::has('news-translation:' . sha1('https://example.com/article')));
+        Queue::assertPushed(TranslateNewsArticle::class, fn (TranslateNewsArticle $job) => $job->article['title'] === 'OpenAI launches new AI model');
     }
 
     private function makeUser(string $username): User

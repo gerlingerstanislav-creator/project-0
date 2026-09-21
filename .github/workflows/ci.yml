@@ -363,7 +363,30 @@ jobs:
             echo "VAPID configuration health check passed"
             echo "=== End HTTPS diagnostics ==="
 
-            php artisan queue:restart || true
+            cat > /etc/systemd/system/project-0-queue.service <<'SYSTEMD'
+            [Unit]
+            Description=project-0 Laravel queue worker
+            After=network.target
+
+            [Service]
+            Type=simple
+            User=www-data
+            Group=www-data
+            WorkingDirectory=/var/www/project-0
+            ExecStart=/usr/bin/php8.5 /var/www/project-0/artisan queue:work database --sleep=2 --tries=3 --timeout=120 --max-time=3600
+            Restart=always
+            RestartSec=5
+            KillSignal=SIGTERM
+            TimeoutStopSec=60
+
+            [Install]
+            WantedBy=multi-user.target
+            SYSTEMD
+
+            systemctl daemon-reload
+            systemctl enable project-0-queue.service
+            systemctl restart project-0-queue.service
+            systemctl --no-pager --full status project-0-queue.service || true
             echo "Deployment completed successfully"
 
       - name: Health check
