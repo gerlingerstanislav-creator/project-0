@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tool-3', Tool3Controller::class)->name('tools.tool3');
     Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
     Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
-    Route::get('/news', NewsController::class)->name('tools.news');
+    Route::get('/news', NewsController::class)->name('tools.news');\n    Route::get('/cron-scheduler', CronSchedulerController::class)->name('tools.cron-scheduler');
     Route::put('/news/preferences', [NewsController::class, 'savePreferences'])->name('tools.news.preferences');
     Route::post('/news/feedback', [NewsController::class, 'feedback'])->name('tools.news.feedback');
     Route::delete('/news/feedback', [NewsController::class, 'removeFeedback'])->name('tools.news.feedback.remove');
