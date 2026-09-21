@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\NewsFeedback;
+use App\Jobs\TranslateNewsArticle;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -213,27 +214,36 @@ class NewsAggregatorService
 
         usort($result, fn (array $a, array $b) => $b['score'] <=> $a['score']);
 
-        $translationTexts = [];
-        $translationArticles = array_slice($result, 0, 8);
-        foreach ($translationArticles as $article) {
-            $translationTexts[] = $article['title'];
-            if ($article['description'] !== '') $translationTexts[] = $article['description'];
-        }
+        foreach ($result as $index => $article) {
+            $translation = Cache::get('news-translation:' . $article['article_key']);
 
-        $translations = $this->translationService->translate($translationTexts);
-        $translationIndex = 0;
-        foreach (array_slice($result, 0, 8, true) as $index => $article) {
-            $result[$index]['title_ru'] = $translations[$translationIndex] ?? $article['title'];
-            $translationIndex++;
-            if ($article['description'] !== '') {
-                $result[$index]['description_ru'] = $translations[$translationIndex] ?? $article['description'];
-                $translationIndex++;
+            if (is_array($translation)) {
+                $result[$index]['title_ru'] = $translation['title_ru'] ?? $article['title'];
+                $result[$index]['description_ru'] = $translation['description_ru'] ?? $article['description'];
+                $result[$index]['translation_pending'] = false;
+                continue;
+            }
+
+            if ($this->needsTranslation($article)) {
+                TranslateNewsArticle::dispatch($article);
+                $result[$index]['translation_pending'] = true;
             } else {
-                $result[$index]['description_ru'] = '';
+                $result[$index]['title_ru'] = $article['title'];
+                $result[$index]['description_ru'] = $article['description'];
+                $result[$index]['translation_pending'] = false;
             }
         }
 
         return $result;
+    }
+
+    private function needsTranslation(array $article): bool
+    {
+        $text = $article['title'] . ' ' . $article['description'];
+        $cyrillic = preg_match_all('/[А-Яа-яЁё]/u', $text);
+        $latin = preg_match_all('/[A-Za-z]/', $text);
+
+        return $latin > $cyrillic;
     }
 
     private function articleKey(array $article): string
