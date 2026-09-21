@@ -1,18 +1,18 @@
 <?php
 
-use App\\Http\\Controllers\\Auth\\LoginController;
-use App\\Http\\Controllers\\Auth\\LogoutController;
-use App\\Http\\Controllers\\PushSubscriptionController;
-use App\\Http\\Controllers\\Tools\\ManagerCheatSheetsController;
-use App\\Http\\Controllers\\Tools\\NewsController;
-use App\\Http\\Controllers\\Tools\\SkiResortController;
-use App\\Http\\Controllers\\Tools\\Tool1Controller;
-use App\\Http\\Controllers\\Tools\\Tool2Controller;
-use App\\Http\\Controllers\\Tools\\Tool3Controller;
-use App\\Http\\Middleware\\EnsureUserCanAccessDesignSystem;
-use App\\Http\\Middleware\\EnsureUserCanEditStartupIdeas;
-use Illuminate\\Support\\Facades\\Route;
-use Inertia\\Inertia;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\Tools\ManagerCheatSheetsController;
+use App\Http\Controllers\Tools\NewsController;
+use App\Http\Controllers\Tools\SkiResortController;
+use App\Http\Controllers\Tools\Tool1Controller;
+use App\Http\Controllers\Tools\Tool2Controller;
+use App\Http\Controllers\Tools\Tool3Controller;
+use App\Http\Middleware\EnsureUserCanAccessDesignSystem;
+use App\Http\Middleware\EnsureUserCanEditStartupIdeas;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
