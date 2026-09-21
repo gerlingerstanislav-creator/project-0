@@ -39,7 +39,7 @@ const takeNewBottle = () => {
     bottleOpen.value = false;
 };
 
-const bottleLevel = computed(() => (bottleBeer.value / 4) * 47);
+const bottleLevel = computed(() => (bottleBeer.value / 4) * 100);
 const glassLevel = computed(() => (glassBeer.value / 4) * 100);
 const bottleHint = computed(() => {
     if (!bottleOpen.value) return 'Открыть бутылку';
