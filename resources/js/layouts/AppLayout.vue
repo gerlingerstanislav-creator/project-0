@@ -19,7 +19,7 @@ const links = [
     { href: '/tool-3', label: 'Инструмент 3', number: '3' },
     { href: '/manager-cheat-sheets', label: 'Менеджерские шпаргалки', number: '4' },
     { href: '/ski-resort', label: 'Горнолыжные курорты', number: '5' },
-    { href: '/tests', label: 'Tests', number: '6' },
+    { href: '/tests', label: 'Тесты', number: '6' },
 ];
 
 const isActive = (href) => currentPath.value === href;
