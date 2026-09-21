@@ -78,7 +78,7 @@ function parseField(raw, min, max) {
 }
 
 function parseCron(expression) {
-    const raw = expression.trim().split(/\\s+/);
+    const raw = expression.trim().split(/\s+/);
     if (raw.length !== 5) return { valid:false, error:'Cron должен содержать 5 полей: минуты, часы, день месяца, месяц, день недели.', field:null, fields:raw };
     const mins = [0,0,1,1,0], maxs = [59,23,31,12,7];
     const parsed = raw.map((v,i) => parseField(v, mins[i], maxs[i]));
@@ -123,7 +123,7 @@ const removeRule = index => { if (customRules.value.length > 1) customRules.valu
 const useExample = () => { customRules.value=['0 9,18 * * 1-5','0 12 * * 0']; };
 const fixRule = index => {
     const rule = rules.value[index];
-    const copy = rule.expression.trim().split(/\\s+/);
+    const copy = rule.expression.trim().split(/\s+/);
     if (copy.length === 5) copy[rule.state.field ?? 0] = ['0','0','1','1','0'][rule.state.field ?? 0];
     customRules.value[index] = copy.join(' ');
 };
