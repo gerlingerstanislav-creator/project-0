@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 import PageHeader from '../components/ui/PageHeader.vue';
@@ -19,6 +19,7 @@ const importance = ref(props.minImportance);
 const showOriginal = ref(false);
 const localFeedback = ref([...props.feedback]);
 let preferenceTimer = null;
+let translationTimer = null;
 
 const persistPreferences = () => {
     if (preferenceTimer) clearTimeout(preferenceTimer);
@@ -36,10 +37,34 @@ const persistPreferences = () => {
 
 watch(selected, persistPreferences, { deep: true });
 watch(importance, persistPreferences);
+watch(pendingTranslations, syncTranslationPolling, { immediate: true });
+
+onMounted(() => syncTranslationPolling(pendingTranslations.value));
 
 onBeforeUnmount(() => {
     if (preferenceTimer) clearTimeout(preferenceTimer);
+    if (translationTimer) clearInterval(translationTimer);
 });
+
+const pendingTranslations = computed(() => (props.articles.articles ?? []).some((article) => article.translation_pending));
+const refreshTranslations = () => {
+    router.reload({
+        only: ['articles', 'updatedAt'],
+        preserveScroll: true,
+        preserveState: true,
+    });
+};
+
+const syncTranslationPolling = (pending) => {
+    if (pending && !translationTimer) {
+        translationTimer = setInterval(refreshTranslations, 10000);
+    }
+
+    if (!pending && translationTimer) {
+        clearInterval(translationTimer);
+        translationTimer = null;
+    }
+};
 
 const visible = computed(() => {
     let list = (props.articles.articles ?? []).filter((article) => article.importance >= importance.value);
@@ -137,6 +162,7 @@ const hideSource = (article) => {
                         <span class="news-card__importance">Значимость {{ Math.round(article.importance * 100) }}% · Релевантность {{ Math.round(article.relevance * 100) }}%</span>
                     </div>
                     <h2 class="news-card__title"><a :href="article.url" target="_blank" rel="noopener noreferrer">{{ showOriginal || !article.title_ru ? article.title : article.title_ru }}</a></h2>
+                    <span v-if="article.translation_pending" class="news-card__translation-status">Перевод готовится…</span>
                     <p v-if="article.description" class="news-card__description">{{ showOriginal || !article.description_ru ? article.description : article.description_ru }}</p>
                     <div class="news-card__bottom"><span>{{ formatSources(article) }}</span><span>{{ formatDate(article.published_at) }}</span></div>
                     <div class="news-card__why"><span>Почему здесь:</span><span v-for="reason in article.why" :key="reason">{{ reason }}</span></div>
