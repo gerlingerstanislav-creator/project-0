@@ -34,7 +34,16 @@ const subscribeToPush = async () => {
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? ''},
         body: JSON.stringify(subscription.toJSON()),
     });
-    if (!response.ok) throw new Error('Не удалось сохранить push-подписку.');
+    if (!response.ok) {
+        let message = '';
+        try {
+            const data = await response.json();
+            message = data.message || '';
+        } catch {
+            // Ответ может быть HTML при редиректе auth middleware.
+        }
+        throw new Error(`Не удалось сохранить push-подписку (${response.status}${message ? `: ${message}` : ''}).`);
+    }
     return subscription;
 };
 
