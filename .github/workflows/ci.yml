@@ -186,8 +186,8 @@ jobs:
             if [ -n "${{ secrets.VAPID_PUBLIC_KEY }}" ]; then sed -i "s#^VAPID_PUBLIC_KEY=.*#VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}#" .env; fi
             if [ -n "${{ secrets.VAPID_PRIVATE_KEY }}" ]; then sed -i "s#^VAPID_PRIVATE_KEY=.*#VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}#" .env; fi
 
-            if ! grep -q '^VAPID_PUBLIC_KEY=.+' .env || ! grep -q '^VAPID_PRIVATE_KEY=.+' .env; then
-              export VAPID_KEYS="$(php -r 'require "vendor/autoload.php"; echo json_encode(\\Minishlink\\WebPush\\VAPID::createVapidKeys(), JSON_THROW_ON_ERROR);')"
+            if ! grep -Eq '^VAPID_PUBLIC_KEY=.+$' .env || ! grep -Eq '^VAPID_PRIVATE_KEY=.+$' .env; then
+              export VAPID_KEYS="$(php -r 'require "vendor/autoload.php"; echo json_encode(\Minishlink\WebPush\VAPID::createVapidKeys(), JSON_THROW_ON_ERROR);')"
               VAPID_PUBLIC_KEY="$(php -r 'echo json_decode(getenv("VAPID_KEYS"), true)["publicKey"];' 2>/dev/null || true)"
               VAPID_PRIVATE_KEY="$(php -r 'echo json_decode(getenv("VAPID_KEYS"), true)["privateKey"];' 2>/dev/null || true)"
               if [ -z "$VAPID_PUBLIC_KEY" ] || [ -z "$VAPID_PRIVATE_KEY" ]; then
