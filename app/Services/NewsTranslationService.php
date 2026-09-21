@@ -37,7 +37,7 @@ class NewsTranslationService
                     ->acceptJson()
                     ->post($url, [
                         'q' => array_values($batch),
-                        'source' => 'en',
+                        'source' => 'auto',
                         'target' => 'ru',
                         'format' => 'text',
                     ]);
