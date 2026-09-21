@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
+import Alert from '../components/ui/Alert.vue';
+import Button from '../components/ui/Button.vue';
+import Card from '../components/ui/Card.vue';
 import { subscribeToPush } from '../push.js';
 
 const busy = ref(false);
@@ -39,12 +42,19 @@ const sendTestPush = async () => {
 
 <template>
     <Head title="Тесты" />
+
     <AppLayout>
         <section class="page">
-            <button type="button" class="button" :disabled="busy" @click="sendTestPush">
-                {{ busy ? 'Отправка…' : 'Отправить тестовый push' }}
-            </button>
-            <p v-if="error" role="alert">{{ error }}</p>
+            <h1>Тесты</h1>
+            <p class="page__description">Проверка функций, которые мы сейчас собираем в приложении.</p>
+
+            <Card class="tests-card">
+                <Button :disabled="busy" @click="sendTestPush">
+                    {{ busy ? 'Отправка…' : 'Отправить тестовый push' }}
+                </Button>
+
+                <Alert v-if="error">{{ error }}</Alert>
+            </Card>
         </section>
     </AppLayout>
 </template>
