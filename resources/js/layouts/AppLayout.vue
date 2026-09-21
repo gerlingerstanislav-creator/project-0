@@ -54,7 +54,7 @@ if (typeof window !== 'undefined') { window.addEventListener('pwa-install-availa
                 <div class="sidebar__account-label">Аккаунт</div>
                 <div class="sidebar__account-name">{{ user.username }}</div>
                 <div class="sidebar__account-role">
-                    {{ user.role === 'admin' ? 'Администратор' : user.role === 'editor' ? 'Редактор' : 'Наблюдатель' }}
+                    {{ user.role === 'admin' ? 'Администратор' : user.role === 'moderator' ? 'Модератор' : 'Пользователь' }}
                 </div>
                 <Button v-if="pushState === 'available' || pushState === 'subscribed'" variant="secondary" type="button" class="sidebar__push" :disabled="pushBusy" @click="togglePush">{{ pushBusy ? 'Подключение…' : pushState === 'subscribed' ? 'Отключить уведомления' : 'Включить уведомления' }}</Button>
                 <Button v-if="installAvailable" variant="secondary" type="button" class="sidebar__push" @click="requestInstall">Установить приложение</Button>
