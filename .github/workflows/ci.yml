@@ -268,6 +268,20 @@ jobs:
             chmod 664 database/database.sqlite
 
             php artisan translator:doctor --ping
+
+            translation_smoke_test="$(php <<'PHP'
+            <?php
+            require 'vendor/autoload.php';
+            $app = require 'bootstrap/app.php';
+            $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+            $result = app(\App\Services\NewsTranslationService::class)->translate(['OpenAI launches a new AI model', 'The company announced a new product'], 'en');
+            echo json_encode($result, JSON_UNESCAPED_UNICODE);
+            if (count($result) !== 2 || $result[0] === 'OpenAI launches a new AI model' || $result[1] === 'The company announced a new product' || in_array('', $result, true)) {
+                exit(1);
+            }
+            PHP
+            )"
+            echo "Laravel translation smoke test: $translation_smoke_test"
             php artisan optimize
             php artisan storage:link || true
             sed -i 's#^APP_URL=.*#APP_URL=https://project-0.duckdns.org#' .env
