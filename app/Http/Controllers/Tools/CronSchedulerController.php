@@ -1,10 +1,10 @@
 <?php
 
-namespace App\\Http\\Controllers\\Tools;
+namespace App\Http\Controllers\Tools;
 
-use App\\Http\\Controllers\\Controller;
-use Inertia\\Inertia;
-use Inertia\\Response;
+use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CronSchedulerController extends Controller
 {
