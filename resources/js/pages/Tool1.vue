@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 import Button from '../components/ui/Button.vue';
-import Card from '../components/ui/Card.vue';
 import Input from '../components/ui/Input.vue';
 import PageHeader from '../components/ui/PageHeader.vue';
 
@@ -22,9 +21,8 @@ const saveEditing = (idea) => form.patch(`/tool-1/ideas/${idea.id}`, { preserveS
                 <template #actions><span class="ds-badge">{{ canEditIdeas ? 'Редактирование доступно' : 'Только просмотр' }}</span></template>
             </PageHeader>
             <div class="startup-ideas__list">
-                <Card v-for="idea in ideas" :key="idea.id" class="startup-idea">
-                    <details>
-                        <summary class="startup-idea__title">
+                <details v-for="idea in ideas" :key="idea.id" class="startup-idea">
+                    <summary class="startup-idea__title">
                             <span class="startup-idea__title-text">{{ editingId === idea.id ? form.title : idea.title }}</span>
                             <span class="startup-idea__icon" aria-hidden="true">+</span>
                         </summary>
@@ -38,8 +36,7 @@ const saveEditing = (idea) => form.patch(`/tool-1/ideas/${idea.id}`, { preserveS
                             <Button variant="secondary" @click="cancelEditing">Отмена</Button>
                             <Button :disabled="form.processing" @click="saveEditing(idea)">{{ form.processing ? 'Сохранение…' : 'Сохранить' }}</Button>
                         </div>
-                    </details>
-                </Card>
+                </details>
                 <div v-if="ideas.length === 0" class="startup-ideas__empty">Пока нет идей.</div>
             </div>
         </section>
