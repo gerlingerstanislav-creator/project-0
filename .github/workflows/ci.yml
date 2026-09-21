@@ -186,18 +186,292 @@ jobs:
             if [ -n "${{ secrets.VAPID_PUBLIC_KEY }}" ]; then sed -i "s#^VAPID_PUBLIC_KEY=.*#VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}#" .env; fi
             if [ -n "${{ secrets.VAPID_PRIVATE_KEY }}" ]; then sed -i "s#^VAPID_PRIVATE_KEY=.*#VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}#" .env; fi
 
-            if ! grep -Eq '^VAPID_PUBLIC_KEY=.+$' .env || ! grep -Eq '^VAPID_PRIVATE_KEY=.+$' .env; then
-              export VAPID_KEYS="$(php -r 'require "vendor/autoload.php"; echo json_encode(\Minishlink\WebPush\VAPID::createVapidKeys(), JSON_THROW_ON_ERROR);')"
-              VAPID_PUBLIC_KEY="$(php -r 'echo json_decode(getenv("VAPID_KEYS"), true)["publicKey"];' 2>/dev/null || true)"
-              VAPID_PRIVATE_KEY="$(php -r 'echo json_decode(getenv("VAPID_KEYS"), true)["privateKey"];' 2>/dev/null || true)"
-              if [ -z "$VAPID_PUBLIC_KEY" ] || [ -z "$VAPID_PRIVATE_KEY" ]; then
-                echo "Failed to generate VAPID keys"
-                exit 1
-              fi
-              sed -i "s#^VAPID_PUBLIC_KEY=.*#VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY#" .env
-              sed -i "s#^VAPID_PRIVATE_KEY=.*#VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY#" .env
+            if ! grep -Eq '^VAPID_PUBLIC_KEY=.+
+
+            if ! grep -q '^APP_KEY=base64:' .env; then
+              php artisan key:generate --force
+            fi
+            php artisan migrate --seed --force
+
+            chown www-data:www-data database/database.sqlite
+            chmod 664 database/database.sqlite
+
+            php artisan storage:link || true
+            sed -i 's#^APP_URL=.*#APP_URL=https://project-0.duckdns.org#' .env
+
+            cat > /etc/nginx/sites-available/stools <<'NGINX'
+            server {
+                listen 80 default_server;
+                listen [::]:80 default_server;
+                server_name project-0.duckdns.org ${{ vars.VPS_HOST }};
+                root /var/www/stools/public;
+                index index.php;
+                charset utf-8;
+                add_header X-Frame-Options "SAMEORIGIN";
+                add_header X-Content-Type-Options "nosniff";
+
+                location / {
+                    try_files $uri $uri/ /index.php?$query_string;
+                }
+
+                location = /favicon.ico { access_log off; log_not_found off; }
+                location = /robots.txt  { access_log off; log_not_found off; }
+                error_page 404 /index.php;
+
+                location ~ ^/index\.php(/|$) {
+                    fastcgi_pass unix:/var/run/php/php8.5-fpm.sock;
+                    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+                    include fastcgi_params;
+                    fastcgi_hide_header X-Powered-By;
+                }
+
+                location ~ /\.(?!well-known).* {
+                    deny all;
+                }
+            }
+            NGINX
+            ln -sf /etc/nginx/sites-available/stools /etc/nginx/sites-enabled/stools
+            rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/test
+
+            chown -R www-data:www-data storage bootstrap/cache
+            chmod -R ug+rwX storage bootstrap/cache
+            nginx -t
+            systemctl enable nginx php8.5-fpm
+
+            apt-get install -y certbot python3-certbot-nginx
+            if [ ! -f /etc/letsencrypt/live/project-0.duckdns.org/fullchain.pem ]; then
+              certbot --nginx -d project-0.duckdns.org --non-interactive --agree-tos --register-unsafely-without-email --redirect
+            else
+              certbot renew --quiet
+              certbot install --cert-name project-0.duckdns.org --nginx --redirect
+            fi
+
+            if command -v ufw >/dev/null 2>&1; then
+              # Keep SSH reachable before enabling/reloading the firewall.
+              ufw allow 22/tcp
+              ufw allow 80/tcp
+              ufw allow 443/tcp
+              ufw --force enable || true
+            fi
+
+            systemctl enable certbot.timer >/dev/null 2>&1 || true
+            systemctl start certbot.timer >/dev/null 2>&1 || true
+            systemctl reload php8.5-fpm || systemctl restart php8.5-fpm
+            systemctl reload nginx || systemctl restart nginx
+
+            echo "=== HTTPS diagnostics on VPS ==="
+            ss -ltnp | grep -E ':(80|443)\s' || true
+            nginx -T 2>/dev/null | grep -E 'listen .*443|server_name .*project-0\.duckdns\.org' || true
+            curl --fail --silent --show-error --max-time 15 --resolve project-0.duckdns.org:443:127.0.0.1 https://project-0.duckdns.org/up >/dev/null
+            echo "Local HTTPS health check passed"
+            curl --fail --silent --show-error --max-time 15 --resolve project-0.duckdns.org:443:127.0.0.1 https://project-0.duckdns.org/push/config | php -r '
+              $data = json_decode(stream_get_contents(STDIN), true);
+              if (($data["enabled"] ?? false) !== true) {
+                  fwrite(STDERR, "VAPID configuration is not enabled after deployment\\n");
+                  exit(1);
+              }
+            '
+            echo "VAPID configuration health check passed"
+            echo "=== End HTTPS diagnostics ==="
+
+            php artisan queue:restart || true
+            echo "Deployment completed successfully"
+
+      - name: Health check
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl --fail --silent --show-error --max-time 15 https://project-0.duckdns.org/up > /dev/null; then
+              echo "Health check passed"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Health check failed: https://project-0.duckdns.org/up"
+          exit 1
+
+      - name: Notify admin about successful deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          timeout: 30s
+          command_timeout: 5m
+          script: |
+            set -e
+            cd /var/www/stools
+            php artisan push:deploy-success
+
+  notify:
+    name: Telegram notification
+    runs-on: ubuntu-latest
+    needs: [test, frontend, deploy]
+    if: ${{ failure() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+    steps:
+      - name: Send Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PROJECT_NAME: project-0
+        run: |
+          set -e
+          curl --fail --silent --show-error -X POST             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}"             --data-urlencode "text=GitHub - ${PROJECT_NAME} - Deploy failed"
+ .env || ! grep -Eq '^VAPID_PRIVATE_KEY=.+
+
+            if ! grep -q '^APP_KEY=base64:' .env; then
+              php artisan key:generate --force
+            fi
+            php artisan migrate --seed --force
+
+            chown www-data:www-data database/database.sqlite
+            chmod 664 database/database.sqlite
+
+            php artisan optimize
+            php artisan storage:link || true
+            sed -i 's#^APP_URL=.*#APP_URL=https://project-0.duckdns.org#' .env
+
+            cat > /etc/nginx/sites-available/stools <<'NGINX'
+            server {
+                listen 80 default_server;
+                listen [::]:80 default_server;
+                server_name project-0.duckdns.org ${{ vars.VPS_HOST }};
+                root /var/www/stools/public;
+                index index.php;
+                charset utf-8;
+                add_header X-Frame-Options "SAMEORIGIN";
+                add_header X-Content-Type-Options "nosniff";
+
+                location / {
+                    try_files $uri $uri/ /index.php?$query_string;
+                }
+
+                location = /favicon.ico { access_log off; log_not_found off; }
+                location = /robots.txt  { access_log off; log_not_found off; }
+                error_page 404 /index.php;
+
+                location ~ ^/index\.php(/|$) {
+                    fastcgi_pass unix:/var/run/php/php8.5-fpm.sock;
+                    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+                    include fastcgi_params;
+                    fastcgi_hide_header X-Powered-By;
+                }
+
+                location ~ /\.(?!well-known).* {
+                    deny all;
+                }
+            }
+            NGINX
+            ln -sf /etc/nginx/sites-available/stools /etc/nginx/sites-enabled/stools
+            rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/test
+
+            chown -R www-data:www-data storage bootstrap/cache
+            chmod -R ug+rwX storage bootstrap/cache
+            nginx -t
+            systemctl enable nginx php8.5-fpm
+
+            apt-get install -y certbot python3-certbot-nginx
+            if [ ! -f /etc/letsencrypt/live/project-0.duckdns.org/fullchain.pem ]; then
+              certbot --nginx -d project-0.duckdns.org --non-interactive --agree-tos --register-unsafely-without-email --redirect
+            else
+              certbot renew --quiet
+              certbot install --cert-name project-0.duckdns.org --nginx --redirect
+            fi
+
+            if command -v ufw >/dev/null 2>&1; then
+              # Keep SSH reachable before enabling/reloading the firewall.
+              ufw allow 22/tcp
+              ufw allow 80/tcp
+              ufw allow 443/tcp
+              ufw --force enable || true
+            fi
+
+            systemctl enable certbot.timer >/dev/null 2>&1 || true
+            systemctl start certbot.timer >/dev/null 2>&1 || true
+            systemctl reload php8.5-fpm || systemctl restart php8.5-fpm
+            systemctl reload nginx || systemctl restart nginx
+
+            echo "=== HTTPS diagnostics on VPS ==="
+            ss -ltnp | grep -E ':(80|443)\s' || true
+            nginx -T 2>/dev/null | grep -E 'listen .*443|server_name .*project-0\.duckdns\.org' || true
+            curl --fail --silent --show-error --max-time 15 --resolve project-0.duckdns.org:443:127.0.0.1 https://project-0.duckdns.org/up >/dev/null
+            echo "Local HTTPS health check passed"
+            echo "=== End HTTPS diagnostics ==="
+
+            php artisan queue:restart || true
+            echo "Deployment completed successfully"
+
+      - name: Health check
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl --fail --silent --show-error --max-time 15 https://project-0.duckdns.org/up > /dev/null; then
+              echo "Health check passed"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Health check failed: https://project-0.duckdns.org/up"
+          exit 1
+
+      - name: Notify admin about successful deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          timeout: 30s
+          command_timeout: 5m
+          script: |
+            set -e
+            cd /var/www/stools
+            php artisan push:deploy-success
+
+  notify:
+    name: Telegram notification
+    runs-on: ubuntu-latest
+    needs: [test, frontend, deploy]
+    if: ${{ failure() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+    steps:
+      - name: Send Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PROJECT_NAME: project-0
+        run: |
+          set -e
+          curl --fail --silent --show-error -X POST             "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}"             --data-urlencode "text=GitHub - ${PROJECT_NAME} - Deploy failed"
+ .env; then
+              php -r '
+              require "vendor/autoload.php";
+              $path = ".env";
+              $keys = \Minishlink\WebPush\VAPID::createVapidKeys();
+              $env = file_get_contents($path);
+              if ($env === false) {
+                  throw new RuntimeException("Unable to read .env");
+              }
+              foreach ([
+                  "VAPID_PUBLIC_KEY" => $keys["publicKey"],
+                  "VAPID_PRIVATE_KEY" => $keys["privateKey"],
+              ] as $name => $value) {
+                  $pattern = "/^" . preg_quote($name, "/") . "=.*$/m";
+                  $env = preg_replace($pattern, $name . "=" . $value, $env, 1, $count);
+                  if ($count !== 1) {
+                      throw new RuntimeException("Missing {$name} entry in .env");
+                  }
+              }
+              if (file_put_contents($path, $env) === false) {
+                  throw new RuntimeException("Unable to write .env");
+              }
+              '
               echo "VAPID keys generated on VPS"
             fi
+
+            # Rebuild Laravel's cached configuration after changing .env.
+            php artisan config:clear
+            php artisan optimize
 
             if ! grep -q '^APP_KEY=base64:' .env; then
               php artisan key:generate --force
