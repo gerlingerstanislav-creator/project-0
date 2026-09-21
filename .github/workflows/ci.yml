@@ -176,6 +176,9 @@ jobs:
 
             mkdir -p database
             touch database/database.sqlite
+            chown -R www-data:www-data database
+            chmod 775 database
+            chmod 664 database/database.sqlite
             mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
 
             if [ -f composer.lock ] && composer check-platform-reqs --no-interaction >/dev/null 2>&1 && composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
@@ -225,7 +228,8 @@ jobs:
             fi
             php artisan migrate --seed --force
 
-            chown www-data:www-data database/database.sqlite
+            chown -R www-data:www-data database
+            chmod 775 database
             chmod 664 database/database.sqlite
 
             php artisan optimize
