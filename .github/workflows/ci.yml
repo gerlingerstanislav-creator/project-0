@@ -172,6 +172,8 @@ jobs:
               sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/project-0/database/database.sqlite#' .env
             fi
 
+            sed -i 's#^DB_DATABASE=.*#DB_DATABASE=/var/www/project-0/database/database.sqlite#' .env
+
             mkdir -p database
             touch database/database.sqlite
             mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
