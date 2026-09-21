@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\NewsFeedback;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -24,21 +26,19 @@ class NewsAggregatorService
     ];
 
     private const PROFILE = [
-        'IT' => 1.0,
-        'AI' => 1.0,
-        'Стартапы' => 1.0,
-        'Программирование' => 0.95,
-        'Бизнес' => 0.85,
-        'Управление' => 0.8,
-        'Наука' => 0.7,
-        'Мир' => 0.65,
-        'Политика' => 0.55,
-        'Спорт' => 0.5,
+        'IT' => 1.0, 'AI' => 1.0, 'Стартапы' => 1.0, 'Программирование' => 0.95,
+        'Бизнес' => 0.85, 'Управление' => 0.8, 'Наука' => 0.7, 'Мир' => 0.65,
+        'Политика' => 0.55, 'Спорт' => 0.5,
     ];
 
-    public function getFeed(): array
+    public function sources(): array
     {
-        return Cache::remember('news-aggregator:feed', now()->addMinutes(5), function (): array {
+        return collect(self::SOURCES)->map(fn (array $source) => $source['name'])->values()->all();
+    }
+
+    public function getFeed(User $user): array
+    {
+        $feed = Cache::remember('news-aggregator:feed', now()->addMinutes(5), function (): array {
             $responses = Http::pool(function ($pool) {
                 return collect(self::SOURCES)->mapWithKeys(function (array $source) use ($pool) {
                     return [$source['name'] => $pool
@@ -51,10 +51,8 @@ class NewsAggregatorService
             }, concurrency: 6);
 
             $articles = [];
-
             foreach (self::SOURCES as $source) {
                 $response = $responses[$source['name']] ?? null;
-
                 if (! $response || $response instanceof Throwable || ! $response->successful()) {
                     continue;
                 }
@@ -71,20 +69,82 @@ class NewsAggregatorService
 
             return [
                 'articles' => array_values(array_slice($articles, 0, 80)),
-                'sources' => collect(self::SOURCES)->map(fn (array $source) => $source['name'])->values()->all(),
+                'sources' => $this->sources(),
                 'updated_at' => now()->toIso8601String(),
             ];
         });
+
+        $feedback = NewsFeedback::query()
+            ->where('user_id', $user->id)
+            ->get();
+
+        $hiddenSources = $feedback
+            ->where('scope', 'source')
+            ->where('action', 'hide')
+            ->pluck('target_key')
+            ->flip();
+
+        $articleFeedback = $feedback->where('scope', 'article')->keyBy('target_key');
+        $sourceFeedback = $feedback->where('scope', 'source');
+
+        $articles = [];
+        foreach ($feed['articles'] as $article) {
+            $articleKey = $this->articleKey($article);
+            $article['feedback'] = $articleFeedback->get($articleKey)?->action;
+            $article['source_hidden'] = isset($hiddenSources[$article['source']]);
+
+            if ($article['source_hidden']) {
+                continue;
+            }
+
+            $adjustment = 0.0;
+
+            foreach ($sourceFeedback as $item) {
+                if (! in_array($article['source'], $item->sources ?? [], true)) {
+                    continue;
+                }
+                $adjustment += $item->action === 'more' ? 0.08 : ($item->action === 'less' ? -0.12 : 0);
+            }
+
+            $item = $articleFeedback->get($articleKey);
+            if ($item) {
+                $adjustment += $item->action === 'more' ? 0.16 : -0.2;
+            }
+
+            foreach ($feedback as $item) {
+                if ($item->scope !== 'article' || ! in_array($item->action, ['more', 'less'], true)) {
+                    continue;
+                }
+                $overlap = count(array_intersect($article['categories'], $item->categories ?? []));
+                if ($overlap > 0) {
+                    $adjustment += ($item->action === 'more' ? 0.025 : -0.035) * min($overlap, 3);
+                }
+            }
+
+            $article['relevance'] = min(1.0, max(0.0, round($article['relevance'] + $adjustment, 2)));
+            $article['score'] = round(
+                $article['importance']
+                * (0.65 + $article['relevance'] * 0.35)
+                * $article['freshness']
+                * $article['source_quality']
+                * (1 + min($article['source_count'] - 1, 3) * 0.08),
+                3
+            );
+            $article['why'] = $this->why($article);
+            $articles[] = $article;
+        }
+
+        usort($articles, fn (array $a, array $b) => strcmp($b['published_at'], $a['published_at']));
+
+        $feed['articles'] = $articles;
+        return $feed;
     }
 
     private function parseFeed(string $xml): array
     {
         libxml_use_internal_errors(true);
         $feed = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        if (! $feed) {
-            return [];
-        }
+        if (! $feed) return [];
 
         $items = isset($feed->channel->item) ? $feed->channel->item : ($feed->entry ?? []);
         $articles = [];
@@ -92,23 +152,13 @@ class NewsAggregatorService
         foreach ($items as $item) {
             $title = trim((string) ($item->title ?? ''));
             $url = trim((string) ($item->link ?? ''));
-
-            if (! $url && isset($item->link['href'])) {
-                $url = trim((string) $item->link['href']);
-            }
-
-            if (! $title || ! filter_var($url, FILTER_VALIDATE_URL)) {
-                continue;
-            }
+            if (! $url && isset($item->link['href'])) $url = trim((string) $item->link['href']);
+            if (! $title || ! filter_var($url, FILTER_VALIDATE_URL)) continue;
 
             $description = trim(strip_tags((string) ($item->description ?? $item->summary ?? '')));
             $published = (string) ($item->pubDate ?? $item->published ?? $item->updated ?? '');
-
-            try {
-                $publishedAt = $published ? Carbon::parse($published) : now();
-            } catch (Throwable) {
-                $publishedAt = now();
-            }
+            try { $publishedAt = $published ? Carbon::parse($published) : now(); }
+            catch (Throwable) { $publishedAt = now(); }
 
             $articles[] = [
                 'title' => $title,
@@ -124,11 +174,9 @@ class NewsAggregatorService
     private function deduplicate(array $articles): array
     {
         $groups = [];
-
         foreach ($articles as $article) {
             $key = $this->normalizeTitle($article['title']);
             $match = null;
-
             foreach (array_keys($groups) as $existing) {
                 if ($this->titleSimilarity($key, $existing) >= 0.72) {
                     $match = $existing;
@@ -152,21 +200,14 @@ class NewsAggregatorService
         }
 
         $result = array_values($groups);
-
         foreach ($result as &$article) {
             $article['categories'] = $this->categoriesFor($article);
             $article['importance'] = $this->importanceFor($article);
             $article['relevance'] = $this->relevanceFor($article);
             $article['freshness'] = $this->freshnessFor($article['published_at']);
-            $article['score'] = round(
-                $article['importance']
-                * (0.65 + $article['relevance'] * 0.35)
-                * $article['freshness']
-                * $article['source_quality']
-                * (1 + min($article['source_count'] - 1, 3) * 0.08),
-                3
-            );
+            $article['score'] = round($article['importance'] * (0.65 + $article['relevance'] * 0.35) * $article['freshness'] * $article['source_quality'] * (1 + min($article['source_count'] - 1, 3) * 0.08), 3);
             $article['why'] = $this->why($article);
+            $article['article_key'] = $this->articleKey($article);
         }
         unset($article);
 
@@ -175,18 +216,14 @@ class NewsAggregatorService
         $translationTexts = [];
         foreach (array_slice($result, 0, 40) as $article) {
             $translationTexts[] = $article['title'];
-            if ($article['description'] !== '') {
-                $translationTexts[] = $article['description'];
-            }
+            if ($article['description'] !== '') $translationTexts[] = $article['description'];
         }
 
         $translations = $this->translationService->translate($translationTexts);
         $translationIndex = 0;
-
         foreach (array_slice($result, 0, 40, true) as $index => $article) {
             $result[$index]['title_ru'] = $translations[$translationIndex] ?? $article['title'];
             $translationIndex++;
-
             if ($article['description'] !== '') {
                 $result[$index]['description_ru'] = $translations[$translationIndex] ?? $article['description'];
                 $translationIndex++;
@@ -198,12 +235,17 @@ class NewsAggregatorService
         return $result;
     }
 
+    private function articleKey(array $article): string
+    {
+        return sha1($article['url']);
+    }
+
     private function categoriesFor(array $article): array
     {
         $text = mb_strtolower($article['title'] . ' ' . $article['description']);
         $map = [
             'AI' => ['ai', 'artificial intelligence', 'нейросет', 'ии ', 'модель', 'llm', 'agent'],
-            'Программирование' => ['programming', 'developer', 'developer', 'код', 'software', 'github', 'open source', 'разработ'],
+            'Программирование' => ['programming', 'developer', 'код', 'software', 'github', 'open source', 'разработ'],
             'Стартапы' => ['startup', 'funding', 'venture', 'founder', 'стартап', 'инвестици'],
             'Бизнес' => ['business', 'market', 'company', 'revenue', 'эконом', 'рынок', 'acquisition'],
             'Управление' => ['management', 'manager', 'leadership', 'team', 'управлен', 'команд'],
@@ -214,11 +256,7 @@ class NewsAggregatorService
             'IT' => ['technology', 'tech', 'internet', 'cloud', 'chip', 'cyber', 'software', 'технолог', 'айти'],
         ];
 
-        $categories = array_intersect_key(
-            $map,
-            array_filter($map, fn (array $keywords) => collect($keywords)->contains(fn (string $keyword) => str_contains($text, $keyword)))
-        );
-
+        $categories = array_intersect_key($map, array_filter($map, fn (array $keywords) => collect($keywords)->contains(fn (string $keyword) => str_contains($text, $keyword))));
         return array_values(array_unique(array_merge($article['source_categories'], array_keys($categories))));
     }
 
@@ -227,19 +265,9 @@ class NewsAggregatorService
         $text = mb_strtolower($article['title'] . ' ' . $article['description']);
         $high = ['acquisition', 'merger', 'launches', 'released', 'banned', 'law', 'regulation', 'election', 'war', 'breach', 'funding', 'банкрот', 'закон', 'регулирован', 'запрет', 'запуст', 'купил'];
         $medium = ['update', 'feature', 'partnership', 'study', 'research', 'funding', 'обновлен', 'партнерств', 'исследован'];
-
         $score = 0.45;
-        foreach ($high as $keyword) {
-            if (str_contains($text, $keyword)) {
-                $score += 0.12;
-            }
-        }
-        foreach ($medium as $keyword) {
-            if (str_contains($text, $keyword)) {
-                $score += 0.05;
-            }
-        }
-
+        foreach ($high as $keyword) if (str_contains($text, $keyword)) $score += 0.12;
+        foreach ($medium as $keyword) if (str_contains($text, $keyword)) $score += 0.05;
         return min(1.0, round($score, 2));
     }
 
@@ -247,20 +275,12 @@ class NewsAggregatorService
     {
         $text = mb_strtolower($article['title'] . ' ' . $article['description']);
         $score = 0.2;
-
         foreach (self::PROFILE as $category => $weight) {
-            if (in_array($category, $article['categories'], true)) {
-                $score += $weight * 0.16;
-            }
+            if (in_array($category, $article['categories'], true)) $score += $weight * 0.16;
         }
-
-        $keywords = ['startup', 'founder', 'product', 'developer', 'software', 'ai', 'llm', 'open source', 'api', 'saas'];
-        foreach ($keywords as $keyword) {
-            if (str_contains($text, $keyword)) {
-                $score += 0.06;
-            }
+        foreach (['startup', 'founder', 'product', 'developer', 'software', 'ai', 'llm', 'open source', 'api', 'saas'] as $keyword) {
+            if (str_contains($text, $keyword)) $score += 0.06;
         }
-
         return min(1.0, round($score, 2));
     }
 
@@ -273,43 +293,27 @@ class NewsAggregatorService
     private function why(array $article): array
     {
         $reasons = [];
-
-        if ($article['relevance'] >= 0.75) {
-            $reasons[] = 'Высокая личная релевантность';
-        } elseif ($article['relevance'] >= 0.55) {
-            $reasons[] = 'Релевантно твоим интересам';
-        }
-
-        if ($article['importance'] >= 0.7) {
-            $reasons[] = 'Высокая значимость';
-        }
-
-        if ($article['source_count'] > 1) {
-            $reasons[] = $article['source_count'] . ' источника';
-        }
-
+        if ($article['relevance'] >= 0.75) $reasons[] = 'Высокая личная релевантность';
+        elseif ($article['relevance'] >= 0.55) $reasons[] = 'Релевантно твоим интересам';
+        if ($article['importance'] >= 0.7) $reasons[] = 'Высокая значимость';
+        if ($article['source_count'] > 1) $reasons[] = $article['source_count'] . ' источника';
         return $reasons ?: ['Попало в общий поток'];
     }
 
     private function normalizeTitle(string $title): string
     {
         $title = mb_strtolower(strip_tags($title));
-        $title = preg_replace('/[^\\p{L}\\p{N} ]+/u', ' ', $title);
-        return trim(preg_replace('/\\s+/u', ' ', $title));
+        $title = preg_replace('/[^\p{L}\p{N} ]+/u', ' ', $title);
+        return trim(preg_replace('/\s+/u', ' ', $title));
     }
 
     private function titleSimilarity(string $a, string $b): float
     {
         $left = array_unique(array_filter(explode(' ', $a)));
         $right = array_unique(array_filter(explode(' ', $b)));
-
-        if (! $left || ! $right) {
-            return 0;
-        }
-
+        if (! $left || ! $right) return 0;
         $intersection = count(array_intersect($left, $right));
         $union = count(array_unique(array_merge($left, $right)));
-
         return $union ? $intersection / $union : 0;
     }
 }
