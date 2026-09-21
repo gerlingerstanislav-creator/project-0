@@ -301,9 +301,10 @@ jobs:
             nginx -T 2>/dev/null | grep -E 'listen .*443|server_name .*project-0\.duckdns\.org' || true
             curl --fail --silent --show-error --max-time 15 --resolve project-0.duckdns.org:443:127.0.0.1 https://project-0.duckdns.org/up >/dev/null
             echo "Local HTTPS health check passed"
-            curl --fail --silent --show-error --max-time 15 --resolve project-0.duckdns.org:443:127.0.0.1 https://project-0.duckdns.org/push/config | php -r '
-              $data = json_decode(stream_get_contents(STDIN), true);
-              if (($data["enabled"] ?? false) !== true) {
+            php -r '
+              $app = require "bootstrap/app.php";
+              $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+              if (!filled(config("webpush.public_key")) || !filled(config("webpush.private_key"))) {
                   fwrite(STDERR, "VAPID configuration is not enabled after deployment\n");
                   exit(1);
               }
