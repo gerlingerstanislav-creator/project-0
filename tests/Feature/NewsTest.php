@@ -16,13 +16,22 @@ class NewsTest extends TestCase
     {
         parent::setUp();
         Cache::flush();
-        Http::fake([
-            '*' => Http::response(
+        Http::fake(function ($request) {
+            if ($request->url() === 'http://127.0.0.1:5000/translate') {
+                return Http::response([
+                    'translatedText' => [
+                        'Запускается новая модель ИИ',
+                        'Новости разработчика программного обеспечения с ИИ.',
+                    ],
+                ], 200);
+            }
+
+            return Http::response(
                 '<?xml version="1.0"?><rss><channel><item><title>OpenAI launches new AI model</title><link>https://example.com/article</link><description>AI software developer news.</description><pubDate>Mon, 21 Sep 2026 05:00:00 GMT</pubDate></item></channel></rss>',
                 200,
                 ['Content-Type' => 'application/rss+xml']
-            ),
-        ]);
+            );
+        });
     }
 
     public function test_news_page_requires_authentication(): void
@@ -33,15 +42,6 @@ class NewsTest extends TestCase
     public function test_news_translation_uses_libretranslate_when_configured(): void
     {
         Config::set('services.translation.url', 'http://127.0.0.1:5000');
-
-        Http::fake([
-            'http://127.0.0.1:5000/translate*' => Http::response([
-                'translatedText' => [
-                    'Запускается новая модель ИИ',
-                    'Новости разработчика программного обеспечения с ИИ.',
-                ],
-            ], 200),
-        ]);
 
         $translations = app(NewsTranslationService::class)->translate([
             'OpenAI launches new AI model',
