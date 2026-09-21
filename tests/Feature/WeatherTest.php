@@ -2,12 +2,19 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class WeatherTest extends TestCase
 {
-    public function test_weather_page_contains_camera_configuration_for_each_resort(): void
+    public function test_guest_is_redirected_from_weather_page(): void
+    {
+        $this->get('/ski-resort')->assertRedirect('/login');
+    }
+
+    public function test_authenticated_user_can_view_weather_page(): void
     {
         Http::fake([
             'https://api.open-meteo.com/*' => Http::response([
@@ -15,9 +22,15 @@ class WeatherTest extends TestCase
             ]),
         ]);
 
-        $response = $this->get('/ski-resort');
+        $user = User::create([
+            'username' => 'user',
+            'role' => 'user',
+            'password' => Hash::make('secret'),
+        ]);
 
-        $response->assertOk()
+        $this->actingAs($user)
+            ->get('/ski-resort')
+            ->assertOk()
             ->assertInertia(fn ($page) => $page
                 ->component('SkiResort')
                 ->has('resorts', 5)
