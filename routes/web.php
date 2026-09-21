@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\PushSubscriptionController;
-use App\Http\Controllers\Tools\ManagerCheatSheetsController;
-use App\Http\Controllers\Tools\NewsController;
-use App\Http\Controllers\Tools\SkiResortController;
-use App\Http\Controllers\Tools\Tool1Controller;
-use App\Http\Controllers\Tools\Tool2Controller;
-use App\Http\Controllers\Tools\Tool3Controller;
-use App\Http\Middleware\EnsureUserCanEditStartupIdeas;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\\Http\\Controllers\\Auth\\LoginController;
+use App\\Http\\Controllers\\Auth\\LogoutController;
+use App\\Http\\Controllers\\PushSubscriptionController;
+use App\\Http\\Controllers\\Tools\\ManagerCheatSheetsController;
+use App\\Http\\Controllers\\Tools\\NewsController;
+use App\\Http\\Controllers\\Tools\\SkiResortController;
+use App\\Http\\Controllers\\Tools\\Tool1Controller;
+use App\\Http\\Controllers\\Tools\\Tool2Controller;
+use App\\Http\\Controllers\\Tools\\Tool3Controller;
+use App\\Http\\Middleware\\EnsureUserCanAccessDesignSystem;
+use App\\Http\\Middleware\\EnsureUserCanEditStartupIdeas;
+use Illuminate\\Support\\Facades\\Route;
+use Inertia\\Inertia;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -31,11 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/news/feedback', [NewsController::class, 'removeFeedback'])->name('tools.news.feedback.remove');
     Route::get('/tests', fn () => Inertia::render('Tests'))->name('tests');
     Route::get('/design-system', fn () => Inertia::render('DesignSystem'))
-        ->middleware(function ($request, $next) {
-            abort_unless(in_array($request->user()?->role, ['admin', 'moderator'], true), 403);
-
-            return $next($request);
-        })
+        ->middleware(EnsureUserCanAccessDesignSystem::class)
         ->name('design-system');
 
     Route::get('/push/config', [PushSubscriptionController::class, 'config'])->name('push.config');
