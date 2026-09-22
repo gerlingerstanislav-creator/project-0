@@ -4,8 +4,8 @@ import AppLayout from '../layouts/AppLayout.vue';
 
 const flowerSources = {
     pink: 'https://wallpapers.com/images/hd/pink-hydrangea-bloom-transparent-background-shaxv0ufousimvye.png',
-    blue: 'https://w7.pngwing.com/pngs/44/891/png-transparent-purple-flowers-french-hydrangea-cut-flowers-shrub-rose-hydrangea-blue-color-flower-garden.png',
-    white: 'https://toppng.com/public/uploads/preview/white-hydrangea-transparent-background-11563060537nrtgmy9bhm.png',
+    blue: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Hydrangea.png',
+    white: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Hydrangea.png',
 };
 const flowers = [
     ['8%','13%','30%','-10deg','-1s','pink'],['28%','2%','34%','4deg','-2.6s','blue'],
@@ -26,6 +26,7 @@ const flowers = [
                 <div class="bouquet" aria-label="Большой живой букет гортензий">
                     <div class="stems" aria-hidden="true"><i v-for="n in 8" :key="n" :style="{ '--n': n }"></i></div>
                     <div v-for="(f,i) in flowers" :key="i" class="flower"
+                        :class="`flower--${f[5]}`"
                         :style="{left:f[0],top:f[1],width:f[2],'--r':f[3],'--d':f[4]}">
                         <img :src="flowerSources[f[5]]" alt="" aria-hidden="true" loading="eager">
                     </div>
@@ -46,6 +47,8 @@ const flowers = [
 .bouquet{position:relative;width:min(72vw,760px);height:min(67vh,690px);min-height:480px;flex:none;animation:breathe 7s ease-in-out infinite;transform-origin:50% 88%}
 .flower{position:absolute;aspect-ratio:1;z-index:3;transform-origin:50% 88%;animation:sway 5.8s ease-in-out infinite;animation-delay:var(--d);will-change:transform}
 .flower img{width:100%;height:100%;display:block;object-fit:contain;filter:drop-shadow(0 14px 14px #4e315c26);transform:scale(1.08)}
+.flower--blue img{filter:hue-rotate(155deg) saturate(1.12) drop-shadow(0 14px 14px #4e315c26)}
+.flower--white img{filter:grayscale(1) brightness(1.5) saturate(.1) drop-shadow(0 14px 14px #4e315c26)}
 .stems{position:absolute;left:50%;bottom:8%;width:34%;height:58%;transform:translateX(-50%);z-index:1}.stems i{position:absolute;left:50%;bottom:0;width:9px;height:100%;border-radius:999px;transform-origin:50% 100%;transform:translateX(-50%) rotate(calc(var(--n)*9deg - 40deg));background:linear-gradient(90deg,#315d3d,#79a86d 48%,#3b704b);opacity:.88;animation:stem 5s ease-in-out infinite;animation-delay:calc(var(--n)*-.23s)}
 .leaves{position:absolute;inset:22% 5% 7%;z-index:2}.leaves i{position:absolute;width:22%;height:13%;left:calc((var(--n) - 1)*10%);top:calc(40% + (var(--n) % 3)*10%);border-radius:100% 0;background:linear-gradient(135deg,#a7ce94,#477c52 72%);transform:rotate(calc(-42deg + var(--n)*13deg));box-shadow:inset -7px -6px 12px #1c452726;animation:leaf 4.8s ease-in-out infinite;animation-delay:calc(var(--n)*-.37s)}
 .wrap{position:absolute;z-index:8;left:50%;bottom:-1%;width:48%;height:34%;transform:translateX(-50%);filter:drop-shadow(0 18px 18px #45304b1f)}.paper{position:absolute;inset:0;clip-path:polygon(8% 0,92% 0,76% 100%,24% 100%);background:linear-gradient(105deg,#fff,#f8edf3 48%,#dfcddd)}.bow{position:absolute;left:50%;top:4%;width:22%;height:16%;border-radius:80% 12%;background:linear-gradient(135deg,#b18ae8,#7045ae);transform:translateX(-94%) rotate(28deg);animation:bow 4s ease-in-out infinite}.tail{position:absolute;top:12%;height:52%;width:9%;border-radius:8px;background:#7045ae}.tail--l{left:41%;transform:rotate(25deg)}.tail--r{right:41%;transform:rotate(-25deg)}
