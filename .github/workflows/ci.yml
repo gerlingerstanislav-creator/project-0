@@ -42,8 +42,24 @@ jobs:
           mkdir -p database bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
           touch database/database.sqlite
 
+      - name: Cache Composer downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Upload resolved Composer lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: composer-lock-${{ github.sha }}
+          path: composer.lock
+          if-no-files-found: error
+          retention-days: 3
 
       - name: Generate application key
         run: php artisan key:generate
@@ -78,6 +94,37 @@ jobs:
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
+          name: laravel-source-${{ github.sha }}
+          path: release.tar.gz
+          if-no-files-found: error
+          retention-days: 3
+
+  package:
+    name: Assemble release
+    runs-on: ubuntu-latest
+    needs: [test, frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Download source artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: laravel-source-${{ github.sha }}
+      - name: Download resolved Composer lock
+        uses: actions/download-artifact@v5
+        with:
+          name: composer-lock-${{ github.sha }}
+          path: composer-lock
+      - name: Add resolved Composer lock to release
+        run: |
+          set -e
+          mkdir -p /tmp/release
+          tar -xzf release.tar.gz -C /tmp/release
+          cp composer-lock/composer.lock /tmp/release/composer.lock
+          tar -C /tmp/release -czf release-final.tar.gz .
+          mv release-final.tar.gz release.tar.gz
+      - name: Upload final release artifact
+        uses: actions/upload-artifact@v4
+        with:
           name: laravel-release-${{ github.sha }}
           path: release.tar.gz
           if-no-files-found: error
@@ -86,7 +133,7 @@ jobs:
   deploy:
     name: Deploy to Ubuntu VPS
     runs-on: ubuntu-latest
-    needs: [test, frontend]
+    needs: package
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Download release artifact
@@ -105,16 +152,14 @@ jobs:
           echo "DuckDNS record updated"
 
       - name: Upload release to VPS
-        env:
-          VPS_HOST: ${{ vars.VPS_HOST }}
-          VPS_USERNAME: ${{ vars.VPS_USERNAME }}
-          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-        run: |
-          set -e
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq sshpass
-          base64 -w 0 release.tar.gz | sshpass -p "$VPS_PASSWORD" ssh             -o StrictHostKeyChecking=no             -o UserKnownHostsFile=/dev/null             -o ConnectTimeout=30             -o ServerAliveInterval=10             -o ServerAliveCountMax=3             "$VPS_USERNAME@$VPS_HOST"             'base64 -d > /tmp/release.tar.gz'
-          echo "Release uploaded successfully"
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          source: release.tar.gz
+          target: /tmp
 
       - name: Bootstrap and deploy
         uses: appleboy/ssh-action@v1
@@ -129,6 +174,9 @@ jobs:
             set -e
             export DEBIAN_FRONTEND=noninteractive
             APP_DIR="/var/www/project-0"
+            BOOTSTRAP_DIR="/var/lib/project-0"
+            BOOTSTRAP_MARKER="$BOOTSTRAP_DIR/bootstrap-complete"
+            mkdir -p "$BOOTSTRAP_DIR"
 
             apt_run() {
               local attempts=12
@@ -155,67 +203,85 @@ jobs:
               return 1
             }
 
-            if [ -d /var/www/stools ] && [ ! -d "$APP_DIR" ]; then
-              mv /var/www/stools "$APP_DIR"
-            elif [ -d /var/www/test ] && [ ! -d "$APP_DIR" ]; then
-              mv /var/www/test "$APP_DIR"
-            fi
-
-            if ! command -v php8.5 >/dev/null 2>&1; then
-              apt-get update
-              apt_run install -y software-properties-common ca-certificates lsb-release apt-transport-https
-              add-apt-repository ppa:ondrej/php -y
-              apt-get update
-            fi
-
-            apt_run install -y nginx php8.5-cli php8.5-fpm php8.5-mbstring php8.5-xml php8.5-curl php8.5-sqlite3 php8.5-zip php8.5-bcmath php8.5-intl unzip git curl
-
-            if ! command -v docker >/dev/null 2>&1; then
-              apt_run install -y docker.io
-              systemctl enable --now docker
-            fi
-
-            if ! docker ps --format '{{.Names}}' | grep -qx 'project-0-translator'; then
-              docker rm -f project-0-translator >/dev/null 2>&1 || true
-              docker pull libretranslate/libretranslate:latest
-              docker run -d --restart unless-stopped --name project-0-translator -p 127.0.0.1:5000:5000 libretranslate/libretranslate:latest --load-only en,ru
-            fi
-
-            translator_ready=0
-            for i in $(seq 1 60); do
-              if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:5000/health >/dev/null; then
-                translator_ready=1
-                break
+            if [ ! -f "$BOOTSTRAP_MARKER" ]; then
+              echo "=== First-time VPS bootstrap ==="
+              if [ -d /var/www/stools ] && [ ! -d "$APP_DIR" ]; then
+                mv /var/www/stools "$APP_DIR"
+              elif [ -d /var/www/test ] && [ ! -d "$APP_DIR" ]; then
+                mv /var/www/test "$APP_DIR"
               fi
-              sleep 3
+
+              if ! command -v php8.5 >/dev/null 2>&1; then
+                apt-get update
+                apt_run install -y software-properties-common ca-certificates lsb-release apt-transport-https
+                add-apt-repository ppa:ondrej/php -y
+                apt-get update
+              fi
+
+              apt_run install -y nginx php8.5-cli php8.5-fpm php8.5-mbstring php8.5-xml php8.5-curl php8.5-sqlite3 php8.5-zip php8.5-bcmath php8.5-intl unzip git curl
+
+              if ! command -v docker >/dev/null 2>&1; then
+                apt_run install -y docker.io
+                systemctl enable --now docker
+              fi
+
+              if ! docker ps --format '{{.Names}}' | grep -qx 'project-0-translator'; then
+                docker rm -f project-0-translator >/dev/null 2>&1 || true
+                docker pull libretranslate/libretranslate:latest
+                docker run -d --restart unless-stopped --name project-0-translator -p 127.0.0.1:5000:5000 libretranslate/libretranslate:latest --load-only en,ru
+              fi
+
+              translator_ready=0
+              for i in $(seq 1 60); do
+                if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:5000/health >/dev/null; then
+                  translator_ready=1
+                  break
+                fi
+                sleep 3
+              done
+              if [ "$translator_ready" -ne 1 ]; then
+                echo "LibreTranslate health check failed"
+                docker logs --tail 80 project-0-translator || true
+                exit 1
+              fi
+
+              translation_test="$(curl --fail --silent --show-error --max-time 30               -H 'Content-Type: application/json'               -d '{"q":"Hello","source":"en","target":"ru","format":"text"}'               http://127.0.0.1:5000/translate)"
+              echo "LibreTranslate test response: $translation_test"
+              echo "$translation_test" | grep -q '"translatedText"'
+
+              if ! command -v composer >/dev/null 2>&1; then
+                php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+                php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+                rm -f composer-setup.php
+              fi
+
+              for i in 1 2 3 4 5 6 7 8 9 10; do
+                if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:5000/languages >/dev/null; then
+                  break
+                fi
+                sleep 3
+              done
+
+              NODE_MAJOR="$(node -p "process.versions.node.split('.')[0]" 2>/dev/null || echo 0)"
+              if [ "$NODE_MAJOR" -lt 22 ]; then
+                curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+                apt_run install -y nodejs
+              fi
+
+
+            else
+              echo "VPS package provisioning already completed."
+            fi
+
+            docker start project-0-translator >/dev/null 2>&1 || true
+            translator_ready=0
+            for i in $(seq 1 20); do
+              if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:5000/health >/dev/null; then translator_ready=1; break; fi
+              sleep 2
             done
             if [ "$translator_ready" -ne 1 ]; then
-              echo "LibreTranslate health check failed"
               docker logs --tail 80 project-0-translator || true
               exit 1
-            fi
-
-            translation_test="$(curl --fail --silent --show-error --max-time 30               -H 'Content-Type: application/json'               -d '{"q":"Hello","source":"en","target":"ru","format":"text"}'               http://127.0.0.1:5000/translate)"
-            echo "LibreTranslate test response: $translation_test"
-            echo "$translation_test" | grep -q '"translatedText"'
-
-            if ! command -v composer >/dev/null 2>&1; then
-              php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-              php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-              rm -f composer-setup.php
-            fi
-
-            for i in 1 2 3 4 5 6 7 8 9 10; do
-              if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:5000/languages >/dev/null; then
-                break
-              fi
-              sleep 3
-            done
-
-            NODE_MAJOR="$(node -p "process.versions.node.split('.')[0]" 2>/dev/null || echo 0)"
-            if [ "$NODE_MAJOR" -lt 22 ]; then
-              curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-              apt_run install -y nodejs
             fi
 
             mkdir -p "$APP_DIR"
@@ -242,12 +308,8 @@ jobs:
             chmod 664 database/database.sqlite
             mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
 
-            if [ -f composer.lock ] && composer check-platform-reqs --no-interaction >/dev/null 2>&1 && composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
-              composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-            else
-              rm -f composer.lock
-              composer update --no-dev --no-interaction --prefer-dist --optimize-autoloader
-            fi
+            test -f composer.lock
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
             if [ -n "${{ secrets.VAPID_SUBJECT }}" ]; then sed -i "s#^VAPID_SUBJECT=.*#VAPID_SUBJECT=${{ secrets.VAPID_SUBJECT }}#" .env; fi
             if [ -n "${{ secrets.VAPID_PUBLIC_KEY }}" ]; then sed -i "s#^VAPID_PUBLIC_KEY=.*#VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}#" .env; fi
@@ -311,62 +373,70 @@ jobs:
             php artisan storage:link || true
             sed -i 's#^APP_URL=.*#APP_URL=https://project-0.duckdns.org#' .env
 
-            cat > /etc/nginx/sites-available/stools <<'NGINX'
-            server {
-                listen 80 default_server;
-                listen [::]:80 default_server;
-                server_name project-0.duckdns.org ${{ vars.VPS_HOST }};
-                root /var/www/project-0/public;
-                index index.php;
-                charset utf-8;
-                add_header X-Frame-Options "SAMEORIGIN";
-                add_header X-Content-Type-Options "nosniff";
+            if [ ! -f "$BOOTSTRAP_MARKER" ]; then
+              echo "=== First-time Nginx/SSL bootstrap ==="
+              cat > /etc/nginx/sites-available/stools <<'NGINX'
+              server {
+                  listen 80 default_server;
+                  listen [::]:80 default_server;
+                  server_name project-0.duckdns.org ${{ vars.VPS_HOST }};
+                  root /var/www/project-0/public;
+                  index index.php;
+                  charset utf-8;
+                  add_header X-Frame-Options "SAMEORIGIN";
+                  add_header X-Content-Type-Options "nosniff";
 
-                location / {
-                    try_files $uri $uri/ /index.php?$query_string;
-                }
+                  location / {
+                      try_files $uri $uri/ /index.php?$query_string;
+                  }
 
-                location = /favicon.ico { access_log off; log_not_found off; }
-                location = /robots.txt  { access_log off; log_not_found off; }
-                error_page 404 /index.php;
+                  location = /favicon.ico { access_log off; log_not_found off; }
+                  location = /robots.txt  { access_log off; log_not_found off; }
+                  error_page 404 /index.php;
 
-                location ~ ^/index\.php(/|$) {
-                    fastcgi_pass unix:/var/run/php/php8.5-fpm.sock;
-                    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-                    include fastcgi_params;
-                    fastcgi_hide_header X-Powered-By;
-                }
+                  location ~ ^/index\.php(/|$) {
+                      fastcgi_pass unix:/var/run/php/php8.5-fpm.sock;
+                      fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+                      include fastcgi_params;
+                      fastcgi_hide_header X-Powered-By;
+                  }
 
-                location ~ /\.(?!well-known).* {
-                    deny all;
-                }
-            }
-            NGINX
-            ln -sf /etc/nginx/sites-available/stools /etc/nginx/sites-enabled/stools
-            rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/test
+                  location ~ /\.(?!well-known).* {
+                      deny all;
+                  }
+              }
+              NGINX
+              ln -sf /etc/nginx/sites-available/stools /etc/nginx/sites-enabled/stools
+              rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/test
 
-            chown -R www-data:www-data storage bootstrap/cache
-            chmod -R ug+rwX storage bootstrap/cache
-            nginx -t
-            systemctl enable nginx php8.5-fpm
+              chown -R www-data:www-data storage bootstrap/cache
+              chmod -R ug+rwX storage bootstrap/cache
+              nginx -t
+              systemctl enable nginx php8.5-fpm
 
-            apt_run install -y certbot python3-certbot-nginx
-            if [ ! -f /etc/letsencrypt/live/project-0.duckdns.org/fullchain.pem ]; then
-              certbot --nginx -d project-0.duckdns.org --non-interactive --agree-tos --register-unsafely-without-email --redirect
+              apt_run install -y certbot python3-certbot-nginx
+              if [ ! -f /etc/letsencrypt/live/project-0.duckdns.org/fullchain.pem ]; then
+                certbot --nginx -d project-0.duckdns.org --non-interactive --agree-tos --register-unsafely-without-email --redirect
+              else
+                certbot renew --quiet
+                certbot install --cert-name project-0.duckdns.org --nginx --redirect
+              fi
+
+              if command -v ufw >/dev/null 2>&1; then
+                ufw allow 22/tcp
+                ufw allow 80/tcp
+                ufw allow 443/tcp
+                ufw --force enable || true
+              fi
+
+              systemctl enable certbot.timer >/dev/null 2>&1 || true
+              systemctl start certbot.timer >/dev/null 2>&1 || true
+              touch "$BOOTSTRAP_MARKER"
             else
-              certbot renew --quiet
-              certbot install --cert-name project-0.duckdns.org --nginx --redirect
+              echo "Nginx/SSL bootstrap already completed."
             fi
 
-            if command -v ufw >/dev/null 2>&1; then
-              ufw allow 22/tcp
-              ufw allow 80/tcp
-              ufw allow 443/tcp
-              ufw --force enable || true
-            fi
 
-            systemctl enable certbot.timer >/dev/null 2>&1 || true
-            systemctl start certbot.timer >/dev/null 2>&1 || true
             systemctl reload php8.5-fpm || systemctl restart php8.5-fpm
             systemctl reload nginx || systemctl restart nginx
 
@@ -388,30 +458,35 @@ jobs:
             echo "VAPID configuration health check passed"
             echo "=== End HTTPS diagnostics ==="
 
-            cat > /etc/systemd/system/project-0-queue.service <<'SYSTEMD'
-            [Unit]
-            Description=project-0 Laravel queue worker
-            After=network.target
+            if [ ! -f "$BOOTSTRAP_MARKER" ]; then
+              echo "=== First-time queue bootstrap ==="
+              cat > /etc/systemd/system/project-0-queue.service <<'SYSTEMD'
+              [Unit]
+              Description=project-0 Laravel queue worker
+              After=network.target
 
-            [Service]
-            Type=simple
-            User=www-data
-            Group=www-data
-            WorkingDirectory=/var/www/project-0
-            ExecStart=/usr/bin/php8.5 /var/www/project-0/artisan queue:work database --sleep=2 --tries=3 --timeout=120 --max-time=3600
-            Restart=always
-            RestartSec=5
-            KillSignal=SIGTERM
-            TimeoutStopSec=60
+              [Service]
+              Type=simple
+              User=www-data
+              Group=www-data
+              WorkingDirectory=/var/www/project-0
+              ExecStart=/usr/bin/php8.5 /var/www/project-0/artisan queue:work database --sleep=2 --tries=3 --timeout=120 --max-time=3600
+              Restart=always
+              RestartSec=5
+              KillSignal=SIGTERM
+              TimeoutStopSec=60
 
-            [Install]
-            WantedBy=multi-user.target
-            SYSTEMD
+              [Install]
+              WantedBy=multi-user.target
+              SYSTEMD
 
-            systemctl daemon-reload
-            systemctl enable project-0-queue.service
-            systemctl restart project-0-queue.service
-            systemctl --no-pager --full status project-0-queue.service || true
+              systemctl daemon-reload
+              systemctl enable project-0-queue.service
+              systemctl restart project-0-queue.service
+              systemctl --no-pager --full status project-0-queue.service || true
+            else
+              systemctl enable project-0-queue.service >/dev/null 2>&1 || true
+            fi
             echo "Deployment completed successfully"
 
       - name: Health check
@@ -444,7 +519,7 @@ jobs:
     name: Telegram notification
     runs-on: ubuntu-latest
     needs: deploy
-    if: ${{ failure() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ !cancelled() && failure() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
     steps:
       - name: Send Telegram notification

@@ -265,3 +265,11 @@ README должен быть коротким, понятным человеку
 - README обновляй для пользовательского поведения и заметных возможностей.
 - AGENTS.md обновляй для правил, обязательных подходов и инженерных ограничений.
 - Документацию проверяй вместе с кодом перед завершением задачи.
+
+## Deployment architecture
+
+- Production deployment is split into one-time VPS bootstrap and lightweight application deployment.
+- Normal deploys must not reinstall the OS-level stack, rewrite Nginx/systemd configuration, or re-provision SSL.
+- First-time server provisioning creates its configuration files directly on the VPS with shell commands and records completion in `/var/lib/project-0/bootstrap-complete`.
+- Normal deploys require the resolved `composer.lock` produced by CI and use `composer install`; production deployment must not fall back to `composer update`.
+- Backend tests and frontend build run in parallel; packaging waits for both, and production deployment waits only for packaging.
