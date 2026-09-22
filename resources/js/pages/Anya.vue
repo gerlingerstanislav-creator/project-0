@@ -2,7 +2,12 @@
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 
-const flowerSource = 'https://www.publicdomainpictures.net/en/free-download.php?id=640632&image=flower-hydrangea-isolated-png';
+const flowerSources = [
+    'https://commons.wikimedia.org/wiki/Special:Redirect/file/Hydrangea_1.jpg',
+    'https://commons.wikimedia.org/wiki/Special:Redirect/file/Hydrangea_(11380488336).jpg',
+    'https://commons.wikimedia.org/wiki/Special:Redirect/file/Hydrangea_(236018531).jpeg',
+    'https://commons.wikimedia.org/wiki/Special:Redirect/file/Purple_hydrangea.jpg',
+];
 const flowers = [
     ['8%','13%','30%','-10deg','-1s','pink'],['28%','2%','34%','4deg','-2.6s','blue'],
     ['55%','6%','33%','9deg','-1.8s','pink'],['69%','20%','29%','13deg','-.4s','blue'],
@@ -23,7 +28,7 @@ const flowers = [
                     <div class="stems" aria-hidden="true"><i v-for="n in 8" :key="n" :style="{ '--n': n }"></i></div>
                     <div v-for="(f,i) in flowers" :key="i" class="flower" :class="'flower--'+f[5]"
                         :style="{left:f[0],top:f[1],width:f[2],'--r':f[3],'--d':f[4]}">
-                        <img :src="flowerSource" alt="" aria-hidden="true" loading="eager">
+                        <img :src="flowerSources[i % flowerSources.length]" alt="" aria-hidden="true" loading="eager">
                     </div>
                     <div class="leaves" aria-hidden="true"><i v-for="n in 9" :key="n" :style="{ '--n': n }"></i></div>
                     <div class="wrap" aria-hidden="true"><span class="paper"></span><span class="bow"></span><span class="tail tail--l"></span><span class="tail tail--r"></span></div>
