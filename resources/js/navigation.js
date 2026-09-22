@@ -9,6 +9,7 @@ export const appLinks = [
     { href: '/tests', label: 'Тесты', number: '7', auth: true },
     { href: '/cron-scheduler', label: 'Конструктор расписаний', number: '8', auth: true },
     { href: '/oleg', label: 'Привет, Олег', number: '9', auth: true },
-    { href: '/design-system', label: 'Дизайн-система', number: '10', auth: true, roles: ['admin', 'moderator'] },
+    { href: '/anya', label: 'Ура, Аня приехала!!!', number: '10', auth: true },
+    { href: '/design-system', label: 'Дизайн-система', number: '11', auth: true, roles: ['admin', 'moderator'] },
     { href: '/login', label: 'Войти', number: '→', guest: true },
 ];
