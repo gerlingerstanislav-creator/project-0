@@ -3,11 +3,12 @@ import { Head } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 
 const hydrangeaHeads = [
-    { x: 175, y: 145, scale: 1.05, delay: '-1.2s' },
-    { x: 305, y: 108, scale: 1.12, delay: '-2.4s' },
-    { x: 430, y: 155, scale: 1.02, delay: '-.5s' },
-    { x: 235, y: 238, scale: .92, delay: '-3.1s' },
-    { x: 365, y: 245, scale: .88, delay: '-1.8s' },
+    { x: 145, y: 150, scale: 1.35, delay: '-1.2s' },
+    { x: 300, y: 105, scale: 1.48, delay: '-2.4s' },
+    { x: 455, y: 150, scale: 1.34, delay: '-.5s' },
+    { x: 215, y: 265, scale: 1.28, delay: '-3.1s' },
+    { x: 385, y: 265, scale: 1.24, delay: '-1.8s' },
+    { x: 300, y: 205, scale: 1.18, delay: '-2.9s' },
 ];
 </script>
 
@@ -97,27 +98,27 @@ const hydrangeaHeads = [
                             class="hydrangea-head"
                             :style="{ '--head-delay': head.delay, transform: `translate(${head.x}px,${head.y}px) scale(${head.scale})` }"
                         >
-                            <g v-for="ring in 4" :key="ring" :transform="`rotate(${ring * 18}) scale(${1 - ring * .045})`">
-                                <g v-for="petal in 8" :key="petal" :transform="`rotate(${petal * 45}) translate(0 ${18 + ring * 18})`">
+                            <g v-for="ring in 7" :key="ring" :transform="`rotate(${ring * 13}) scale(${1 - ring * .035})`">
+                                <g v-for="petal in 12" :key="petal" :transform="`rotate(${petal * 30 + ring * 7}) translate(0 ${10 + ring * 15})`">
                                     <path class="hydrangea-floret"
                                         :fill="index % 2 === 0 ? 'url(#hydrangeaBlue)' : 'url(#hydrangeaPink)'"
-                                        d="M0 -16 C-13 -25 -24 -15 -18 -3 C-24 8 -13 18 0 11 C13 18 24 8 18 -3 C24 -15 13 -25 0 -16Z"/>
-                                    <circle cx="0" cy="-3" r="3.2" fill="#fff3a6"/>
+                                        d="M0 -10 C-9 -17 -17 -11 -13 -2 C-17 7 -8 13 0 9 C8 13 17 7 13 -2 C17 -11 9 -17 0 -10Z"/>
+                                    <circle cx="0" cy="-2" r="2.2" fill="#fff3a6"/>
                                 </g>
                             </g>
                         </g>
 
-                        <!-- roses with curled concentric petals -->
+                        <!-- roses sit in front of the hydrangeas so the bouquet reads as a dense mass of flowers -->
                         <g class="roses" filter="url(#flowerShadow)">
-                            <g class="rose-flower rose-flower--one" transform="translate(145 170)">
+                            <g class="rose-flower rose-flower--one" transform="translate(142 220) scale(1.18)">
                                 <ellipse rx="61" ry="55" fill="url(#rose)"/>
                                 <path d="M-42 3 C-48 -34 -7 -56 26 -39 C55 -24 48 15 23 30 C-5 46 -38 31 -31 8 C-27 -9 2 -22 22 -9 C39 2 26 24 8 20 C-10 16 -8 0 4 -5 C13 -9 18 -1 13 5" fill="none" stroke="#fff0f8" stroke-width="9" stroke-linecap="round"/>
                             </g>
-                            <g class="rose-flower rose-flower--two" transform="translate(460 190) scale(.9)">
+                            <g class="rose-flower rose-flower--two" transform="translate(458 220) scale(1.08)">
                                 <ellipse rx="61" ry="55" fill="url(#rose)"/>
                                 <path d="M-42 3 C-48 -34 -7 -56 26 -39 C55 -24 48 15 23 30 C-5 46 -38 31 -31 8 C-27 -9 2 -22 22 -9 C39 2 26 24 8 20 C-10 16 -8 0 4 -5 C13 -9 18 -1 13 5" fill="none" stroke="#fff0f8" stroke-width="9" stroke-linecap="round"/>
                             </g>
-                            <g class="rose-flower rose-flower--three" transform="translate(303 72) scale(.78)">
+                            <g class="rose-flower rose-flower--three" transform="translate(300 105) scale(.95)">
                                 <ellipse rx="61" ry="55" fill="url(#rose)"/>
                                 <path d="M-42 3 C-48 -34 -7 -56 26 -39 C55 -24 48 15 23 30 C-5 46 -38 31 -31 8 C-27 -9 2 -22 22 -9 C39 2 26 24 8 20 C-10 16 -8 0 4 -5 C13 -9 18 -1 13 5" fill="none" stroke="#fff0f8" stroke-width="9" stroke-linecap="round"/>
                             </g>
@@ -212,13 +213,14 @@ const hydrangeaHeads = [
 .bouquet-art { width:100%; height:100%; overflow:visible; }
 .stems, .foliage, .hydrangea-head, .roses, .wrapper { transform-box:fill-box; transform-origin:center bottom; }
 .hydrangea-head { animation:flower-sway 5s ease-in-out infinite; animation-delay:var(--head-delay); }
-.hydrangea-floret { filter:drop-shadow(0 3px 3px rgba(73,59,124,.18)); }
+.hydrangea-floret { filter:drop-shadow(0 2px 2px rgba(73,59,124,.16)); }
+.hydrangea-head { transform-origin:center; }
 .rose-flower { transform-box:fill-box; transform-origin:center; animation:rose-sway 4.5s ease-in-out infinite; }
 .rose-flower--two { animation-delay:-1.7s; }
 .rose-flower--three { animation-delay:-.8s; }
 .foliage { animation:leaf-sway 4.2s ease-in-out infinite; transform-origin:50% 100%; }
 .wrapper { transform-origin:50% 100%; }
-.ribbo { transform-origin:center; }
+.ribbon { transform-origin:center; }
 .bouquet-sparkles { animation:sparkle 2.7s ease-in-out infinite; }
 .anya-sparkle {
     position:absolute; z-index:9; color:#9c72b5; text-shadow:0 4px 15px rgba(112,73,133,.16);
