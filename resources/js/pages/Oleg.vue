@@ -9,14 +9,29 @@ import AppLayout from '../layouts/AppLayout.vue';
     <AppLayout>
         <main class="oleg-page">
             <section class="oleg-banner" aria-labelledby="oleg-title">
-                <div class="oleg-banner__glow oleg-banner__glow--one"></div>
-                <div class="oleg-banner__glow oleg-banner__glow--two"></div>
-                <div class="oleg-banner__content">
-                    <span class="oleg-banner__eyebrow">WELCOME</span>
-                    <h1 id="oleg-title">Привет, Олег</h1>
-                    <p>Рады видеть тебя здесь.</p>
+                <div class="confetti" aria-hidden="true">
+                    <span v-for="n in 18" :key="n" :class="'confetti__piece confetti__piece--' + n"></span>
                 </div>
-                <div class="oleg-banner__mark" aria-hidden="true">✦</div>
+                <div class="oleg-banner__orb oleg-banner__orb--pink"></div>
+                <div class="oleg-banner__orb oleg-banner__orb--blue"></div>
+                <div class="oleg-banner__orb oleg-banner__orb--yellow"></div>
+
+                <div class="oleg-banner__content">
+                    <div class="oleg-banner__badge">✨ SPECIAL DELIVERY ✨</div>
+                    <div class="oleg-banner__emoji" aria-hidden="true">🎉</div>
+                    <h1 id="oleg-title">Привет, Олег!</h1>
+                    <p>Этот баннер явно пришёл не за тем, чтобы быть скучным.</p>
+                    <div class="oleg-banner__chips">
+                        <span>🌈 Красочно</span>
+                        <span>⚡ Ярко</span>
+                        <span>🚀 С кайфом</span>
+                    </div>
+                </div>
+
+                <div class="oleg-banner__sparkle oleg-banner__sparkle--one">✦</div>
+                <div class="oleg-banner__sparkle oleg-banner__sparkle--two">✧</div>
+                <div class="oleg-banner__star oleg-banner__star--one">★</div>
+                <div class="oleg-banner__star oleg-banner__star--two">★</div>
             </section>
         </main>
     </AppLayout>
@@ -27,112 +42,229 @@ import AppLayout from '../layouts/AppLayout.vue';
     min-height: calc(100vh - 96px);
     display: grid;
     place-items: center;
+    padding: 32px;
 }
 
 .oleg-banner {
     position: relative;
-    width: min(100%, 1080px);
-    min-height: 430px;
+    width: min(100%, 1100px);
+    min-height: 520px;
     overflow: hidden;
     display: grid;
     place-items: center;
-    padding: 56px;
-    border-radius: 28px;
+    padding: 64px;
+    border-radius: 36px;
+    isolation: isolate;
     background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,.18), transparent 32%),
-        radial-gradient(circle at 85% 80%, rgba(255,255,255,.12), transparent 30%),
-        linear-gradient(135deg, #18181b 0%, #27272a 48%, #09090b 100%);
+        radial-gradient(circle at 50% 45%, rgba(255,255,255,.16), transparent 28%),
+        linear-gradient(135deg, #ff4ecd 0%, #7c3aed 35%, #2563eb 67%, #06b6d4 100%);
     color: #fff;
-    box-shadow: 0 30px 80px rgba(0,0,0,.18);
+    box-shadow:
+        0 35px 90px rgba(99, 51, 177, .35),
+        inset 0 1px 0 rgba(255,255,255,.35);
 }
 
 .oleg-banner::before {
     content: "";
     position: absolute;
-    inset: 1px;
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 27px;
+    inset: 10px;
+    border: 2px solid rgba(255,255,255,.22);
+    border-radius: 29px;
     pointer-events: none;
+    z-index: 3;
 }
 
 .oleg-banner__content {
     position: relative;
-    z-index: 2;
+    z-index: 4;
     text-align: center;
+    max-width: 850px;
 }
 
-.oleg-banner__eyebrow {
+.oleg-banner__badge {
     display: inline-block;
-    margin-bottom: 18px;
-    padding: 7px 11px;
-    border: 1px solid rgba(255,255,255,.2);
+    padding: 9px 16px;
+    border: 1px solid rgba(255,255,255,.4);
     border-radius: 999px;
-    color: rgba(255,255,255,.68);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: .18em;
+    background: rgba(255,255,255,.16);
+    box-shadow: 0 8px 30px rgba(0,0,0,.12);
+    backdrop-filter: blur(12px);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .16em;
+}
+
+.oleg-banner__emoji {
+    margin: 24px 0 4px;
+    font-size: 58px;
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,.16));
 }
 
 .oleg-banner h1 {
     margin: 0;
-    font-size: clamp(46px, 8vw, 96px);
-    line-height: .95;
-    letter-spacing: -.055em;
+    font-size: clamp(54px, 9vw, 108px);
+    line-height: .9;
+    letter-spacing: -.065em;
+    text-shadow: 0 8px 24px rgba(39, 17, 84, .22);
 }
 
 .oleg-banner p {
-    margin: 24px 0 0;
-    color: rgba(255,255,255,.62);
-    font-size: clamp(15px, 2vw, 19px);
+    margin: 24px auto 0;
+    color: rgba(255,255,255,.9);
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 600;
 }
 
-.oleg-banner__glow {
+.oleg-banner__chips {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.oleg-banner__chips span {
+    padding: 10px 15px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.3);
+    backdrop-filter: blur(10px);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.oleg-banner__orb {
     position: absolute;
-    width: 240px;
-    height: 240px;
     border-radius: 50%;
-    filter: blur(70px);
-    opacity: .28;
+    filter: blur(2px);
+    z-index: 0;
 }
 
-.oleg-banner__glow--one {
+.oleg-banner__orb--pink {
+    width: 270px;
+    height: 270px;
     top: -100px;
     left: -60px;
-    background: #a1a1aa;
+    background: #fb7185;
+    opacity: .7;
 }
 
-.oleg-banner__glow--two {
-    right: -70px;
-    bottom: -120px;
-    background: #71717a;
+.oleg-banner__orb--blue {
+    width: 310px;
+    height: 310px;
+    right: -110px;
+    bottom: -140px;
+    background: #22d3ee;
+    opacity: .75;
 }
 
-.oleg-banner__mark {
+.oleg-banner__orb--yellow {
+    width: 130px;
+    height: 130px;
+    right: 12%;
+    top: 9%;
+    background: #facc15;
+    opacity: .9;
+}
+
+.oleg-banner__sparkle,
+.oleg-banner__star {
     position: absolute;
-    right: 32px;
-    top: 28px;
-    color: rgba(255,255,255,.22);
-    font-size: 42px;
+    z-index: 2;
+    color: #fff;
+    text-shadow: 0 4px 16px rgba(0,0,0,.2);
 }
+
+.oleg-banner__sparkle--one {
+    left: 10%;
+    bottom: 18%;
+    font-size: 58px;
+    transform: rotate(15deg);
+}
+
+.oleg-banner__sparkle--two {
+    right: 9%;
+    top: 34%;
+    font-size: 46px;
+}
+
+.oleg-banner__star--one {
+    left: 19%;
+    top: 16%;
+    color: #fde047;
+    font-size: 26px;
+}
+
+.oleg-banner__star--two {
+    right: 20%;
+    bottom: 15%;
+    color: #f9a8d4;
+    font-size: 34px;
+}
+
+.confetti {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.confetti__piece {
+    position: absolute;
+    width: 9px;
+    height: 22px;
+    border-radius: 4px;
+    background: #fff;
+    opacity: .8;
+}
+
+.confetti__piece--1 { left: 7%; top: 22%; transform: rotate(24deg); background: #fef08a; }
+.confetti__piece--2 { left: 14%; top: 69%; transform: rotate(-35deg); background: #67e8f9; }
+.confetti__piece--3 { left: 27%; top: 8%; transform: rotate(70deg); background: #f9a8d4; }
+.confetti__piece--4 { left: 38%; top: 82%; transform: rotate(18deg); background: #bef264; }
+.confetti__piece--5 { left: 49%; top: 14%; transform: rotate(-50deg); background: #fde68a; }
+.confetti__piece--6 { left: 58%; top: 77%; transform: rotate(42deg); background: #fda4af; }
+.confetti__piece--7 { left: 70%; top: 20%; transform: rotate(-24deg); background: #a5f3fc; }
+.confetti__piece--8 { left: 81%; top: 63%; transform: rotate(63deg); background: #fef08a; }
+.confetti__piece--9 { left: 90%; top: 27%; transform: rotate(-18deg); background: #86efac; }
+.confetti__piece--10 { left: 4%; top: 51%; transform: rotate(54deg); background: #fbcfe8; }
+.confetti__piece--11 { left: 23%; top: 91%; transform: rotate(-60deg); background: #bae6fd; }
+.confetti__piece--12 { left: 34%; top: 21%; transform: rotate(31deg); background: #ddd6fe; }
+.confetti__piece--13 { left: 64%; top: 7%; transform: rotate(82deg); background: #fecaca; }
+.confetti__piece--14 { left: 76%; top: 88%; transform: rotate(-42deg); background: #d9f99d; }
+.confetti__piece--15 { left: 94%; top: 75%; transform: rotate(27deg); background: #fde68a; }
+.confetti__piece--16 { left: 12%; top: 38%; transform: rotate(-68deg); background: #c4b5fd; }
+.confetti__piece--17 { left: 86%; top: 47%; transform: rotate(55deg); background: #f9a8d4; }
+.confetti__piece--18 { left: 54%; top: 92%; transform: rotate(-20deg); background: #67e8f9; }
 
 @media (max-width: 700px) {
     .oleg-page {
         min-height: calc(100vh - 96px);
+        padding: 16px;
     }
 
     .oleg-banner {
-        min-height: 360px;
-        padding: 32px 22px;
-        border-radius: 20px;
+        min-height: 500px;
+        padding: 44px 22px;
+        border-radius: 24px;
     }
 
     .oleg-banner::before {
-        border-radius: 19px;
+        inset: 7px;
+        border-radius: 18px;
     }
 
-    .oleg-banner__mark {
-        right: 20px;
-        top: 18px;
+    .oleg-banner__emoji {
+        font-size: 46px;
+    }
+
+    .oleg-banner__sparkle--one {
+        left: 5%;
+        bottom: 10%;
+    }
+
+    .oleg-banner__star--one {
+        left: 12%;
     }
 }
 </style>
