@@ -3,9 +3,9 @@ import { Head } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 
 const flowerSources = {
-    pink: 'https://www.pngkit.com/png/detail/108-1085827_pink-hydrangea-redoute-hydrangea-png.png',
-    blue: 'https://www.pngkit.com/png/detail/108-1085699_hydrangeas-legacy-light-light-blue-hydrangea-png.png',
-    white: 'https://www.pngkit.com/png/detail/108-1086210_white-hydrangea-transparent-background.png',
+    pink: 'https://wallpapers.com/images/hd/pink-hydrangea-bloom-transparent-background-shaxv0ufousimvye.png',
+    blue: 'https://w7.pngwing.com/pngs/44/891/png-transparent-purple-flowers-french-hydrangea-cut-flowers-shrub-rose-hydrangea-blue-color-flower-garden.png',
+    white: 'https://toppng.com/public/uploads/preview/white-hydrangea-transparent-background-11563060537nrtgmy9bhm.png',
 };
 const flowers = [
     ['8%','13%','30%','-10deg','-1s','pink'],['28%','2%','34%','4deg','-2.6s','blue'],
