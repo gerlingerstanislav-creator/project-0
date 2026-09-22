@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/news', NewsController::class)->name('tools.news');
     Route::get('/cron-scheduler', CronSchedulerController::class)->name('tools.cron-scheduler');
     Route::get('/oleg', fn () => Inertia::render('Oleg'))->name('oleg');
+    Route::get('/anya', fn () => Inertia::render('Anya'))->name('anya');
     Route::put('/news/preferences', [NewsController::class, 'savePreferences'])->name('tools.news.preferences');
     Route::post('/news/feedback', [NewsController::class, 'feedback'])->name('tools.news.feedback');
     Route::delete('/news/feedback', [NewsController::class, 'removeFeedback'])->name('tools.news.feedback.remove');
