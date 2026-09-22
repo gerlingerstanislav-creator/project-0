@@ -443,7 +443,7 @@ jobs:
   notify:
     name: Telegram notification
     runs-on: ubuntu-latest
-    needs: [test, frontend, deploy]
+    needs: deploy
     if: ${{ failure() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
     steps:
