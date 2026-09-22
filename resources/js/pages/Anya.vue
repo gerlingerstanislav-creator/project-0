@@ -2,8 +2,13 @@
 import { Head } from '@inertiajs/vue3';
 import AppLayout from '../layouts/AppLayout.vue';
 
-const hydrangeas = Array.from({ length: 7 }, (_, index) => index);
-const petals = Array.from({ length: 12 }, (_, index) => index);
+const hydrangeaHeads = [
+    { x: 175, y: 145, scale: 1.05, delay: '-1.2s' },
+    { x: 305, y: 108, scale: 1.12, delay: '-2.4s' },
+    { x: 430, y: 155, scale: 1.02, delay: '-.5s' },
+    { x: 235, y: 238, scale: .92, delay: '-3.1s' },
+    { x: 365, y: 245, scale: .88, delay: '-1.8s' },
+];
 </script>
 
 <template>
@@ -14,9 +19,6 @@ const petals = Array.from({ length: 12 }, (_, index) => index);
             <section class="anya-hero" aria-labelledby="anya-title">
                 <div class="anya-glow anya-glow--one"></div>
                 <div class="anya-glow anya-glow--two"></div>
-                <div class="anya-confetti" aria-hidden="true">
-                    <i v-for="n in 18" :key="n" :class="'anya-confetti__piece anya-confetti__piece--' + n"></i>
-                </div>
 
                 <div class="anya-copy">
                     <span class="anya-kicker">💐 SPECIAL DELIVERY 💐</span>
@@ -24,53 +26,123 @@ const petals = Array.from({ length: 12 }, (_, index) => index);
                     <p>И поэтому здесь просто обязан быть огромный букет.</p>
                 </div>
 
-                <div class="bouquet" aria-label="Большой букет цветов с гортензиями">
-                    <div class="bouquet__back-ribbon bouquet__back-ribbon--left"></div>
-                    <div class="bouquet__back-ribbon bouquet__back-ribbon--right"></div>
+                <div class="bouquet" aria-label="Большой живой букет с гортензиями">
+                    <svg class="bouquet-art" viewBox="0 0 600 700" role="img" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#fff"/>
+                                <stop offset=".5" stop-color="#f8edf2"/>
+                                <stop offset="1" stop-color="#dfcddc"/>
+                            </linearGradient>
+                            <linearGradient id="stem" x1="0" x2="1">
+                                <stop stop-color="#315f3e"/>
+                                <stop offset=".5" stop-color="#76a96d"/>
+                                <stop offset="1" stop-color="#3b714b"/>
+                            </linearGradient>
+                            <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+                                <stop stop-color="#9bc98c"/>
+                                <stop offset=".55" stop-color="#4d8b59"/>
+                                <stop offset="1" stop-color="#315e42"/>
+                            </linearGradient>
+                            <radialGradient id="hydrangeaBlue" cx=".35" cy=".28">
+                                <stop stop-color="#f1edff"/>
+                                <stop offset=".22" stop-color="#c9c1ff"/>
+                                <stop offset=".7" stop-color="#8584d8"/>
+                                <stop offset="1" stop-color="#6565b5"/>
+                            </radialGradient>
+                            <radialGradient id="hydrangeaPink" cx=".35" cy=".28">
+                                <stop stop-color="#fff1fa"/>
+                                <stop offset=".25" stop-color="#f5b9dc"/>
+                                <stop offset=".72" stop-color="#d87bb6"/>
+                                <stop offset="1" stop-color="#b45b98"/>
+                            </radialGradient>
+                            <radialGradient id="rose" cx=".35" cy=".25">
+                                <stop stop-color="#fff"/>
+                                <stop offset=".18" stop-color="#ffc4df"/>
+                                <stop offset=".55" stop-color="#ef76ae"/>
+                                <stop offset="1" stop-color="#bd4f8d"/>
+                            </radialGradient>
+                            <filter id="flowerShadow" x="-30%" y="-30%" width="160%" height="160%">
+                                <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#553d62" flood-opacity=".18"/>
+                            </filter>
+                            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+                                <feGaussianBlur stdDeviation="1.5"/>
+                            </filter>
+                        </defs>
 
-                    <div
-                        v-for="(hydrangea, flowerIndex) in hydrangeas"
-                        :key="'hydrangea-' + hydrangea"
-                        class="hydrangea"
-                        :class="'hydrangea--' + flowerIndex"
-                    >
-                        <span
-                            v-for="petal in petals"
-                            :key="petal"
-                            class="hydrangea__petal"
-                            :style="{ '--petal': petal }"
-                        ></span>
-                        <span class="hydrangea__center"></span>
-                    </div>
+                        <!-- long, natural stems -->
+                        <g class="stems">
+                            <path d="M300 620 C275 460 175 280 120 110" stroke="url(#stem)" stroke-width="10" fill="none"/>
+                            <path d="M300 620 C285 430 270 250 300 70" stroke="url(#stem)" stroke-width="11" fill="none"/>
+                            <path d="M300 620 C320 430 405 270 465 115" stroke="url(#stem)" stroke-width="10" fill="none"/>
+                            <path d="M300 620 C315 445 350 350 365 220" stroke="url(#stem)" stroke-width="9" fill="none"/>
+                            <path d="M300 620 C270 455 225 390 205 250" stroke="url(#stem)" stroke-width="9" fill="none"/>
+                            <path d="M300 620 C340 480 435 400 490 290" stroke="url(#stem)" stroke-width="8" fill="none"/>
+                        </g>
 
-                    <div class="rose rose--one">
-                        <span v-for="n in 8" :key="n" class="rose__petal"></span>
-                    </div>
-                    <div class="rose rose--two">
-                        <span v-for="n in 8" :key="n" class="rose__petal"></span>
-                    </div>
-                    <div class="rose rose--three">
-                        <span v-for="n in 8" :key="n" class="rose__petal"></span>
-                    </div>
+                        <!-- foliage behind the flowers -->
+                        <g class="foliage">
+                            <path d="M188 475 C102 470 65 415 72 356 C137 358 183 393 188 475Z" fill="url(#leaf)"/>
+                            <path d="M405 486 C495 478 536 425 528 360 C465 365 420 405 405 486Z" fill="url(#leaf)"/>
+                            <path d="M235 555 C151 550 119 500 130 446 C190 449 228 482 235 555Z" fill="url(#leaf)"/>
+                            <path d="M370 555 C454 550 490 500 478 445 C420 449 378 482 370 555Z" fill="url(#leaf)"/>
+                            <path d="M294 455 C225 430 202 380 220 331 C275 343 301 381 294 455Z" fill="url(#leaf)"/>
+                            <path d="M328 455 C396 430 420 380 401 331 C347 343 320 382 328 455Z" fill="url(#leaf)"/>
+                        </g>
 
-                    <div class="bouquet__stems">
-                        <span v-for="n in 12" :key="n" class="stem" :class="'stem--' + n"></span>
-                    </div>
+                        <!-- realistic hydrangea clusters: each cluster is many four-petal florets -->
+                        <g
+                            v-for="(head, index) in hydrangeaHeads"
+                            :key="index"
+                            class="hydrangea-head"
+                            :style="{ '--head-delay': head.delay, transform: `translate(${head.x}px,${head.y}px) scale(${head.scale})` }"
+                        >
+                            <g v-for="ring in 4" :key="ring" :transform="`rotate(${ring * 18}) scale(${1 - ring * .045})`">
+                                <g v-for="petal in 8" :key="petal" :transform="`rotate(${petal * 45}) translate(0 ${18 + ring * 18})`">
+                                    <path class="hydrangea-floret"
+                                        :fill="index % 2 === 0 ? 'url(#hydrangeaBlue)' : 'url(#hydrangeaPink)'"
+                                        d="M0 -16 C-13 -25 -24 -15 -18 -3 C-24 8 -13 18 0 11 C13 18 24 8 18 -3 C24 -15 13 -25 0 -16Z"/>
+                                    <circle cx="0" cy="-3" r="3.2" fill="#fff3a6"/>
+                                </g>
+                            </g>
+                        </g>
 
-                    <div class="bouquet__leaves">
-                        <span v-for="n in 10" :key="n" class="leaf" :class="'leaf--' + n"></span>
-                    </div>
+                        <!-- roses with curled concentric petals -->
+                        <g class="roses" filter="url(#flowerShadow)">
+                            <g class="rose-flower rose-flower--one" transform="translate(145 170)">
+                                <ellipse rx="61" ry="55" fill="url(#rose)"/>
+                                <path d="M-42 3 C-48 -34 -7 -56 26 -39 C55 -24 48 15 23 30 C-5 46 -38 31 -31 8 C-27 -9 2 -22 22 -9 C39 2 26 24 8 20 C-10 16 -8 0 4 -5 C13 -9 18 -1 13 5" fill="none" stroke="#fff0f8" stroke-width="9" stroke-linecap="round"/>
+                            </g>
+                            <g class="rose-flower rose-flower--two" transform="translate(460 190) scale(.9)">
+                                <ellipse rx="61" ry="55" fill="url(#rose)"/>
+                                <path d="M-42 3 C-48 -34 -7 -56 26 -39 C55 -24 48 15 23 30 C-5 46 -38 31 -31 8 C-27 -9 2 -22 22 -9 C39 2 26 24 8 20 C-10 16 -8 0 4 -5 C13 -9 18 -1 13 5" fill="none" stroke="#fff0f8" stroke-width="9" stroke-linecap="round"/>
+                            </g>
+                            <g class="rose-flower rose-flower--three" transform="translate(303 72) scale(.78)">
+                                <ellipse rx="61" ry="55" fill="url(#rose)"/>
+                                <path d="M-42 3 C-48 -34 -7 -56 26 -39 C55 -24 48 15 23 30 C-5 46 -38 31 -31 8 C-27 -9 2 -22 22 -9 C39 2 26 24 8 20 C-10 16 -8 0 4 -5 C13 -9 18 -1 13 5" fill="none" stroke="#fff0f8" stroke-width="9" stroke-linecap="round"/>
+                            </g>
+                        </g>
 
-                    <div class="bouquet__paper">
-                        <div class="bouquet__paper-fold"></div>
-                        <div class="bouquet__paper-shadow"></div>
-                    </div>
+                        <!-- wrapping paper and ribbon -->
+                        <g class="wrapper">
+                            <path d="M112 500 L488 500 L418 688 L182 688Z" fill="url(#paper)" filter="url(#flowerShadow)"/>
+                            <path d="M185 500 L300 688 L414 500" fill="rgba(255,255,255,.45)"/>
+                            <path d="M300 500 L300 688" stroke="rgba(160,115,150,.18)" stroke-width="2"/>
+                            <path d="M205 518 L250 680 M395 518 L350 680" stroke="rgba(160,115,150,.13)" stroke-width="2"/>
+                            <g class="ribbon">
+                                <path d="M300 535 C255 505 225 530 246 565 C262 588 283 570 300 552Z" fill="#8d5bd1"/>
+                                <path d="M300 535 C345 505 375 530 354 565 C338 588 317 570 300 552Z" fill="#a77be4"/>
+                                <path d="M293 553 L246 645 L288 616 L302 565Z" fill="#7546b9"/>
+                                <path d="M307 553 L354 645 L312 616 L298 565Z" fill="#8c5ed0"/>
+                            </g>
+                        </g>
 
-                    <div class="bouquet__ribbon">
-                        <span class="bouquet__knot"></span>
-                        <span class="bouquet__tail bouquet__tail--left"></span>
-                        <span class="bouquet__tail bouquet__tail--right"></span>
-                    </div>
+                        <g class="bouquet-sparkles">
+                            <circle cx="108" cy="275" r="4" fill="#fff" />
+                            <circle cx="493" cy="330" r="5" fill="#fff" />
+                            <circle cx="178" cy="95" r="3" fill="#fff" />
+                        </g>
+                    </svg>
                 </div>
 
                 <div class="anya-sparkle anya-sparkle--one">✦</div>
@@ -88,515 +160,95 @@ const petals = Array.from({ length: 12 }, (_, index) => index);
     place-items: center;
     padding: 24px;
 }
-
 .anya-hero {
     position: relative;
     width: min(100%, 1180px);
     min-height: 760px;
     overflow: hidden;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(420px, 1fr);
+    grid-template-columns: minmax(0, .88fr) minmax(480px, 1.12fr);
     align-items: center;
-    gap: 18px;
-    padding: 64px 56px 40px;
+    gap: 8px;
+    padding: 48px 36px 26px 56px;
     border-radius: 38px;
     isolation: isolate;
     background:
-        radial-gradient(circle at 74% 18%, rgba(255, 255, 255, .8), transparent 16%),
-        radial-gradient(circle at 20% 78%, rgba(224, 231, 255, .9), transparent 28%),
-        linear-gradient(135deg, #fff7fb 0%, #f4edff 48%, #eaf5ff 100%);
-    box-shadow:
-        0 34px 90px rgba(111, 76, 145, .16),
-        inset 0 1px 0 rgba(255, 255, 255, .9);
+        radial-gradient(circle at 78% 20%, rgba(255,255,255,.9), transparent 18%),
+        radial-gradient(circle at 17% 80%, rgba(224,231,255,.9), transparent 29%),
+        linear-gradient(135deg,#fff7fb 0%,#f4edff 48%,#eaf5ff 100%);
+    box-shadow: 0 34px 90px rgba(111,76,145,.16), inset 0 1px 0 rgba(255,255,255,.9);
 }
-
 .anya-hero::before {
-    content: "";
-    position: absolute;
-    inset: 12px;
-    border: 1px solid rgba(129, 93, 160, .16);
-    border-radius: 29px;
-    pointer-events: none;
-    z-index: 10;
+    content:""; position:absolute; inset:12px; border:1px solid rgba(129,93,160,.16);
+    border-radius:29px; pointer-events:none; z-index:10;
 }
-
-.anya-copy {
-    position: relative;
-    z-index: 7;
-    padding: 24px 0 80px;
-}
-
+.anya-copy { position:relative; z-index:7; padding:24px 0 80px; }
 .anya-kicker {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 16px;
-    border: 1px solid rgba(146, 108, 174, .18);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, .62);
-    color: #7b4c8f;
-    box-shadow: 0 10px 30px rgba(119, 77, 142, .1);
-    backdrop-filter: blur(12px);
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: .14em;
+    display:inline-flex; padding:10px 16px; border:1px solid rgba(146,108,174,.18);
+    border-radius:999px; background:rgba(255,255,255,.62); color:#7b4c8f;
+    box-shadow:0 10px 30px rgba(119,77,142,.1); backdrop-filter:blur(12px);
+    font-size:11px; font-weight:900; letter-spacing:.14em;
 }
-
 .anya-copy h1 {
-    margin: 24px 0 0;
-    color: #42244e;
-    font-size: clamp(54px, 7vw, 102px);
-    line-height: .9;
-    letter-spacing: -.065em;
-    text-wrap: balance;
-    text-shadow: 0 8px 30px rgba(111, 70, 130, .12);
+    margin:24px 0 0; color:#42244e; font-size:clamp(54px,7vw,102px);
+    line-height:.9; letter-spacing:-.065em; text-wrap:balance;
+    text-shadow:0 8px 30px rgba(111,70,130,.12);
 }
-
 .anya-copy p {
-    max-width: 480px;
-    margin: 28px 0 0;
-    color: #725e79;
-    font-size: clamp(17px, 2vw, 21px);
-    line-height: 1.55;
-    font-weight: 600;
+    max-width:480px; margin:28px 0 0; color:#725e79; font-size:clamp(17px,2vw,21px);
+    line-height:1.55; font-weight:600;
 }
-
 .anya-glow {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    filter: blur(8px);
-    z-index: -1;
-    animation: glow-drift 8s ease-in-out infinite alternate;
+    position:absolute; border-radius:50%; pointer-events:none; filter:blur(8px); z-index:-1;
+    animation:glow-drift 8s ease-in-out infinite alternate;
 }
-
-.anya-glow--one {
-    width: 380px;
-    height: 380px;
-    left: -160px;
-    top: -150px;
-    background: rgba(249, 168, 212, .3);
-}
-
-.anya-glow--two {
-    width: 440px;
-    height: 440px;
-    right: -170px;
-    bottom: -190px;
-    background: rgba(165, 180, 252, .3);
-    animation-delay: -3s;
-}
+.anya-glow--one { width:380px;height:380px;left:-160px;top:-150px;background:rgba(249,168,212,.3); }
+.anya-glow--two { width:440px;height:440px;right:-170px;bottom:-190px;background:rgba(165,180,252,.3);animation-delay:-3s; }
 
 .bouquet {
-    position: relative;
-    z-index: 5;
-    width: min(100%, 560px);
-    height: 620px;
-    justify-self: center;
-    animation: bouquet-breathe 5.5s ease-in-out infinite;
-    transform-origin: 50% 90%;
+    position:relative; z-index:5; width:min(100%,610px); height:700px; justify-self:center;
+    animation:bouquet-breathe 6s ease-in-out infinite; transform-origin:50% 90%;
 }
-
-.hydrangea,
-.rose,
-.bouquet__stems,
-.bouquet__leaves,
-.bouquet__paper,
-.bouquet__ribbon,
-.bouquet__back-ribbon {
-    position: absolute;
-}
-
-.hydrangea {
-    width: 190px;
-    height: 190px;
-    border-radius: 50%;
-    animation: flower-sway 4.5s ease-in-out infinite;
-    transform-origin: 50% 80%;
-}
-
-.hydrangea--0 { left: 46px; top: 70px; animation-delay: -.4s; }
-.hydrangea--1 { left: 182px; top: 30px; animation-delay: -1.1s; }
-.hydrangea--2 { right: 28px; top: 92px; animation-delay: -2s; }
-.hydrangea--3 { left: 112px; top: 180px; animation-delay: -2.8s; transform: scale(.96); }
-.hydrangea--4 { right: 94px; top: 205px; animation-delay: -3.4s; transform: scale(.92); }
-.hydrangea--5 { left: 12px; top: 222px; animation-delay: -1.8s; transform: scale(.78); }
-.hydrangea--6 { right: -8px; top: 230px; animation-delay: -2.5s; transform: scale(.76); }
-
-.hydrangea__petal {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 54px;
-    height: 54px;
-    margin: -27px;
-    border-radius: 45% 55% 48% 52%;
-    background:
-        radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), transparent 16%),
-        linear-gradient(145deg, #c4b5fd, #8b8ce8 58%, #6d6bc5);
-    box-shadow:
-        inset -5px -7px 10px rgba(67, 56, 140, .15),
-        0 5px 9px rgba(98, 79, 160, .12);
-    transform: rotate(calc(var(--petal) * 30deg)) translateY(-45px) rotate(calc(var(--petal) * -30deg));
-    transform-origin: center;
-    animation: petal-pulse 3.2s ease-in-out infinite;
-    animation-delay: calc(var(--petal) * -0.09s);
-}
-
-.hydrangea__center {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 13px;
-    height: 13px;
-    margin: -6px;
-    border-radius: 50%;
-    background: #fff4b8;
-    box-shadow: 0 0 0 5px rgba(255, 255, 255, .24);
-    animation: center-glow 2.4s ease-in-out infinite;
-}
-
-.rose {
-    width: 112px;
-    height: 112px;
-    border-radius: 50%;
-    z-index: 4;
-    animation: rose-sway 4s ease-in-out infinite;
-}
-
-.rose--one { left: 98px; top: 104px; animation-delay: -.8s; }
-.rose--two { right: 88px; top: 132px; animation-delay: -2.2s; transform: scale(.9); }
-.rose--three { left: 218px; top: 8px; animation-delay: -1.4s; transform: scale(.78); }
-
-.rose__petal {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 66px;
-    height: 66px;
-    margin: -33px;
-    border-radius: 54% 46% 58% 42%;
-    background: radial-gradient(circle at 35% 30%, #fff 0 5%, #f9a8d4 25%, #e879b5 70%, #c95d9c 100%);
-    box-shadow: inset -4px -6px 9px rgba(135, 42, 100, .13);
-    transform: rotate(calc(var(--rose-petal) * 45deg)) translateY(-19px) rotate(calc(var(--rose-petal) * -45deg));
-}
-
-.rose__petal:nth-child(1) { --rose-petal: 0; }
-.rose__petal:nth-child(2) { --rose-petal: 1; }
-.rose__petal:nth-child(3) { --rose-petal: 2; }
-.rose__petal:nth-child(4) { --rose-petal: 3; }
-.rose__petal:nth-child(5) { --rose-petal: 4; }
-.rose__petal:nth-child(6) { --rose-petal: 5; }
-.rose__petal:nth-child(7) { --rose-petal: 6; }
-.rose__petal:nth-child(8) { --rose-petal: 7; }
-
-.bouquet__stems {
-    left: 48px;
-    top: 178px;
-    width: 420px;
-    height: 350px;
-    z-index: 1;
-}
-
-.stem {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 9px;
-    height: 350px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #4d8c64, #7eb47e 55%, #3e7554);
-    transform-origin: 50% 0;
-}
-
-.stem--1 { transform: rotate(-28deg); }
-.stem--2 { transform: rotate(-21deg); }
-.stem--3 { transform: rotate(-14deg); }
-.stem--4 { transform: rotate(-8deg); }
-.stem--5 { transform: rotate(-3deg); }
-.stem--6 { transform: rotate(4deg); }
-.stem--7 { transform: rotate(10deg); }
-.stem--8 { transform: rotate(16deg); }
-.stem--9 { transform: rotate(22deg); }
-.stem--10 { transform: rotate(28deg); }
-.stem--11 { transform: rotate(-34deg); }
-.stem--12 { transform: rotate(34deg); }
-
-.bouquet__leaves {
-    inset: 190px 40px auto;
-    height: 280px;
-    z-index: 2;
-}
-
-.leaf {
-    position: absolute;
-    width: 80px;
-    height: 38px;
-    border-radius: 100% 0 100% 0;
-    background: linear-gradient(145deg, #91c78f, #4e9166);
-    box-shadow: inset -8px -5px 9px rgba(44, 87, 60, .15);
-    transform-origin: 0 50%;
-    animation: leaf-sway 3.8s ease-in-out infinite;
-}
-
-.leaf::after {
-    content: "";
-    position: absolute;
-    left: 8px;
-    right: 8px;
-    top: 18px;
-    height: 2px;
-    border-radius: 999px;
-    background: rgba(238, 255, 224, .48);
-    transform: rotate(-8deg);
-}
-
-.leaf--1 { left: 22px; top: 34px; transform: rotate(22deg); }
-.leaf--2 { left: 68px; top: 112px; transform: rotate(-28deg) scale(.9); animation-delay: -.7s; }
-.leaf--3 { left: 2px; top: 188px; transform: rotate(35deg) scale(.82); animation-delay: -1.1s; }
-.leaf--4 { right: 10px; top: 52px; transform: scaleX(-1) rotate(26deg); animation-delay: -.3s; }
-.leaf--5 { right: 50px; top: 128px; transform: scaleX(-1) rotate(-24deg) scale(.9); animation-delay: -1.5s; }
-.leaf--6 { right: 0; top: 208px; transform: scaleX(-1) rotate(32deg) scale(.82); animation-delay: -2s; }
-.leaf--7 { left: 140px; top: 222px; transform: rotate(18deg) scale(.75); animation-delay: -.9s; }
-.leaf--8 { right: 134px; top: 232px; transform: scaleX(-1) rotate(16deg) scale(.75); animation-delay: -1.8s; }
-.leaf--9 { left: 178px; top: 70px; transform: rotate(-20deg) scale(.65); animation-delay: -2.3s; }
-.leaf--10 { right: 176px; top: 78px; transform: scaleX(-1) rotate(-17deg) scale(.65); animation-delay: -2.8s; }
-
-.bouquet__paper {
-    left: 82px;
-    bottom: 22px;
-    width: 390px;
-    height: 220px;
-    z-index: 6;
-    overflow: hidden;
-    clip-path: polygon(4% 4%, 96% 4%, 78% 100%, 22% 100%);
-    background: linear-gradient(115deg, #fff 0%, #f9eef4 48%, #e9dce8 100%);
-    filter: drop-shadow(0 18px 18px rgba(92, 59, 83, .16));
-    transform: rotate(-2deg);
-}
-
-.bouquet__paper::before,
-.bouquet__paper::after {
-    content: "";
-    position: absolute;
-    top: -10%;
-    width: 2px;
-    height: 120%;
-    background: rgba(178, 132, 165, .22);
-    transform: rotate(17deg);
-}
-
-.bouquet__paper::before { left: 26%; }
-.bouquet__paper::after { right: 25%; transform: rotate(-17deg); }
-
-.bouquet__paper-fold {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent 42%, rgba(255,255,255,.62) 50%, transparent 58%);
-}
-
-.bouquet__paper-shadow {
-    position: absolute;
-    inset: auto 0 0;
-    height: 55px;
-    background: linear-gradient(transparent, rgba(132, 88, 122, .12));
-}
-
-.bouquet__ribbon {
-    left: 218px;
-    bottom: 56px;
-    z-index: 8;
-}
-
-.bouquet__knot {
-    display: block;
-    width: 74px;
-    height: 45px;
-    border-radius: 50% 50% 45% 45%;
-    background: linear-gradient(145deg, #c084fc, #8b5cf6);
-    box-shadow: 0 8px 15px rgba(109, 62, 166, .22);
-}
-
-.bouquet__tail {
-    position: absolute;
-    top: 26px;
-    width: 78px;
-    height: 125px;
-    background: linear-gradient(145deg, #a78bfa, #7c3aed);
-    clip-path: polygon(10% 0, 100% 0, 75% 100%, 48% 83%, 20% 100%);
-    transform-origin: top center;
-}
-
-.bouquet__tail--left { right: 45px; transform: rotate(17deg); }
-.bouquet__tail--right { left: 45px; transform: scaleX(-1) rotate(17deg); }
-
-.bouquet__back-ribbon {
-    z-index: 0;
-    width: 160px;
-    height: 300px;
-    bottom: 62px;
-    border-radius: 30px;
-    background: linear-gradient(145deg, rgba(196, 181, 253, .65), rgba(124, 58, 237, .45));
-    filter: blur(.2px);
-}
-
-.bouquet__back-ribbon--left {
-    left: 92px;
-    transform: rotate(24deg);
-}
-
-.bouquet__back-ribbon--right {
-    right: 72px;
-    transform: rotate(-24deg);
-}
-
+.bouquet-art { width:100%; height:100%; overflow:visible; }
+.stems, .foliage, .hydrangea-head, .roses, .wrapper { transform-box:fill-box; transform-origin:center bottom; }
+.hydrangea-head { animation:flower-sway 5s ease-in-out infinite; animation-delay:var(--head-delay); }
+.hydrangea-floret { filter:drop-shadow(0 3px 3px rgba(73,59,124,.18)); }
+.rose-flower { transform-box:fill-box; transform-origin:center; animation:rose-sway 4.5s ease-in-out infinite; }
+.rose-flower--two { animation-delay:-1.7s; }
+.rose-flower--three { animation-delay:-.8s; }
+.foliage { animation:leaf-sway 4.2s ease-in-out infinite; transform-origin:50% 100%; }
+.wrapper { transform-origin:50% 100%; }
+.ribbo { transform-origin:center; }
+.bouquet-sparkles { animation:sparkle 2.7s ease-in-out infinite; }
 .anya-sparkle {
-    position: absolute;
-    z-index: 9;
-    color: #9c72b5;
-    text-shadow: 0 4px 15px rgba(112, 73, 133, .16);
-    animation: sparkle 2.7s ease-in-out infinite;
+    position:absolute; z-index:9; color:#9c72b5; text-shadow:0 4px 15px rgba(112,73,133,.16);
+    animation:sparkle 2.7s ease-in-out infinite;
 }
+.anya-sparkle--one { right:43%; top:12%; font-size:42px; }
+.anya-sparkle--two { right:3%; top:43%; font-size:56px; animation-delay:-.9s; }
+.anya-sparkle--three { left:51%; bottom:7%; font-size:34px; animation-delay:-1.6s; }
 
-.anya-sparkle--one { right: 46%; top: 13%; font-size: 42px; }
-.anya-sparkle--two { right: 5%; top: 42%; font-size: 56px; animation-delay: -.9s; }
-.anya-sparkle--three { left: 49%; bottom: 9%; font-size: 34px; animation-delay: -1.6s; }
+@keyframes bouquet-breathe { 0%,100%{transform:translateY(0) rotate(-.5deg)} 50%{transform:translateY(-10px) rotate(.6deg)} }
+@keyframes flower-sway { 0%,100%{transform:rotate(-1deg)} 50%{transform:rotate(1.7deg) translateY(-3px)} }
+@keyframes rose-sway { 0%,100%{transform:rotate(-1deg) scale(1)} 50%{transform:rotate(2deg) scale(1.025) translateY(-3px)} }
+@keyframes leaf-sway { 0%,100%{transform:rotate(-1deg)} 50%{transform:rotate(1.4deg) translateY(-4px)} }
+@keyframes sparkle { 0%,100%{opacity:.35;transform:scale(.85) rotate(0)} 50%{opacity:1;transform:scale(1.15) rotate(12deg)} }
+@keyframes glow-drift { from{transform:translate3d(0,0,0) scale(1)} to{transform:translate3d(20px,12px,0) scale(1.08)} }
 
-.anya-confetti {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
+@media (max-width:900px) {
+    .anya-hero { min-height:900px; grid-template-columns:1fr; padding:52px 28px 10px; }
+    .anya-copy { padding:18px 0 0; text-align:center; }
+    .anya-copy p { margin-left:auto; margin-right:auto; }
+    .bouquet { width:min(100%,590px); height:590px; margin-top:-35px; }
+    .anya-sparkle--one { right:12%; top:41%; }
+    .anya-sparkle--three { left:12%; bottom:5%; }
 }
-
-.anya-confetti__piece {
-    position: absolute;
-    width: 8px;
-    height: 22px;
-    border-radius: 99px;
-    opacity: .5;
-    animation: confetti-float 4s ease-in-out infinite;
-}
-
-.anya-confetti__piece--1 { left: 7%; top: 16%; background: #e879f9; transform: rotate(32deg); }
-.anya-confetti__piece--2 { left: 15%; top: 78%; background: #818cf8; transform: rotate(-28deg); animation-delay: -.8s; }
-.anya-confetti__piece--3 { left: 28%; top: 8%; background: #f472b6; transform: rotate(62deg); animation-delay: -1.4s; }
-.anya-confetti__piece--4 { left: 42%; top: 20%; background: #a78bfa; transform: rotate(-24deg); animation-delay: -2.1s; }
-.anya-confetti__piece--5 { left: 52%; top: 84%; background: #60a5fa; transform: rotate(50deg); animation-delay: -1.1s; }
-.anya-confetti__piece--6 { left: 67%; top: 9%; background: #f9a8d4; transform: rotate(-42deg); animation-delay: -2.7s; }
-.anya-confetti__piece--7 { left: 81%; top: 68%; background: #8b5cf6; transform: rotate(22deg); animation-delay: -.4s; }
-.anya-confetti__piece--8 { left: 93%; top: 24%; background: #93c5fd; transform: rotate(68deg); animation-delay: -1.9s; }
-.anya-confetti__piece--9 { left: 4%; top: 45%; background: #f0abfc; transform: rotate(-54deg); animation-delay: -3s; }
-.anya-confetti__piece--10 { left: 24%; top: 91%; background: #c4b5fd; transform: rotate(38deg); animation-delay: -1.6s; }
-.anya-confetti__piece--11 { left: 37%; top: 66%; background: #f9a8d4; transform: rotate(-68deg); animation-delay: -2.5s; }
-.anya-confetti__piece--12 { left: 58%; top: 12%; background: #93c5fd; transform: rotate(44deg); animation-delay: -3.3s; }
-.anya-confetti__piece--13 { left: 73%; top: 90%; background: #c4b5fd; transform: rotate(-32deg); animation-delay: -2.2s; }
-.anya-confetti__piece--14 { left: 87%; top: 51%; background: #f9a8d4; transform: rotate(58deg); animation-delay: -1.2s; }
-.anya-confetti__piece--15 { left: 34%; top: 35%; background: #a5b4fc; transform: rotate(-19deg); animation-delay: -2.8s; }
-.anya-confetti__piece--16 { left: 63%; top: 54%; background: #f0abfc; transform: rotate(31deg); animation-delay: -.7s; }
-.anya-confetti__piece--17 { left: 12%; top: 28%; background: #93c5fd; transform: rotate(-45deg); animation-delay: -1.8s; }
-.anya-confetti__piece--18 { left: 77%; top: 31%; background: #f472b6; transform: rotate(73deg); animation-delay: -3.5s; }
-
-@keyframes bouquet-breathe {
-    0%, 100% { transform: translateY(0) rotate(-.5deg); }
-    50% { transform: translateY(-10px) rotate(.7deg); }
-}
-
-@keyframes flower-sway {
-    0%, 100% { transform: rotate(-1deg); }
-    50% { transform: rotate(2deg) translateY(-3px); }
-}
-
-@keyframes rose-sway {
-    0%, 100% { rotate: -1deg; }
-    50% { rotate: 2deg; translate: 0 -3px; }
-}
-
-@keyframes petal-pulse {
-    0%, 100% { filter: brightness(1); }
-    50% { filter: brightness(1.12); }
-}
-
-@keyframes center-glow {
-    0%, 100% { box-shadow: 0 0 0 5px rgba(255,255,255,.2); }
-    50% { box-shadow: 0 0 0 9px rgba(255,255,255,.34); }
-}
-
-@keyframes leaf-sway {
-    0%, 100% { margin-top: 0; }
-    50% { margin-top: -4px; }
-}
-
-@keyframes sparkle {
-    0%, 100% { opacity: .35; transform: scale(.85) rotate(0); }
-    50% { opacity: 1; transform: scale(1.15) rotate(12deg); }
-}
-
-@keyframes confetti-float {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 0 -10px; }
-}
-
-@keyframes glow-drift {
-    from { transform: translate3d(0, 0, 0) scale(1); }
-    to { transform: translate3d(20px, 12px, 0) scale(1.08); }
-}
-
-@media (max-width: 900px) {
-    .anya-hero {
-        min-height: 900px;
-        grid-template-columns: 1fr;
-        padding: 52px 28px 20px;
-    }
-
-    .anya-copy {
-        padding: 18px 0 0;
-        text-align: center;
-    }
-
-    .anya-copy p {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .bouquet {
-        width: min(100%, 520px);
-        height: 520px;
-        transform: scale(.86);
-        margin-top: -38px;
-    }
-
-    .anya-sparkle--one { right: 12%; top: 41%; }
-    .anya-sparkle--three { left: 12%; bottom: 5%; }
-}
-
-@media (max-width: 560px) {
-    .anya-page {
-        padding: 10px;
-    }
-
-    .anya-hero {
-        min-height: 790px;
-        padding: 42px 18px 10px;
-        border-radius: 24px;
-    }
-
-    .anya-copy h1 {
-        font-size: clamp(45px, 14vw, 72px);
-    }
-
-    .anya-kicker {
-        font-size: 9px;
-    }
-
-    .bouquet {
-        width: 440px;
-        height: 470px;
-        margin-left: 50%;
-        transform: translateX(-50%) scale(.67);
-        transform-origin: 50% 50%;
-        margin-top: -70px;
-    }
-
-    .anya-sparkle--one { display: none; }
+@media (max-width:560px) {
+    .anya-page { padding:10px; }
+    .anya-hero { min-height:790px; padding:42px 18px 10px; border-radius:24px; }
+    .anya-copy h1 { font-size:clamp(45px,14vw,72px); }
+    .anya-kicker { font-size:9px; }
+    .bouquet { width:540px; height:500px; margin-left:50%; transform:translateX(-50%) scale(.76); transform-origin:50% 50%; margin-top:-65px; }
+    .anya-sparkle--one { display:none; }
 }
 </style>
