@@ -405,7 +405,7 @@ jobs:
                       deny all;
                   }
               }
-              NGINX
+            NGINX
               ln -sf /etc/nginx/sites-available/stools /etc/nginx/sites-enabled/stools
               rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/test
 
@@ -478,7 +478,7 @@ jobs:
 
               [Install]
               WantedBy=multi-user.target
-              SYSTEMD
+            SYSTEMD
 
               systemctl daemon-reload
               systemctl enable project-0-queue.service
