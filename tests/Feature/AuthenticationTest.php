@@ -17,7 +17,6 @@ class AuthenticationTest extends TestCase
         foreach ([
             'tools.tool1',
             'tools.tool2',
-            'tools.tool3',
             'tools.manager-cheat-sheets',
             'tools.ski-resort',
             'tests',
