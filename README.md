@@ -150,7 +150,7 @@ Pipeline выполняет:
 7. Push-уведомление администратору после успешного деплоя.
 8. Telegram-уведомление при ошибке push-деплоя.
 
-Деплой выполняется из release-архива и не переносит локальные .env, SQLite-базу, vendor или node_modules.
+Деплой выполняется из release-архива. CI собирает production-only `vendor/` и включает его в release, поэтому на VPS при обычном деплое Composer не запускается. Локальные `.env`, SQLite-база и `node_modules` в release не переносятся.
 
 ### Диагностика production БД
 

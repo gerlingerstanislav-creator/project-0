@@ -67,6 +67,20 @@ jobs:
       - name: Run Laravel tests
         run: vendor/bin/phpunit
 
+      - name: Install production Composer dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Package production vendor
+        run: tar -C vendor -czf vendor.tar.gz .
+
+      - name: Upload production vendor
+        uses: actions/upload-artifact@v4
+        with:
+          name: laravel-vendor-${{ github.sha }}
+          path: vendor.tar.gz
+          if-no-files-found: error
+          retention-days: 3
+
   frontend:
     name: Frontend build
     runs-on: ubuntu-latest
@@ -114,12 +128,20 @@ jobs:
         with:
           name: composer-lock-${{ github.sha }}
           path: composer-lock
-      - name: Add resolved Composer lock to release
+      - name: Download production vendor
+        uses: actions/download-artifact@v5
+        with:
+          name: laravel-vendor-${{ github.sha }}
+          path: production-vendor
+      - name: Add Composer lock and production vendor to release
         run: |
           set -e
-          mkdir -p /tmp/release
+          mkdir -p /tmp/release /tmp/vendor
           tar -xzf release.tar.gz -C /tmp/release
           cp composer-lock/composer.lock /tmp/release/composer.lock
+          tar -xzf production-vendor/vendor.tar.gz -C /tmp/vendor
+          rm -rf /tmp/release/vendor
+          mv /tmp/vendor /tmp/release/vendor
           tar -C /tmp/release -czf release-final.tar.gz .
           mv release-final.tar.gz release.tar.gz
       - name: Upload final release artifact
@@ -249,24 +271,12 @@ jobs:
               echo "LibreTranslate test response: $translation_test"
               echo "$translation_test" | grep -q '"translatedText"'
 
-              if ! command -v composer >/dev/null 2>&1; then
-                php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-                php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-                rm -f composer-setup.php
-              fi
-
               for i in 1 2 3 4 5 6 7 8 9 10; do
                 if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:5000/languages >/dev/null; then
                   break
                 fi
                 sleep 3
               done
-
-              NODE_MAJOR="$(node -p "process.versions.node.split('.')[0]" 2>/dev/null || echo 0)"
-              if [ "$NODE_MAJOR" -lt 22 ]; then
-                curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-                apt_run install -y nodejs
-              fi
 
 
             else
@@ -309,7 +319,7 @@ jobs:
             mkdir -p bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
 
             test -f composer.lock
-            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+            test -f vendor/autoload.php
 
             if [ -n "${{ secrets.VAPID_SUBJECT }}" ]; then sed -i "s#^VAPID_SUBJECT=.*#VAPID_SUBJECT=${{ secrets.VAPID_SUBJECT }}#" .env; fi
             if [ -n "${{ secrets.VAPID_PUBLIC_KEY }}" ]; then sed -i "s#^VAPID_PUBLIC_KEY=.*#VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }}#" .env; fi

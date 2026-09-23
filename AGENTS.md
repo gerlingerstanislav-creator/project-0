@@ -272,5 +272,5 @@ README должен быть коротким, понятным человеку
 - Production deployment is split into one-time VPS bootstrap and lightweight application deployment.
 - Normal deploys must not reinstall the OS-level stack, rewrite Nginx/systemd configuration, or re-provision SSL.
 - First-time server provisioning creates its configuration files directly on the VPS with shell commands and records completion in `/var/lib/project-0/bootstrap-complete`.
-- Normal deploys require the resolved `composer.lock` produced by CI and use `composer install`; production deployment must not fall back to `composer update`.
+- CI builds a production-only `vendor/` tree after tests and includes it in the release artifact; normal deploys must not run Composer on the VPS.
 - Backend tests and frontend build run in parallel; packaging waits for both, and production deployment waits only for packaging.
