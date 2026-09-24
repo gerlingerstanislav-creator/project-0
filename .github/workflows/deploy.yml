@@ -89,6 +89,18 @@ jobs:
             test -f "$APP_DIR/.env"
             test -f /tmp/release.tar.gz
 
+            # Translation was removed from the application. Clean up the old
+            # worker and LibreTranslate container left by previous releases.
+            if systemctl list-unit-files project-0-queue.service >/dev/null 2>&1; then
+              systemctl stop project-0-queue.service || true
+              systemctl disable project-0-queue.service || true
+              rm -f /etc/systemd/system/project-0-queue.service
+              systemctl daemon-reload
+            fi
+            if command -v docker >/dev/null 2>&1 && docker ps -a --format '{{.Names}}' | grep -qx 'project-0-translator'; then
+              docker rm -f project-0-translator
+            fi
+
             tar -xzf /tmp/release.tar.gz -C "$APP_DIR"
             rm -f /tmp/release.tar.gz
             cd "$APP_DIR"
@@ -108,5 +120,5 @@ jobs:
             systemctl reload nginx
 
             curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/ >/dev/null
-            curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/check-ip >/dev/null
+            curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/news >/dev/null
             echo "Deployment and smoke checks completed"
