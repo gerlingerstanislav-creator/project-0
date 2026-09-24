@@ -9,5 +9,6 @@ export const appLinks = [
     { href: '/cron-scheduler', label: 'Конструктор расписаний', number: '7', auth: true },
     { href: '/check-ip', label: 'Check IP', number: '8', auth: true },
     { href: '/design-system', label: 'Дизайн-система', number: '9', auth: true, roles: ['admin', 'moderator'] },
+    { href: '/event-manager-training', label: 'Обучение event-менеджера', number: '10', auth: true },
     { href: '/login', label: 'Войти', number: '→', guest: true },
 ];

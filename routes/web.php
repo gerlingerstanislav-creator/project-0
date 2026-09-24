@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/cron-scheduler', CronSchedulerController::class)->name('tools.cron-scheduler');
     Route::get('/check-ip', [CheckIpController::class, 'index'])->name('tools.check-ip');
     Route::post('/check-ip/lookup', [CheckIpController::class, 'lookup'])->middleware('throttle:30,1')->name('tools.check-ip.lookup');
+    Route::get('/event-manager-training', fn () => Inertia::render('EventManagerTraining'))->name('tools.event-manager-training');
     Route::put('/news/preferences', [NewsController::class, 'savePreferences'])->name('tools.news.preferences');
     Route::post('/news/feedback', [NewsController::class, 'feedback'])->name('tools.news.feedback');
     Route::delete('/news/feedback', [NewsController::class, 'removeFeedback'])->name('tools.news.feedback.remove');
