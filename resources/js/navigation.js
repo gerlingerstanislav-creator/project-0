@@ -7,6 +7,7 @@ export const appLinks = [
     { href: '/news', label: 'Новости', number: '5', auth: true },
     { href: '/tests', label: 'Тесты', number: '6', auth: true },
     { href: '/cron-scheduler', label: 'Конструктор расписаний', number: '7', auth: true },
-    { href: '/design-system', label: 'Дизайн-система', number: '8', auth: true, roles: ['admin', 'moderator'] },
+    { href: '/check-ip', label: 'Check IP', number: '8', auth: true },
+    { href: '/design-system', label: 'Дизайн-система', number: '9', auth: true, roles: ['admin', 'moderator'] },
     { href: '/login', label: 'Войти', number: '→', guest: true },
 ];
