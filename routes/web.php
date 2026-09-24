@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\Tools\CheckIpController;
 use App\Http\Controllers\Tools\ManagerCheatSheetsController;
 use App\Http\Controllers\Tools\NewsController;
 use App\Http\Controllers\Tools\SkiResortController;
@@ -28,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
     Route::get('/news', NewsController::class)->name('tools.news');
     Route::get('/cron-scheduler', CronSchedulerController::class)->name('tools.cron-scheduler');
+    Route::get('/check-ip', [CheckIpController::class, 'index'])->name('tools.check-ip');
+    Route::post('/check-ip/lookup', [CheckIpController::class, 'lookup'])->middleware('throttle:30,1')->name('tools.check-ip.lookup');
     Route::put('/news/preferences', [NewsController::class, 'savePreferences'])->name('tools.news.preferences');
     Route::post('/news/feedback', [NewsController::class, 'feedback'])->name('tools.news.feedback');
     Route::delete('/news/feedback', [NewsController::class, 'removeFeedback'])->name('tools.news.feedback.remove');
