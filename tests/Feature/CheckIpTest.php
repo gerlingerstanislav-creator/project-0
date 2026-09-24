@@ -4,12 +4,22 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class CheckIpTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function user(): User
+    {
+        return User::create([
+            'username' => 'check-ip-'.uniqid(),
+            'role' => 'user',
+            'password' => Hash::make('secret'),
+        ]);
+    }
 
     public function test_guest_cannot_access_check_ip(): void
     {
@@ -18,14 +28,12 @@ class CheckIpTest extends TestCase
 
     public function test_authenticated_user_can_open_check_ip(): void
     {
-        $user = User::factory()->create();
-        $this->actingAs($user)->get('/check-ip')->assertOk();
+        $this->actingAs($this->user())->get('/check-ip')->assertOk();
     }
 
     public function test_lookup_validates_ip(): void
     {
-        $user = User::factory()->create();
-        $this->actingAs($user)->postJson('/check-ip/lookup', ['ip' => 'not-an-ip'])
+        $this->actingAs($this->user())->postJson('/check-ip/lookup', ['ip' => 'not-an-ip'])
             ->assertUnprocessable()
             ->assertJsonValidationErrors('ip');
     }
@@ -33,9 +41,8 @@ class CheckIpTest extends TestCase
     public function test_private_ip_does_not_make_external_request(): void
     {
         Http::preventStrayRequests();
-        $user = User::factory()->create();
 
-        $this->actingAs($user)->postJson('/check-ip/lookup', ['ip' => '192.168.1.10'])
+        $this->actingAs($this->user())->postJson('/check-ip/lookup', ['ip' => '192.168.1.10'])
             ->assertOk()
             ->assertJsonPath('version', 'IPv4')
             ->assertJsonPath('scope', 'private / reserved')
@@ -59,8 +66,7 @@ class CheckIpTest extends TestCase
             ]),
         ]);
 
-        $user = User::factory()->create();
-        $this->actingAs($user)->postJson('/check-ip/lookup', ['ip' => '8.8.8.8'])
+        $this->actingAs($this->user())->postJson('/check-ip/lookup', ['ip' => '8.8.8.8'])
             ->assertOk()
             ->assertJsonPath('scope', 'public')
             ->assertJsonPath('rdap.name', 'GOGL')
