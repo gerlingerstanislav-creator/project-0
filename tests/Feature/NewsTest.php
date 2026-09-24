@@ -2,14 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Jobs\TranslateNewsArticle;
 use App\Models\User;
-use App\Services\NewsTranslationService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Queue;
-use Minhyung\LaravelTranslator\Facades\Translator;
 use Tests\TestCase;
 
 class NewsTest extends TestCase
@@ -18,11 +14,6 @@ class NewsTest extends TestCase
     {
         parent::setUp();
         Cache::flush();
-        Queue::fake();
-        Translator::fake([
-            'OpenAI launches new AI model' => 'Запускается новая модель ИИ',
-            'AI software developer news.' => 'Новости разработчика программного обеспечения с ИИ.',
-        ]);
         Http::fake([
             '*' => Http::response(
                 '<?xml version="1.0"?><rss><channel><item><title>OpenAI launches new AI model</title><link>https://example.com/article</link><description>AI software developer news.</description><pubDate>Mon, 21 Sep 2026 05:00:00 GMT</pubDate></item></channel></rss>',
@@ -37,18 +28,18 @@ class NewsTest extends TestCase
         $this->get('/news')->assertRedirect('/login');
     }
 
-    public function test_news_translation_uses_libretranslate_driver(): void
+    public function test_news_page_returns_original_article_content(): void
     {
-        $translations = app(NewsTranslationService::class)->translate([
-            'OpenAI launches new AI model',
-            'AI software developer news.',
-        ]);
-
-        $this->assertSame('Запускается новая модель ИИ', $translations[0]);
-        $this->assertSame('Новости разработчика программного обеспечения с ИИ.', $translations[1]);
-
-        Translator::assertTranslated('OpenAI launches new AI model');
-        Translator::assertTranslated('AI software developer news.');
+        $this->actingAs($this->makeUser('news-content-test'))
+            ->get('/news')
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->where('articles.articles.0.title', 'OpenAI launches new AI model')
+                ->where('articles.articles.0.description', 'AI software developer news.')
+                ->missing('articles.articles.0.title_ru')
+                ->missing('articles.articles.0.description_ru')
+                ->missing('articles.articles.0.translation_pending')
+            );
     }
 
     public function test_news_feedback_changes_relevance_and_is_returned_to_page(): void
@@ -95,16 +86,6 @@ class NewsTest extends TestCase
                 ->where('selectedCategories', ['AI', 'Стартапы'])
                 ->where('minImportance', 0.65)
             );
-    }
-
-    public function test_news_page_queues_translation_without_waiting_for_it(): void
-    {
-        $this->actingAs($this->makeUser('news-test'))
-            ->get('/news')
-            ->assertOk();
-
-        $this->assertFalse(Cache::has('news-translation:' . sha1('https://example.com/article')));
-        Queue::assertPushed(TranslateNewsArticle::class, fn (TranslateNewsArticle $job) => $job->article['title'] === 'OpenAI launches new AI model');
     }
 
     private function makeUser(string $username): User
