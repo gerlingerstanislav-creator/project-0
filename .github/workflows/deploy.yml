@@ -1,0 +1,112 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy without artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          extensions: mbstring, sqlite3, pdo_sqlite
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Prepare application
+        run: |
+          cp .env.example .env
+          mkdir -p database bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
+          touch database/database.sqlite
+
+      - name: Install and test
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+          php artisan key:generate
+          vendor/bin/phpunit
+
+      - name: Build production release
+        run: |
+          npm install
+          npm run build
+          composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+          rm -f .env database/database.sqlite
+          tar --exclude=.git --exclude=node_modules --exclude=.env --exclude=database/database.sqlite --exclude=release.tar.gz -czf /tmp/release.tar.gz .
+          mv /tmp/release.tar.gz release.tar.gz
+
+      - name: Update DuckDNS record
+        env:
+          DUCKDNS_TOKEN: ${{ secrets.DUCKDNS_TOKEN }}
+        run: |
+          set -e
+          test -n "$DUCKDNS_TOKEN"
+          response="$(curl --fail --silent --show-error --retry 3 "https://www.duckdns.org/update?domains=project-0&token=${DUCKDNS_TOKEN}&ip=45.137.42.239")"
+          test "$response" = "OK"
+
+      - name: Upload release to VPS
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          source: release.tar.gz
+          target: /tmp
+
+      - name: Deploy release
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.VPS_HOST }}
+          username: ${{ vars.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          timeout: 30s
+          command_timeout: 10m
+          script: |
+            set -e
+            APP_DIR=/var/www/project-0
+            test -d "$APP_DIR"
+            test -f "$APP_DIR/.env"
+            test -f /tmp/release.tar.gz
+
+            tar -xzf /tmp/release.tar.gz -C "$APP_DIR"
+            rm -f /tmp/release.tar.gz
+            cd "$APP_DIR"
+
+            mkdir -p database bootstrap/cache storage/framework/cache storage/framework/sessions storage/framework/views
+            touch database/database.sqlite
+            chown -R www-data:www-data database storage bootstrap/cache
+            chmod 775 database storage bootstrap/cache
+            chmod 664 database/database.sqlite
+
+            php artisan config:clear
+            php artisan migrate --seed --force
+            php artisan optimize
+            php artisan storage:link || true
+
+            systemctl restart php8.5-fpm
+            systemctl reload nginx
+
+            curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/ >/dev/null
+            curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/check-ip >/dev/null
+            echo "Deployment and smoke checks completed"
