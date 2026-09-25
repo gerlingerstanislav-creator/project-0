@@ -8,7 +8,6 @@ use App\Http\Controllers\Tools\NewsController;
 use App\Http\Controllers\Tools\SkiResortController;
 use App\Http\Controllers\Tools\Tool1Controller;
 use App\Http\Controllers\Tools\Tool2Controller;
-use App\Http\Controllers\Tools\CronSchedulerController;
 use App\Http\Middleware\EnsureUserCanAccessDesignSystem;
 use App\Http\Middleware\EnsureUserCanEditStartupIdeas;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/manager-cheat-sheets', ManagerCheatSheetsController::class)->name('tools.manager-cheat-sheets');
     Route::get('/ski-resort', SkiResortController::class)->name('tools.ski-resort');
     Route::get('/news', NewsController::class)->name('tools.news');
-    Route::get('/cron-scheduler', CronSchedulerController::class)->name('tools.cron-scheduler');
     Route::get('/event-manager-training', fn () => Inertia::render('EventManagerTraining'))->name('tools.event-manager-training');
     Route::put('/news/preferences', [NewsController::class, 'savePreferences'])->name('tools.news.preferences');
     Route::post('/news/feedback', [NewsController::class, 'feedback'])->name('tools.news.feedback');
