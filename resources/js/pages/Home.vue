@@ -14,9 +14,8 @@ const sections = [
     { href: '/news', number: '05', title: 'Новости', description: 'Персональная лента новостей с категориями, значимостью, релевантностью и пользовательской обратной связью.' },
     { href: '/tests', number: '06', title: 'Тесты', description: 'Инструменты для проверки PWA и push-уведомлений приложения.' },
     { href: '/cron-scheduler', number: '07', title: 'Конструктор расписаний', description: 'Создание и проверка cron-расписаний с описанием и ближайшими запусками.' },
-    { href: '/check-ip', number: '08', title: 'Check IP', description: 'Диагностический паспорт IPv4/IPv6: scope, reverse DNS, представления адреса и регистрационные данные RDAP.' },
-    { href: '/design-system', number: '09', title: 'Дизайн-система', description: 'Каталог компонентов и визуальных правил интерфейса проекта.', roles: ['admin', 'moderator'] },
-    { href: '/event-manager-training', number: '10', title: 'Обучение event-менеджера', description: 'Практическая программа от брифа и концепции до самостоятельного проведения мероприятий разной сложности.' },
+    { href: '/design-system', number: '08', title: 'Дизайн-система', description: 'Каталог компонентов и визуальных правил интерфейса проекта.', roles: ['admin', 'moderator'] },
+    { href: '/event-manager-training', number: '09', title: 'Обучение event-менеджера', description: 'Практическая программа от брифа и концепции до самостоятельного проведения мероприятий разной сложности.' },
 ];
 </script>
 
