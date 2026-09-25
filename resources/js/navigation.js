@@ -6,8 +6,7 @@ export const appLinks = [
     { href: '/ski-resort', label: 'Горнолыжные курорты', number: '4', auth: true },
     { href: '/news', label: 'Новости', number: '5', auth: true },
     { href: '/tests', label: 'Тесты', number: '6', auth: true },
-    { href: '/cron-scheduler', label: 'Конструктор расписаний', number: '7', auth: true },
-    { href: '/design-system', label: 'Дизайн-система', number: '8', auth: true, roles: ['admin', 'moderator'] },
-    { href: '/event-manager-training', label: 'Обучение event-менеджера', number: '9', auth: true },
+    { href: '/design-system', label: 'Дизайн-система', number: '7', auth: true, roles: ['admin', 'moderator'] },
+    { href: '/event-manager-training', label: 'Обучение event-менеджера', number: '8', auth: true },
     { href: '/login', label: 'Войти', number: '→', guest: true },
 ];
