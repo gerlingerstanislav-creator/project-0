@@ -19,6 +19,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('/', fn () => Inertia::render('Home'))->name('home');
+Route::get('/put-bez-pregrad', fn () => Inertia::render('PutBezPregrad'))->name('public.put-bez-pregrad');
 
 Route::middleware('auth')->group(function () {
     Route::get('/tool-1', Tool1Controller::class)->name('tools.tool1');

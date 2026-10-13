@@ -15,6 +15,7 @@ const sections = [
     { href: '/tests', number: '06', title: 'Тесты', description: 'Инструменты для проверки PWA и push-уведомлений приложения.' },
     { href: '/design-system', number: '07', title: 'Дизайн-система', description: 'Каталог компонентов и визуальных правил интерфейса проекта.', roles: ['admin', 'moderator'] },
     { href: '/event-manager-training', number: '08', title: 'Обучение event-менеджера', description: 'Практическая программа от брифа и концепции до самостоятельного проведения мероприятий разной сложности.' },
+    { href: '/put-bez-pregrad', number: '09', title: 'Путь без преград', description: 'Публичный демонстрационный лендинг перевозки маломобильных пассажиров по Ульяновску и области.' },
 ];
 </script>
 

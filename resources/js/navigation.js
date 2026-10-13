@@ -8,5 +8,6 @@ export const appLinks = [
     { href: '/tests', label: 'Тесты', number: '6', auth: true },
     { href: '/design-system', label: 'Дизайн-система', number: '7', auth: true, roles: ['admin', 'moderator'] },
     { href: '/event-manager-training', label: 'Обучение event-менеджера', number: '8', auth: true },
+    { href: '/put-bez-pregrad', label: 'Путь без преград', number: '9', guest: true, auth: true },
     { href: '/login', label: 'Войти', number: '→', guest: true },
 ];
