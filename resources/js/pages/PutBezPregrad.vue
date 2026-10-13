@@ -42,20 +42,14 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
                     <p class="eyebrow"><span class="eyebrow__line"></span> СПЕЦИАЛИЗИРОВАННЫЕ ПЕРЕВОЗКИ · 24/7</p>
                     <h1>Дорога должна <em>быть доступна</em> каждому.</h1>
                     <p class="hero__intro">Комфортные поездки для маломобильных пассажиров по Ульяновску и Ульяновской области — на оборудованном автомобиле, с сопровождением или без.</p>
-                    <div class="hero__phone" aria-label="Телефон для заказа перевозки">
-                        <span class="hero__phone-label">ПОЗВОНИТЬ И ЗАКАЗАТЬ МАШИНУ · 24/7</span>
-                        <a v-if="primaryPhoneHref" :href="primaryPhoneHref" class="hero__phone-number" :aria-label="`Позвонить по номеру ${primaryPhone}`"><span aria-hidden="true">☎</span> {{ primaryPhone }}</a>
-                        <span v-else class="hero__phone-number hero__phone-number--placeholder"><span aria-hidden="true">☎</span> {{ primaryPhone }}</span>
-                        <span class="hero__phone-description">{{ primaryPhoneHref ? 'Нажмите на номер, чтобы позвонить' : 'Демонстрационный номер. Звонок станет доступен после указания номера заказчика.' }}</span>
-                    </div>
-                    <div class="hero__actions">
-                        <button type="button" class="button button--primary" @click="scrollToRequest">Заказать поездку <span aria-hidden="true">↗</span></button>
-                        <a href="#how-it-works" class="button button--outline">Как это работает <span aria-hidden="true">↓</span></a>
-                    </div>
-                    <div class="hero__facts">
-                        <div><strong>24/7</strong><span>Принимаем обращения</span></div>
-                        <div><strong>от 1 000 ₽</strong><span>Ориентир по стоимости</span></div>
-                        <div><strong>01 / 02</strong><span>Поездки по городу и области</span></div>
+                    <div class="hero__contact" aria-label="Связаться и заказать перевозку">
+                        <div class="hero__phone">
+                            <span class="hero__phone-label">ЗАКАЗАТЬ ПЕРЕВОЗКУ · 24/7</span>
+                            <a v-if="primaryPhoneHref" :href="primaryPhoneHref" class="hero__phone-number" :aria-label="`Позвонить по номеру ${primaryPhone}`"><span aria-hidden="true">☎</span> {{ primaryPhone }}</a>
+                            <span v-else class="hero__phone-number hero__phone-number--placeholder"><span aria-hidden="true">☎</span> {{ primaryPhone }}</span>
+                            <span class="hero__phone-description">{{ primaryPhoneHref ? 'Нажмите на номер, чтобы позвонить' : 'Демо-номер — ожидаем настоящий телефон' }}</span>
+                        </div>
+                        <button type="button" class="button button--primary hero__request-button" @click="scrollToRequest">Оставить заявку <span aria-hidden="true">↗</span></button>
                     </div>
                 </div>
                 <div class="hero__visual">
@@ -86,7 +80,11 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
                         <path d="M62 357H643" stroke="#e8bc48" stroke-width="4" stroke-linecap="round" stroke-dasharray="20 15"/>
                     </svg>
                     <div class="hero__visual-bottom"><span>Специальный транспорт</span><span class="visual-arrow" aria-hidden="true">↗</span></div>
-                    <div class="floating-note"><span class="floating-note__icon">✓</span><span>Для важных поездок<br><strong>без лишних сложностей</strong></span></div>
+                </div>
+                <div class="hero__facts" aria-label="Основная информация о перевозке">
+                    <div><strong>24/7</strong><span>Принимаем обращения</span></div>
+                    <div><strong>от 1 000 ₽</strong><span>Стоимость поездки</span></div>
+                    <div><strong>Ульяновск и область</strong><span>География поездок</span></div>
                 </div>
             </section>
 
@@ -173,4 +171,63 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
   .accessible-taxi .hero__facts strong{font-size:22px}
 }
 @media(forced-colors:active){.hero__phone{border:2px solid CanvasText}.accessible-taxi :is(a,button,input):focus-visible{outline:3px solid Highlight}}
+
+/* The introductory screen is one two-column composition with a shared info row.
+   Contact details live in the copy flow, not in a competing floating card. */
+.hero{
+  grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+  grid-template-rows:auto auto;
+  column-gap:clamp(30px,4vw,64px);
+  row-gap:36px;
+  align-items:center;
+  min-height:0;
+  padding-top:30px;
+  padding-bottom:60px;
+}
+.hero__copy{min-width:0;padding:0}
+.hero .eyebrow{margin-bottom:20px}
+.hero h1{font-size:clamp(44px,4.65vw,72px);line-height:1.08;letter-spacing:-.052em}
+.accessible-taxi .hero__intro{margin:20px 0 26px;line-height:1.55;max-width:610px}
+.hero__contact{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0;border-top:2px solid #d4d3cd;border-bottom:2px solid #d4d3cd}
+.hero__phone{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0;flex:1 1 auto;margin:0;padding:0;border:0;border-radius:0;box-shadow:none;background:transparent}
+.hero__phone-number{font-size:clamp(26px,2.55vw,38px);gap:9px;min-width:0;white-space:normal}
+.hero__phone-label{font-size:15px}
+.hero__phone-description{font-size:14px;line-height:1.4}
+.hero__request-button{flex:0 0 auto;min-height:60px;gap:15px}
+.hero__visual{min-height:360px;box-shadow:none}
+.hero__illustration{max-height:335px}
+.hero__facts{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:20px 0 0;border-top:1px solid #d4d3cd}
+.hero__facts div{display:flex;flex-direction:column;gap:2px;padding:0 24px;min-width:0;border-right:1px solid #d4d3cd}
+.hero__facts div:first-child{padding-left:0}
+.hero__facts div:last-child{border-right:0}
+.accessible-taxi .hero__facts strong{font-size:clamp(19px,2vw,26px)}
+.accessible-taxi .hero__facts span{font-size:16px}
+@media(max-width:1190px){
+  .hero{grid-template-columns:minmax(0,1fr) minmax(0,.86fr);gap:28px}
+  .hero__contact{flex-wrap:wrap}
+  .hero__request-button{width:100%;justify-content:center}
+  .hero h1{font-size:clamp(43px,4.6vw,62px)}
+}
+@media(max-width:900px){
+  .hero{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;padding-top:25px}
+  .hero__copy,.hero__visual,.hero__facts{grid-column:1}
+  .hero__copy{max-width:760px}
+  .hero__visual{min-height:300px}
+  .hero__contact{flex-wrap:nowrap}
+  .hero__request-button{width:auto}
+}
+@media(max-width:600px){
+  .hero{padding:20px 20px 48px;gap:24px}
+  .hero h1{font-size:clamp(39px,10vw,56px)}
+  .hero .eyebrow{margin-bottom:18px}
+  .hero__contact{flex-direction:column;align-items:stretch;gap:16px}
+  .hero__phone{width:100%}
+  .hero__phone-number{font-size:clamp(26px,7.2vw,38px)}
+  .hero__request-button{width:100%}
+  .hero__facts{grid-template-columns:1fr;gap:14px;padding-top:17px}
+  .hero__facts div,.hero__facts div:first-child{padding:0 0 14px;border-right:0;border-bottom:1px solid #d4d3cd}
+  .hero__facts div:last-child{border-bottom:0;padding-bottom:0}
+  .hero__visual{min-height:250px}
+  .hero__phone-description{font-size:14px}
+}
 </style>
