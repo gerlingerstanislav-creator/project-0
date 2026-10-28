@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+<title id="title">Путь без преград — Пандус</title>
+<desc id="desc">Спецтранспорт без лишних деталей</desc>
+
+ <path d="M30 29H83Q108 29 108 55V89" fill="none" stroke="#009C9A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="52" cy="45" r="8" fill="#142B3F"/>
+ <path d="M53 58V71H78" fill="none" stroke="#142B3F" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="53" cy="86" r="17" fill="none" stroke="#142B3F" stroke-width="8"/>
+ <path d="M79 72L91 91H101" fill="none" stroke="#142B3F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M20 115Q60 105 110 112" fill="none" stroke="#DA304A" stroke-width="8" stroke-linecap="round"/>
+</svg>

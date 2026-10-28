@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+<title id="title">Путь без преград — Монограмма «П»</title>
+<desc id="desc">Свой знак вместо пиктограммы</desc>
+
+ <path d="M26 103V28H101V91" fill="none" stroke="#142B3F" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="57" cy="51" r="8" fill="#DA304A"/>
+ <path d="M58 64V79H80" fill="none" stroke="#142B3F" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="57" cy="91" r="16" fill="none" stroke="#009C9A" stroke-width="8"/>
+ <path d="M31 115Q64 115 98 103" fill="none" stroke="#DA304A" stroke-width="7" stroke-linecap="round"/>
+</svg>
