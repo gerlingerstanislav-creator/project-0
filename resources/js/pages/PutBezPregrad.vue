@@ -1,5 +1,7 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
+import TransportIcon from '../components/TransportIcon.vue';
+import MaxIcon from '../components/MaxIcon.vue';
 import { computed, ref } from 'vue';
 
 const primaryPhone = '8 (8422) 71-73-03';
@@ -8,6 +10,9 @@ const secondaryPhone = '8 (967) 771-73-03';
 const secondaryPhoneHref = 'tel:+79677717303';
 const email = 'bezpregrad73@yandex.ru';
 const maxUrl = 'https://max.ru/u/f9LHodD0cOIMqlrwFHrhALk5VeAh-knTiBJCLnhZSFM3iMksBuOEXJ6JMec';
+const brandLogo = '/images/put-bez-pregrad/logo.svg';
+const brandLogoLight = '/images/put-bez-pregrad/logo-light.svg';
+const brandFavicon = '/images/put-bez-pregrad/favicon.svg';
 const photoVan = '/images/accessible-van.webp';
 const photoPassenger = '/images/accessible-passenger.webp';
 const photoBoarding = '/images/accessible-boarding.webp';
@@ -23,13 +28,13 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
 <template>
   <Head title="Путь без преград — перевозка людей на инвалидных колясках">
     <meta name="description" content="Перевозка людей на инвалидных колясках в спецавтомобиле по Ульяновску и области. С сопровождением или без. Звоните: 8 (8422) 71-73-03." />
+    <link rel="icon" type="image/svg+xml" sizes="any" :href="brandFavicon" />
   </Head>
   <div class="accessible-taxi" id="top">
     <header class="site-header">
       <div class="site-header__inner">
         <a href="#top" class="logo" aria-label="Путь без преград — наверх">
-          <span class="logo__symbol" aria-hidden="true">♿</span>
-          <span class="logo__wordmark">Путь <strong>без преград</strong><small>Доступные перевозки</small></span>
+          <img class="logo__image" :src="brandLogo" width="300" height="93" alt="Путь без преград — доступные перевозки" />
         </a>
         <nav class="header-nav" aria-label="Разделы страницы">
           <a href="#benefits">Преимущества</a>
@@ -44,7 +49,7 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
             <a :href="secondaryPhoneHref">{{ secondaryPhone }}</a>
           </div>
           <a class="header-email" :href="'mailto:' + email">{{ email }}</a>
-          <a class="max-link" :href="maxUrl" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX"><span class="max-icon" aria-hidden="true">M</span><span>MAX</span></a>
+          <a class="max-link" :href="maxUrl" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX"><span class="max-icon"><MaxIcon /></span></a>
         </div>
       </div>
     </header>
@@ -68,7 +73,7 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
             </div>
             <div class="hero__actions">
               <a :href="primaryPhoneHref" class="cta cta--red"><span aria-hidden="true">☎</span> Позвонить сейчас</a>
-              <a :href="maxUrl" target="_blank" rel="noopener noreferrer" class="cta cta--white"><span class="max-icon" aria-hidden="true">M</span> Написать в MAX</a>
+              <a :href="maxUrl" target="_blank" rel="noopener noreferrer" class="cta cta--white" aria-label="Написать в MAX"><span class="max-icon"><MaxIcon /></span> Написать</a>
               <a href="#request" class="cta cta--outline">Оставить заявку</a>
             </div>
           </div>
@@ -79,22 +84,22 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
       <section class="benefits container" id="benefits" aria-labelledby="benefits-title">
         <h2 id="benefits-title" class="visually-hidden">Почему выбирают нас</h2>
         <div class="benefits__grid">
-          <article><span class="benefits__icon" aria-hidden="true">◷</span><div><h3>Быстро</h3><p>Обсудим ближайшее доступное время</p></div></article>
-          <article><span class="benefits__icon" aria-hidden="true">✓</span><div><h3>Надёжно</h3><p>Специализированный транспорт</p></div></article>
-          <article><span class="benefits__icon" aria-hidden="true">♿</span><div><h3>Удобно</h3><p>Поездка с учётом потребностей пассажира</p></div></article>
-          <article><span class="benefits__icon" aria-hidden="true">♥</span><div><h3>С сопровождением</h3><p>Помощь при необходимости</p></div></article>
+          <article><span class="benefits__icon"><TransportIcon name="clock" /></span><div><h3>Быстро</h3><p>Обсудим ближайшее доступное время</p></div></article>
+          <article><span class="benefits__icon"><TransportIcon name="shield" /></span><div><h3>Надёжно</h3><p>Специализированный транспорт</p></div></article>
+          <article><span class="benefits__icon"><TransportIcon name="armchair" /></span><div><h3>Удобно</h3><p>Поездка с учётом потребностей пассажира</p></div></article>
+          <article><span class="benefits__icon"><TransportIcon name="heart-hand" /></span><div><h3>С сопровождением</h3><p>Помощь при необходимости</p></div></article>
         </div>
       </section>
 
       <section class="destinations container" id="destinations" aria-labelledby="destinations-title">
         <div class="section-heading"><div><span class="eyebrow">НАПРАВЛЕНИЯ ПОЕЗДОК</span><h2 id="destinations-title">Куда перевозим</h2></div><p>От медицинских учреждений до повседневных дел. Обсудим маршрут и необходимые условия заранее.</p></div>
         <div class="destination-grid">
-          <article><span class="destination-icon" aria-hidden="true">✚</span><h3>Из больницы домой</h3><p>После лечения и выписки</p></article>
-          <article><span class="destination-icon" aria-hidden="true">✚</span><h3>Из дома в поликлинику</h3><p>На приём к врачу</p></article>
-          <article><span class="destination-icon" aria-hidden="true">▤</span><h3>Из дома в МФЦ</h3><p>Для оформления документов</p></article>
-          <article><span class="destination-icon" aria-hidden="true">✦</span><h3>На обследование</h3><p>На диагностику и процедуры</p></article>
-          <article><span class="destination-icon" aria-hidden="true">⌂</span><h3>В социальные учреждения</h3><p>По важным вопросам</p></article>
-          <article><span class="destination-icon" aria-hidden="true">↗</span><h3>По личным делам</h3><p>На встречи и мероприятия</p></article>
+          <article><span class="destination-icon"><TransportIcon name="hospital" /></span><h3>Из больницы домой</h3><p>После лечения и выписки</p></article>
+          <article><span class="destination-icon"><TransportIcon name="stethoscope" /></span><h3>Из дома в поликлинику</h3><p>На приём к врачу</p></article>
+          <article><span class="destination-icon"><TransportIcon name="file-check" /></span><h3>Из дома в МФЦ</h3><p>Для оформления документов</p></article>
+          <article><span class="destination-icon"><TransportIcon name="activity" /></span><h3>На обследование</h3><p>На диагностику и процедуры</p></article>
+          <article><span class="destination-icon"><TransportIcon name="landmark" /></span><h3>В социальные учреждения</h3><p>По важным вопросам</p></article>
+          <article><span class="destination-icon"><TransportIcon name="map-pin" /></span><h3>По личным делам</h3><p>На встречи и мероприятия</p></article>
         </div>
       </section>
 
@@ -148,10 +153,10 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
     </main>
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <div class="footer-brand"><strong>♿ Путь без преград</strong><p>Перевозка людей на инвалидных колясках<br>Ульяновск и Ульяновская область</p></div>
+        <div class="footer-brand"><a class="footer-brand__link" href="#top" aria-label="Путь без преград — наверх"><img :src="brandLogoLight" class="footer-brand__image" width="300" height="93" alt="Путь без преград — доступные перевозки" /></a><p>Перевозка людей на инвалидных колясках<br>Ульяновск и Ульяновская область</p></div>
         <nav aria-label="Навигация в подвале"><a href="#benefits">Преимущества</a><a href="#destinations">Куда перевозим</a><a href="#fleet">Автопарк</a><a href="#pricing">Стоимость</a><a href="#request">Контакты</a></nav>
         <div class="footer-contact"><a :href="primaryPhoneHref">{{ primaryPhone }}</a><a :href="secondaryPhoneHref">{{ secondaryPhone }}</a><a :href="'mailto:' + email">{{ email }}</a></div>
-        <a class="max-link" :href="maxUrl" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX"><span class="max-icon" aria-hidden="true">M</span> MAX</a>
+        <a class="max-link" :href="maxUrl" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX"><span class="max-icon"><MaxIcon /></span></a>
       </div>
     </footer>
   </div>
@@ -164,13 +169,11 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
 .accessible-taxi :is(a,button){touch-action:manipulation}
 .container{width:min(100% - 48px,1350px);margin-inline:auto}
 .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.site-header{background:#fff;border-bottom:1px solid #e2e8ee}
+.site-header{background:#fff;border-bottom:1px solid #e2e8ee;position:sticky;top:0;z-index:100;box-shadow:0 5px 22px #122e4510}
 .site-header__inner{max-width:1500px;padding:14px 26px;margin:auto;display:flex;align-items:center;gap:30px;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:12px;flex:0 0 auto;text-decoration:none;color:var(--ink);line-height:1.04;font-size:20px;font-weight:900}
-.logo__symbol{display:grid;place-items:center;border-radius:12px;background:var(--red);color:white;width:48px;height:48px;font-size:31px}
-.logo__wordmark strong{display:block;color:var(--red)}
-.logo__wordmark small{display:block;font-size:11px;letter-spacing:.01em;color:#526173;font-weight:600;margin-top:7px}
-.header-nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.logo__image{display:block;width:260px;max-width:100%;height:auto}
+.header-nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center}
 .header-nav a,.site-footer nav a{font-size:14px;font-weight:800;text-decoration:none;color:var(--ink)}
 .header-nav a:hover{text-decoration:underline;color:#bd0929}
 .header-contacts{display:flex;align-items:center;gap:19px}
@@ -178,7 +181,9 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
 .header-phones a,.header-email{font-size:15px;color:var(--ink);font-weight:800;text-decoration:none}
 .header-phones a:hover,.header-email:hover{color:#b40028;text-decoration:underline}
 .max-link{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-weight:900;font-size:15px;text-decoration:none;color:inherit}
-.max-icon{display:inline-grid;place-items:center;width:36px;height:36px;flex:0 0 auto;border-radius:10px;background:linear-gradient(135deg,#5e4bff,#009de7);font-size:22px;color:#fff;font-weight:900;box-shadow:0 5px 15px #2c70ba29}
+.max-icon{display:inline-grid;place-items:center;width:38px;height:38px;flex:0 0 auto;border-radius:11px;background:linear-gradient(135deg,#28bde7,#6256dc 72%,#8b39d9);color:#fff;box-shadow:0 5px 15px #2c70ba29}
+.max-icon svg{display:block;width:26px;height:26px}
+.max-link{min-width:44px;min-height:44px;justify-content:center}
 .hero{position:relative;background:linear-gradient(95deg,#eff9fe 0%,#e6f0f3 50%,#cde0e7 100%);min-height:580px;display:flex;align-items:center;isolation:isolate;overflow:hidden}
 .hero__image{position:absolute;inset:0 0 0 43%;z-index:-1;overflow:hidden}
 .hero__image img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;filter:saturate(1.15)}
@@ -251,13 +256,16 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
 .request-form .cta{width:100%;text-align:center}
 .site-footer{background:#152531;color:#f7fbfe;padding-block:38px}
 .site-footer__inner{display:flex;gap:28px;justify-content:space-between;align-items:flex-start}
-.footer-brand strong{font-size:20px}
+.footer-brand__link{display:inline-block;text-decoration:none}
+.footer-brand__image{display:block;width:276px;max-width:100%;height:auto}
 .footer-brand p{font-size:15px;color:#d1dce5;line-height:1.6;margin:8px 0 0}
 .site-footer nav,.footer-contact{display:flex;flex-direction:column;gap:9px}
 .site-footer nav a,.footer-contact a{font-size:16px;color:#fff;text-decoration:none;font-weight:700}
 .site-footer a:hover{text-decoration:underline}
 @media(max-width:1250px){.header-nav{display:none}.site-header__inner{flex-wrap:wrap}.header-email{display:none}.hero__image{left:42%}}
 @media(max-width:900px){.hero__content{min-height:550px}.hero__text{width:min(650px,75%)}.hero__image{left:30%;opacity:.5}.hero__image:before{background:linear-gradient(90deg,#eff9fc 0%,#eff9fce8 32%,#eff9fc50 100%)}.hero__stamp{right:12px;top:12px}.benefits__grid{grid-template-columns:repeat(2,minmax(0,1fr))}.destination-grid,.fleet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.order{grid-template-columns:1fr}.site-footer__inner{flex-wrap:wrap}}
-@media(max-width:600px){.container{width:min(100% - 32px,1350px)}.site-header__inner{padding:13px 16px;gap:10px}.logo{font-size:17px}.logo__symbol{width:40px;height:40px;font-size:27px}.header-contacts{width:100%;justify-content:space-between;gap:8px}.header-phones a{font-size:15px}.hero{min-height:auto}.hero__content{padding-block:38px 32px;min-height:0}.hero__text{width:100%}.hero__image{inset:0;opacity:.22}.hero__image:before{background:#eff9fbc7}.hero h1{font-size:clamp(34px,8.8vw,49px)}.hero__stamp{display:none}.hero__phone-panel{width:100%;padding:16px}.hero__phone strong{font-size:clamp(38px,10.3vw,56px)}.hero__actions{display:grid}.hero__actions .cta{width:100%}.benefits__grid,.destination-grid,.fleet-grid{grid-template-columns:1fr}.benefits article{padding:17px}.section-heading{display:block}.section-heading>p{margin-top:12px}.destinations{padding-block:30px}.fleet{padding-block:35px}.fleet-card img{height:210px}.request-form__row{grid-template-columns:1fr}.site-footer__inner{display:grid;grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}.price-panel h2 span{white-space:normal}}
+@media(max-width:600px){.container{width:min(100% - 32px,1350px)}.site-header__inner{padding:13px 16px;gap:10px}.logo{font-size:17px}.logo__image{width:213px}.header-contacts{width:100%;justify-content:space-between;gap:8px}.header-phones a{font-size:15px}.hero{min-height:auto}.hero__content{padding-block:38px 32px;min-height:0}.hero__text{width:100%}.hero__image{inset:0;opacity:.22}.hero__image:before{background:#eff9fbc7}.hero h1{font-size:clamp(34px,8.8vw,49px)}.hero__stamp{display:none}.hero__phone-panel{width:100%;padding:16px}.hero__phone strong{font-size:clamp(38px,10.3vw,56px)}.hero__actions{display:grid}.hero__actions .cta{width:100%}.benefits__grid,.destination-grid,.fleet-grid{grid-template-columns:1fr}.benefits article{padding:17px}.section-heading{display:block}.section-heading>p{margin-top:12px}.destinations{padding-block:30px}.fleet{padding-block:35px}.fleet-card img{height:210px}.request-form__row{grid-template-columns:1fr}.site-footer__inner{display:grid;grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}.price-panel h2 span{white-space:normal}}
+@media(max-width:920px){.logo__image{width:228px}}
+@media(max-width:600px){.logo__image{width:213px}.footer-brand__image{width:255px}.max-icon{width:36px;height:36px}}
 @media(prefers-reduced-motion:reduce){.accessible-taxi{scroll-behavior:auto}}
 </style>

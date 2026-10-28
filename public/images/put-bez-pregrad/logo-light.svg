@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 186" role="img" aria-label="Путь без преград — доступные перевозки"><g transform="translate(1 21) scale(0.34)"><g>
+<path d="M22 287 C105 232 188 192 259 186 C254 202 255 214 265 228 C190 227 102 263 22 287 Z" fill="#08acae"/>
+<path d="M137 281 C211 245 258 249 294 269 C323 288 353 288 393 284 C482 279 558 268 620 249 C571 282 484 302 398 306 C342 307 301 296 268 282 C224 265 177 275 137 281 Z" fill="#fb2850"/>
+<path d="M126 54 C192 30 302 21 379 22 C420 21 444 26 466 45 L528 101 C545 116 569 125 598 139 C626 155 639 180 642 203 C647 229 633 238 611 241 L581 244 C585 220 578 201 565 181 L470 67 C447 40 421 34 380 33 C286 31 199 41 126 54 Z" fill="#FFFFFF"/>
+<path d="M113 93 C119 77 127 72 145 70 L280 62 C287 62 291 65 286 76 L252 156 C249 165 245 169 233 170 L84 184 Z" fill="#FFFFFF"/>
+<path d="M564 149 C587 154 611 173 621 194 L589 184 Z" fill="#122e45"/>
+<path d="M306 136 C279 143 268 167 266 189 C261 223 287 251 315 256 C344 263 374 245 385 219" stroke="#08acae" stroke-width="23" fill="none"/>
+<circle cx="354" cy="88" r="24" fill="#FFFFFF"/>
+<path d="M351 119 C335 118 327 130 330 145 L340 179 C343 191 349 197 363 197 L394 201 C402 201 406 205 410 213 L433 260 C437 269 442 272 451 272 L471 272 C482 272 483 260 475 253 C470 249 464 249 455 249 L430 185 C426 170 416 164 404 162 L375 159 L369 132 C367 122 360 119 351 119 Z" fill="#FFFFFF"/>
+</g></g><g font-family="Arial,DejaVu Sans,sans-serif" font-weight="800"><text x="240" y="78" fill="#FFFFFF" font-size="66" letter-spacing="-2.7">Путь</text><text x="240" y="139" font-size="61" letter-spacing="-2.3"><tspan fill="#fb2850">без </tspan><tspan fill="#FFFFFF">преград</tspan></text></g><text x="244" y="168" fill="#FFFFFF" font-family="Arial,DejaVu Sans,sans-serif" font-size="15" font-weight="700" letter-spacing="4.2">ДОСТУПНЫЕ ПЕРЕВОЗКИ</text></svg>
