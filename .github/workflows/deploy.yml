@@ -121,4 +121,15 @@ jobs:
 
             curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/ >/dev/null
             curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/news >/dev/null
-            echo "Deployment and smoke checks completed"
+            # The only public landing must be reachable after each release.
+            curl --fail --silent --show-error --retry 5 --retry-delay 2 https://project-0.duckdns.org/put-bez-pregrad >/dev/null
+            for name in accessible-van accessible-passenger accessible-boarding; do
+              image_file="$(mktemp)"
+              curl --fail --silent --show-error --retry 3 \
+                "https://project-0.duckdns.org/images/${name}.avif" -o "$image_file"
+              test "$(wc -c < "$image_file")" -gt 20000
+              rm -f "$image_file"
+            done
+            curl --fail --silent --show-error --retry 3 \
+              https://project-0.duckdns.org/images/put-bez-pregrad/logo.svg >/dev/null
+            echo "Deployment and public landing smoke checks completed"

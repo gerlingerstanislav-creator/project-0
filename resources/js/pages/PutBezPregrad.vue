@@ -2,7 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import TransportIcon from '../components/TransportIcon.vue';
 import MaxIcon from '../components/MaxIcon.vue';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 const primaryPhone = '8 (8422) 71-73-03';
 const primaryPhoneHref = 'tel:+78422717303';
@@ -13,15 +13,33 @@ const maxUrl = 'https://max.ru/u/f9LHodD0cOIMqlrwFHrhALk5VeAh-knTiBJCLnhZSFM3iMk
 const brandLogo = '/images/put-bez-pregrad/logo.svg';
 const brandLogoLight = '/images/put-bez-pregrad/logo-light.svg';
 const brandFavicon = '/images/put-bez-pregrad/favicon.svg';
-const photoVan = '/images/accessible-van.webp';
-const photoPassenger = '/images/accessible-passenger.webp';
-const photoBoarding = '/images/accessible-boarding.webp';
+const photoVan = '/images/accessible-van.avif';
+const photoPassenger = '/images/accessible-passenger.avif';
+const photoBoarding = '/images/accessible-boarding.avif';
 const departure = ref('');
 const destination = ref('');
 const passenger = ref('');
 const contact = ref('');
-const requestReady = computed(() => departure.value.trim() && destination.value.trim() && contact.value.trim());
-const scrollToRequest = () => document.getElementById('request')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+const mobileMenuOpen = ref(false);
+const closeMenu = () => { mobileMenuOpen.value = false; };
+
+// Until server-side request delivery is configured, provide a real email action
+// rather than a form that silently discards the visitor's personal details.
+const sendRequestEmail = () => {
+  if (!departure.value.trim() || !destination.value.trim() || !contact.value.trim()) return;
+
+  const subject = 'Заявка на перевозку — Путь без преград';
+  const details = [
+    'Здравствуйте! Прошу связаться со мной по поводу перевозки.',
+    '',
+    `Откуда: ${departure.value.trim()}`,
+    `Куда: ${destination.value.trim()}`,
+    `Имя: ${passenger.value.trim() || 'Не указано'}`,
+    `Телефон: ${contact.value.trim()}`,
+  ].join('\n');
+
+  window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(details)}`;
+};
 </script>
 
 
@@ -36,12 +54,31 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
         <a href="#top" class="logo" aria-label="Путь без преград — наверх">
           <img class="logo__image" :src="brandLogo" width="300" height="93" alt="Путь без преград — доступные перевозки" />
         </a>
-        <nav class="header-nav" aria-label="Разделы страницы">
-          <a href="#benefits">Преимущества</a>
-          <a href="#destinations">Куда перевозим</a>
-          <a href="#fleet">Автопарк</a>
-          <a href="#pricing">Цены</a>
-          <a href="#request">Как заказать</a>
+        <button
+          type="button"
+          class="menu-toggle"
+          :aria-expanded="mobileMenuOpen"
+          aria-controls="landing-navigation"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+        >
+          <svg viewBox="0 0 24 24" width="23" height="23" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path v-if="mobileMenuOpen" d="M5 5 19 19M19 5 5 19" />
+            <path v-else d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+          <span>{{ mobileMenuOpen ? 'Закрыть' : 'Меню' }}</span>
+        </button>
+        <nav
+          id="landing-navigation"
+          class="header-nav"
+          :class="{ 'header-nav--open': mobileMenuOpen }"
+          aria-label="Разделы страницы"
+          @keydown.esc="closeMenu"
+        >
+          <a href="#benefits" @click="closeMenu">Преимущества</a>
+          <a href="#destinations" @click="closeMenu">Куда перевозим</a>
+          <a href="#fleet" @click="closeMenu">Автопарк</a>
+          <a href="#pricing" @click="closeMenu">Цены</a>
+          <a href="#request" @click="closeMenu">Как заказать</a>
         </nav>
         <div class="header-contacts">
           <div class="header-phones">
@@ -57,7 +94,7 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero__image" aria-hidden="true">
-          <img  :src="photoVan" alt="" width="170" height="130" fetchpriority="high" />
+          <img :src="photoVan" alt="" width="900" height="675" fetchpriority="high" decoding="async" />
         </div>
         <div class="hero__content container">
           <div class="hero__text">
@@ -108,15 +145,15 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
           <div class="section-heading"><div><span class="eyebrow">ФОТОГАЛЕРЕЯ</span><h2 id="fleet-title">Наш автопарк</h2></div><p>Спецавтомобиль для перевозки людей на инвалидных колясках — с оборудованным местом для посадки.</p></div>
           <div class="fleet-grid">
             <article class="fleet-card">
-              <img  :src="photoVan" alt="Пример автомобиля с открытой задней дверью, пандусом и инвалидной коляской" width="170" height="130" loading="lazy" />
+              <img :src="photoVan" alt="Серый спецминивэн с открытой задней дверью и пандусом для инвалидной коляски" width="900" height="675" loading="lazy" decoding="async" />
               <div class="fleet-card__body"><h3>Специализированный автомобиль</h3><p>Транспорт с доступной посадкой</p></div>
             </article>
             <article class="fleet-card">
-              <img  :src="photoPassenger" alt="Пассажирка на инвалидной коляске с сопровождающим у автомобиля" width="100" height="75" loading="lazy" />
+              <img :src="photoPassenger" alt="Женщина на инвалидной коляске рядом с серым спецминивэном и сопровождающим" width="900" height="675" loading="lazy" decoding="async" />
               <div class="fleet-card__body"><h3>Комфорт пассажира</h3><p>Забота о человеке в течение поездки</p></div>
             </article>
             <article class="fleet-card">
-              <img  :src="photoBoarding" alt="Сопровождающий помогает пассажиру на инвалидной коляске заехать по пандусу автомобиля" width="100" height="75" loading="lazy" />
+              <img :src="photoBoarding" alt="Сопровождающий помогает пассажиру на коляске подняться по пандусу в серый спецминивэн" width="900" height="675" loading="lazy" decoding="async" />
               <div class="fleet-card__body"><h3>Помощь при посадке</h3><p>Возможность сопровождения по запросу</p></div>
             </article>
           </div>
@@ -134,19 +171,19 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
         <div class="request-panel" id="request">
           <span class="eyebrow">ЗАЯВКА НА ПЕРЕВОЗКУ</span>
           <h2>Расскажите, куда нужно ехать</h2>
-          <p>Свяжитесь с нами по телефону или в MAX. Онлайн-форма пока готовится к подключению.</p>
-          <form class="request-form" @submit.prevent>
+          <p>Заполните данные: мы подготовим письмо с маршрутом для отправки. Также можно позвонить или написать в MAX.</p>
+          <form class="request-form" @submit.prevent="sendRequestEmail">
             <label for="taxi-from">Откуда забрать</label>
-            <input id="taxi-from" v-model="departure" type="text" autocomplete="street-address" placeholder="Адрес отправления" />
+            <input id="taxi-from" v-model.trim="departure" type="text" autocomplete="street-address" placeholder="Адрес отправления" required maxlength="250" />
             <label for="taxi-to">Куда доставить</label>
-            <input id="taxi-to" v-model="destination" type="text" placeholder="Адрес назначения" />
+            <input id="taxi-to" v-model.trim="destination" type="text" placeholder="Адрес назначения" required maxlength="250" />
             <div class="request-form__row">
-              <div><label for="taxi-person">Ваше имя</label><input id="taxi-person" v-model="passenger" type="text" autocomplete="name" placeholder="Имя" /></div>
-              <div><label for="taxi-phone">Телефон для связи</label><input id="taxi-phone" v-model="contact" type="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" /></div>
+              <div><label for="taxi-person">Ваше имя</label><input id="taxi-person" v-model.trim="passenger" type="text" autocomplete="name" placeholder="Имя" maxlength="120" /></div>
+              <div><label for="taxi-phone">Телефон для связи</label><input id="taxi-phone" v-model.trim="contact" type="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required minlength="6" maxlength="35" /></div>
             </div>
-            <button type="button" class="cta cta--red" disabled>Отправка заявок скоро появится</button>
-            <small>Форма демонстрационная и пока не отправляет данные. Для заказа позвоните или напишите в MAX.</small>
-            <a :href="primaryPhoneHref" class="cta cta--outline">Позвонить вместо заявки</a>
+            <button type="submit" class="cta cta--red">Подготовить письмо с заявкой</button>
+            <small id="request-note">Откроется ваша почтовая программа с заполненными данными. Проверьте письмо и нажмите «Отправить». Заявка не передаётся автоматически.</small>
+            <a :href="primaryPhoneHref" class="cta cta--outline">Позвонить для заказа</a>
           </form>
         </div>
       </section>
@@ -268,4 +305,36 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
 @media(max-width:920px){.logo__image{width:228px}}
 @media(max-width:600px){.logo__image{width:213px}.footer-brand__image{width:255px}.max-icon{width:36px;height:36px}}
 @media(prefers-reduced-motion:reduce){.accessible-taxi{scroll-behavior:auto}}
+
+/* Public landing accessibility and responsive navigation */
+.accessible-taxi{overflow-x:clip}
+.accessible-taxi section[id],.accessible-taxi #request{scroll-margin-top:110px}
+.menu-toggle{display:none;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:9px 13px;background:#fff;color:var(--ink);border:1px solid #9fb0c0;border-radius:10px;font-size:16px;font-weight:800}
+.menu-toggle:hover{border-color:var(--blue);background:#f1f8fa}
+.header-nav a{font-size:16px}
+.benefits__icon,.destination-icon{flex-shrink:0}
+.request-form input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.request-form small{font-size:16px;line-height:1.55}
+.request-form button{width:100%}
+@media(max-width:1460px){
+  .site-header__inner{flex-wrap:wrap;gap:12px 18px}
+  .menu-toggle{display:inline-flex;margin-left:auto}
+  .header-nav{display:none;order:5;flex-basis:100%;width:100%;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;background:#f5fafc;border:1px solid #dce6eb;border-radius:12px;padding:6px 8px}
+  .header-nav--open{display:flex}
+  .header-nav a{display:block;min-height:44px;padding:11px 13px;border-radius:8px}
+  .header-nav a:hover,.header-nav a:focus-visible{background:#e5f2f5}
+  .header-contacts{margin-left:0}
+}
+@media(max-width:600px){
+  .accessible-taxi section[id],.accessible-taxi #request{scroll-margin-top:155px}
+  .site-header__inner{align-items:center}
+  .menu-toggle{font-size:14px;padding:9px 10px}
+  .header-contacts{flex-wrap:wrap}
+  .header-phones a{font-size:15px}
+  .request-form small{font-size:15px}
+}
+@media(max-width:380px){
+  .logo__image{width:180px}
+  .header-phones a{font-size:14px}
+}
 </style>
