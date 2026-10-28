@@ -56,7 +56,7 @@ const sendRequestEmail = () => {
         </a>
         <button
           type="button"
-          class="menu-toggle"
+          class="transport-menu-toggle"
           :aria-expanded="mobileMenuOpen"
           aria-controls="landing-navigation"
           @click="mobileMenuOpen = !mobileMenuOpen"
@@ -309,8 +309,8 @@ const sendRequestEmail = () => {
 /* Public landing accessibility and responsive navigation */
 .accessible-taxi{overflow-x:clip}
 .accessible-taxi section[id],.accessible-taxi #request{scroll-margin-top:110px}
-.menu-toggle{display:none;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:9px 13px;background:#fff;color:var(--ink);border:1px solid #9fb0c0;border-radius:10px;font-size:16px;font-weight:800}
-.menu-toggle:hover{border-color:var(--blue);background:#f1f8fa}
+.transport-menu-toggle{display:none;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:9px 13px;background:#fff;color:var(--ink);border:1px solid #9fb0c0;border-radius:10px;font-size:16px;font-weight:800}
+.transport-menu-toggle:hover{border-color:var(--blue);background:#f1f8fa}
 .header-nav a{font-size:16px}
 .benefits__icon,.destination-icon{flex-shrink:0}
 .request-form input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
@@ -318,7 +318,7 @@ const sendRequestEmail = () => {
 .request-form button{width:100%}
 @media(max-width:1460px){
   .site-header__inner{flex-wrap:wrap;gap:12px 18px}
-  .menu-toggle{display:inline-flex;margin-left:auto}
+  .transport-menu-toggle{display:inline-flex;margin-left:auto}
   .header-nav{display:none;order:5;flex-basis:100%;width:100%;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;background:#f5fafc;border:1px solid #dce6eb;border-radius:12px;padding:6px 8px}
   .header-nav--open{display:flex}
   .header-nav a{display:block;min-height:44px;padding:11px 13px;border-radius:8px}
@@ -328,7 +328,7 @@ const sendRequestEmail = () => {
 @media(max-width:600px){
   .accessible-taxi section[id],.accessible-taxi #request{scroll-margin-top:155px}
   .site-header__inner{align-items:center}
-  .menu-toggle{font-size:14px;padding:9px 10px}
+  .transport-menu-toggle{font-size:14px;padding:9px 10px}
   .header-contacts{flex-wrap:wrap}
   .header-phones a{font-size:15px}
   .request-form small{font-size:15px}
@@ -345,7 +345,7 @@ const sendRequestEmail = () => {
   .site-header__inner{display:block;position:relative;padding-right:16px}
   .site-header__inner .logo{display:block;width:calc(100% - 120px);min-width:0}
   .site-header__inner .logo__image{width:min(100%,213px);height:auto}
-  .site-header__inner .menu-toggle{position:absolute;right:16px;top:12px;z-index:2;display:inline-flex;margin:0}
+  .site-header__inner .transport-menu-toggle{position:absolute;right:16px;top:12px;z-index:2;display:inline-flex;margin:0}
   .site-header__inner .header-contacts{display:flex;width:100%;min-width:0;margin-top:12px;justify-content:space-between;flex-wrap:wrap}
   .site-header__inner .header-nav{display:none;width:100%;margin-top:10px}
   .site-header__inner .header-nav--open{display:flex}
