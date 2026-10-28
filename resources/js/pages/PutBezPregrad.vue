@@ -341,16 +341,14 @@ const sendRequestEmail = () => {
 /* Audit fix: do not allow the mobile menu to compete with the logo for flex space,
    and do not clip long contact links in the footer. */
 @media(max-width:600px){
-  .site-header__inner{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) auto;
-    gap:9px 10px;
-  }
-  .site-header__inner .logo{grid-column:1;grid-row:1;min-width:0}
-  .site-header__inner .logo__image{width:min(100%,213px)}
-  .site-header__inner .menu-toggle{grid-column:2;grid-row:1;justify-self:end;margin-left:0}
-  .site-header__inner .header-contacts{grid-column:1/-1;grid-row:2;width:100%;min-width:0;justify-content:space-between}
-  .site-header__inner .header-nav{grid-column:1/-1;grid-row:3;order:0;min-width:0}
+  /* Explicitly reserve space for the toggle; avoid flexible row collisions. */
+  .site-header__inner{display:block;position:relative;padding-right:16px}
+  .site-header__inner .logo{display:block;width:calc(100% - 120px);min-width:0}
+  .site-header__inner .logo__image{width:min(100%,213px);height:auto}
+  .site-header__inner .menu-toggle{position:absolute;right:16px;top:12px;z-index:2;display:inline-flex;margin:0}
+  .site-header__inner .header-contacts{display:flex;width:100%;min-width:0;margin-top:12px;justify-content:space-between;flex-wrap:wrap}
+  .site-header__inner .header-nav{display:none;width:100%;margin-top:10px}
+  .site-header__inner .header-nav--open{display:flex}
   .site-footer__inner{grid-template-columns:minmax(0,1fr);gap:22px}
   .site-footer__inner .footer-brand{grid-column:1}
   .site-footer__inner .footer-contact{min-width:0}

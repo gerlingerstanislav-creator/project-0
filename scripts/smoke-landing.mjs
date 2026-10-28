@@ -71,6 +71,8 @@ try {
     if (viewport.width <= 600) {
       const logo = await page.locator('.site-header .logo').boundingBox();
       const menu = await page.locator('.menu-toggle').boundingBox();
+      console.log('HEADER_GEOMETRY', viewport.label, JSON.stringify({ logo, menu }));
+      await page.screenshot({ path: `${screenshotDir}/${viewport.label}-viewport.png` });
       assert.ok(logo && menu && logo.x + logo.width <= menu.x - 2,
         'Mobile menu must not overlap the brand logo');
 
