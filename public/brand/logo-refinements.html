@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#F3F7F9"><meta name="description" content="Девять новых SVG-концепций логотипа Путь без преград: сопровождение, доступный спецавтомобиль и свободное движение."><link rel="icon" href="./logo-refinements/concept-07-favicon.svg" type="image/svg+xml"><title>Путь без преград — девять вариантов логотипа</title><style>:root{--ink:#142C40;--muted:#53697B;--teal:#0CA6A1;--red:#E42F4D;--paper:#F3F7F9;--line:#DCE6EB}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5}
+.wrap{width:min(1480px,calc(100% - 48px));margin-inline:auto}
+a{color:inherit}button{font:inherit;cursor:pointer}
+:is(a,button):focus-visible{outline:3px solid var(--teal);outline-offset:4px}
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.top__inner{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:-.02em;text-decoration:none}
+.brand__mark{display:grid;place-items:center;background:var(--ink);color:#fff;width:40px;height:40px;border-radius:11px;font-size:22px}
+.brand__word span{display:block;color:var(--muted);font-size:12px;font-weight:650;letter-spacing:normal}
+.top__links{display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+.top__links a{font-size:13px;font-weight:800;text-decoration:none;border-radius:9px;background:#F0F5F7;padding:10px 14px}
+.top__links a:hover{background:#DAF0EF}
+.hero{padding:62px 0 35px}
+.eyebrow{color:#B90C32;font-size:12px;font-weight:900;letter-spacing:.18em;margin:0 0 13px}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:end;gap:40px}
+.hero h1{font-size:clamp(40px,5.7vw,78px);line-height:1.05;letter-spacing:-.064em;font-weight:850;margin:0}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero__description{font-size:17px;line-height:1.65;color:var(--muted);max-width:460px;margin:0 0 5px}
+.metrics{display:flex;gap:10px;flex-wrap:wrap;margin-top:33px}
+.metrics span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:800;font-size:13px}
+.controls{border:1px solid var(--line);background:#fff;border-radius:17px;padding:18px 22px;display:flex;gap:22px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:24px}
+.controls__label{font-size:12px;font-weight:850;letter-spacing:.1em;color:#53697B}
+.switches{display:flex;gap:7px;flex-wrap:wrap}
+.switches button{background:#F1F6F8;border:1px solid var(--line);border-radius:9px;padding:10px 13px;font-size:13px;font-weight:800}
+.switches button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.swatches{display:flex;gap:13px;align-items:center;flex-wrap:wrap}
+.swatch{width:25px;height:25px;background:var(--swatch);border:1px solid #0001;border-radius:7px}
+.swatches code{font-size:11px;color:var(--muted)}
+.section-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;margin:12px 0 23px}
+.section-heading h2{font-size:clamp(29px,3vw,40px);letter-spacing:-.045em;line-height:1.13;margin:0}
+.section-heading p{color:var(--muted);font-size:14px;max-width:420px;margin:0}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding-bottom:50px}
+.card{display:flex;flex-direction:column;min-width:0;background:#fff;border:1.5px solid var(--line);border-radius:18px;overflow:hidden;scroll-margin-top:20px;box-shadow:0 6px 26px #1834490b}
+.card.chosen{border-color:var(--teal);box-shadow:0 0 0 3px #0ca6a11c,0 12px 28px #18344914}
+.card[hidden]{display:none!important}
+.card__head{padding:23px 21px 15px}
+.card__ordinal{color:#637A8A;font-size:11px;letter-spacing:.09em;font-weight:850}
+.dot{color:var(--teal);padding-inline:4px}
+.card h3{font-size:27px;line-height:1.2;letter-spacing:-.035em;margin:10px 0 9px;font-weight:850}
+.card__head p{font-size:14px;color:var(--muted);line-height:1.6;min-height:92px;margin:0}
+.card__preview{margin:0 20px;display:grid;grid-template-columns:115px minmax(0,1fr);gap:9px}
+.card__icon,.card__wordmark{background:#F0F6F8;border-radius:12px;display:flex;align-items:center;justify-content:center;min-height:166px;overflow:hidden}
+.card__icon img{width:112px;height:112px}
+.card__wordmark{padding:8px}
+.card__wordmark img{width:100%;height:auto;max-height:150px;object-fit:contain}
+.card__label{margin:15px 20px 15px;color:#0A827E;background:#E5F6F4;border-radius:7px;padding:7px 10px;align-self:flex-start;font-size:12px;font-weight:850}
+.card__tests{margin:0 20px;display:grid;grid-template-columns:1.25fr 1fr;gap:9px}
+.card__mono,.card__fav{border-radius:11px;min-height:109px;padding:13px;display:flex;flex-direction:column;gap:13px}
+.card__mono{background:var(--ink)}
+.card__mono span{color:#C5D9E0}
+.card__mono img{width:100%;max-height:64px;object-fit:contain;filter:brightness(0) invert(1)}
+.card__fav{background:#F0F6F8}
+.card__fav>div{display:flex;gap:8px;align-items:center;min-height:48px}
+.card__tests span{font-size:10px;letter-spacing:.04em;font-weight:800;color:#5E7987}
+.card__footer{margin-top:auto;display:flex;flex-direction:column;gap:13px;padding:19px 20px 22px}
+.downloads{display:flex;flex-wrap:wrap;gap:6px}
+.downloads a{text-decoration:none;background:#fff;border:1px solid #DCE6EB;border-radius:7px;padding:8px 9px;font-size:11px;font-weight:800}
+.downloads a:hover{border-color:var(--teal)}
+.pick{display:flex;align-items:center;justify-content:space-between;border:0;border-radius:9px;padding:11px 15px;color:white;background:var(--ink);font-size:13px;font-weight:850}
+.pick:hover,.pick[aria-pressed=true]{background:#087C79}
+.pick span{font-size:20px;line-height:1}
+.summary{background:#142C40;color:#fff;border-radius:18px;padding:30px;display:flex;align-items:center;justify-content:space-between;gap:25px;margin:0 auto 42px}
+.summary h2{font-size:27px;margin:0 0 7px;letter-spacing:-.035em}
+.summary p{max-width:720px;font-size:14px;line-height:1.6;color:#C6D8E1;margin:0}
+.summary__right{min-width:210px;text-align:right}
+.summary__right strong{font-size:20px;display:block}
+.summary__right button{margin-top:9px;background:var(--teal);color:#072e31;font-size:12px;font-weight:900;border-radius:8px;padding:11px 13px;border:0}
+.footer{font-size:12px;color:#5A7180;padding:0 0 45px}
+@media(max-width:1250px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.card__head p{min-height:0}}
+@media(max-width:870px){.hero__grid{grid-template-columns:1fr;gap:15px}.hero__description{max-width:700px}.summary{display:block}.summary__right{text-align:left;margin-top:20px}}
+@media(max-width:690px){.wrap{width:calc(100% - 28px)}.top__inner{padding-block:13px;flex-wrap:wrap}.top__links{gap:5px}.top__links a{font-size:11px}.hero{padding:40px 0 25px}.hero h1{font-size:clamp(39px,10vw,60px)}.controls{padding:14px}.controls__label{width:100%}.swatches{width:100%}.cards{grid-template-columns:1fr;gap:15px}.card__head{padding:18px}.card__preview{margin:0 17px;grid-template-columns:95px minmax(0,1fr)}.card__icon,.card__wordmark{min-height:140px}.card__icon img{width:91px;height:91px}.card__label,.card__tests{margin-inline:17px}.card__footer{padding:17px}.card__tests{grid-template-columns:1fr 1fr}.summary{padding:21px}.section-heading{display:block}.section-heading p{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head>
+<body>
+<header class="top"><div class="wrap top__inner"><a class="brand" href="#top"><span class="brand__mark">П</span><span class="brand__word">Путь без преград<span>Логотип · расширенная итерация</span></span></a><nav class="top__links" aria-label="Навигация"><a href="./logo-concepts.html">Прошлые варианты</a><a href="/put-bez-pregrad">Лендинг ↗</a></nav></div></header>
+<main id="top" class="wrap">
+<section class="hero"><p class="eyebrow">ДИЗАЙН / ДЕВЯТЬ КОНЦЕПЦИЙ / SVG</p><div class="hero__grid"><h1>Логотип, который<br><em>легко узнать.</em></h1><p class="hero__description">Развиваем выбранный круглый знак №4 и отмеченные тобой референсы. Девять новых вариантов в трёх направлениях: сопровождающий, специальный транспорт и абстрактный путь. Никаких мелких деталей автомобильного клипарта.</p></div><div class="metrics"><span>9 разных знаков</span><span>3 направления</span><span>36 SVG-файлов</span><span>Проверка фавикона 16 px</span></div></section>
+<div class="controls"><div><div class="controls__label">ПОКАЗАТЬ ВАРИАНТЫ</div><div class="switches" role="group" aria-label="Фильтр концепций"><button type="button" data-filter="all" aria-pressed="true">Все 9</button><button type="button" data-filter="people" aria-pressed="false">С сопровождающим (3)</button><button type="button" data-filter="vehicle" aria-pressed="false">С авто (3)</button><button type="button" data-filter="motion" aria-pressed="false">Дорога и движение (3)</button></div></div><div class="swatches" aria-label="Общая палитра"><i class="swatch" style="--swatch:#142C40"></i><i class="swatch" style="--swatch:#E42F4D"></i><i class="swatch" style="--swatch:#0CA6A1"></i><code>#142C40 · #E42F4D · #0CA6A1</code></div></div>
+<div class="section-heading"><div><p class="eyebrow">ВАРИАНТЫ НА СОГЛАСОВАНИЕ</p><h2>Выбираем сильный силуэт</h2></div><p>У каждого — отдельные файлы знака, горизонтального логотипа, монохрома и фавикона. Можно отметить несколько фаворитов.</p></div>
+<section class="cards" id="cards" aria-label="Девять концепций логотипов"><article class="card" id="concept-01" data-id="01" data-group="people">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 01 <span class="dot">•</span> С сопровождением</div><h3>Круг заботы</h3><p>Сохраняем большой открытый круг, добавляем сопровождающего рядом с пассажиром. Читается как забота и безопасное перемещение.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-01-icon.svg" alt="Символ Круг заботы" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-01-logo.svg" alt="Логотип Круг заботы вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Ближе к референсу</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-01-mono.svg" alt="Одноцветный логотип Круг заботы" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-01-favicon.svg" width="48" height="48" alt="Фавикон Круг заботы"><img src="./logo-refinements/concept-01-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-01-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-01-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-01-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-01-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-01-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="01" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-02" data-id="02" data-group="people">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 02 <span class="dot">•</span> С сопровождением</div><h3>Плечом к плечу</h3><p>Два силуэта объединяет одна линия: рука сопровождающего поддерживает пассажира. Круг используется как спокойная защитная арка.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-02-icon.svg" alt="Символ Плечом к плечу" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-02-logo.svg" alt="Логотип Плечом к плечу вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Самый человечный</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-02-mono.svg" alt="Одноцветный логотип Плечом к плечу" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-02-favicon.svg" width="48" height="48" alt="Фавикон Плечом к плечу"><img src="./logo-refinements/concept-02-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-02-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-02-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-02-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-02-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-02-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="02" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-03" data-id="03" data-group="people">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 03 <span class="dot">•</span> С сопровождением</div><h3>Под защитой</h3><p>Сопровождающий и колясочник внутри плотного символа-объятия. Кольцо короче и заметнее, что делает знак устойчивым на вывеске.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-03-icon.svg" alt="Символ Под защитой" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-03-logo.svg" alt="Логотип Под защитой вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Эмблема доверия</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-03-mono.svg" alt="Одноцветный логотип Под защитой" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-03-favicon.svg" width="48" height="48" alt="Фавикон Под защитой"><img src="./logo-refinements/concept-03-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-03-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-03-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-03-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-03-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-03-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="03" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-04" data-id="04" data-group="vehicle">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 04 <span class="dot">•</span> Автомобильная тема</div><h3>Открытый проём</h3><p>Проём раздвижной двери вместо полного автомобиля. Рампа соединяет знак с дорогой, а человек на коляске остаётся главным.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-04-icon.svg" alt="Символ Открытый проём" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-04-logo.svg" alt="Логотип Открытый проём вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Ближе к дверному варианту</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-04-mono.svg" alt="Одноцветный логотип Открытый проём" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-04-favicon.svg" width="48" height="48" alt="Фавикон Открытый проём"><img src="./logo-refinements/concept-04-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-04-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-04-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-04-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-04-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-04-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="04" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-05" data-id="05" data-group="vehicle">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 05 <span class="dot">•</span> Автомобильная тема</div><h3>Контур спецмашины</h3><p>Контур крыши минивэна почти без деталей — лишь большой проём и инвалидная коляска. Не похож на автомобильный клипарт.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-05-icon.svg" alt="Символ Контур спецмашины" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-05-logo.svg" alt="Логотип Контур спецмашины вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Баланс двух тем</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-05-mono.svg" alt="Одноцветный логотип Контур спецмашины" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-05-favicon.svg" width="48" height="48" alt="Фавикон Контур спецмашины"><img src="./logo-refinements/concept-05-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-05-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-05-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-05-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-05-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-05-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="05" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-06" data-id="06" data-group="vehicle">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 06 <span class="dot">•</span> Автомобильная тема</div><h3>Рампа к свободе</h3><p>Два вертикальных штриха напоминают открытую дверь, диагональ — пандус. Машина считывается через посадку, а не через кузов и колёса.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-06-icon.svg" alt="Символ Рампа к свободе" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-06-logo.svg" alt="Логотип Рампа к свободе вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Минимум автомобильных деталей</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-06-mono.svg" alt="Одноцветный логотип Рампа к свободе" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-06-favicon.svg" width="48" height="48" alt="Фавикон Рампа к свободе"><img src="./logo-refinements/concept-06-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-06-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-06-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-06-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-06-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-06-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="06" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-07" data-id="07" data-group="motion">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 07 <span class="dot">•</span> Путь и движение</div><h3>Открытый круг</h3><p>Упрощение выбранного четвёртого логотипа: одна большая бирюзовая дуга, красный сегмент движения и чёткий пассажир.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-07-icon.svg" alt="Символ Открытый круг" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-07-logo.svg" alt="Логотип Открытый круг вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Самый близкий к №4</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-07-mono.svg" alt="Одноцветный логотип Открытый круг" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-07-favicon.svg" width="48" height="48" alt="Фавикон Открытый круг"><img src="./logo-refinements/concept-07-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-07-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-07-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-07-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-07-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-07-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="07" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-08" data-id="08" data-group="motion">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 08 <span class="dot">•</span> Путь и движение</div><h3>Лента маршрута</h3><p>Подчёркнутая траектория дороги вытягивает знак вперёд. Открытая окружность сохраняет смысл доступности, а не просто скорости.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-08-icon.svg" alt="Символ Лента маршрута" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-08-logo.svg" alt="Логотип Лента маршрута вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Самый динамичный</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-08-mono.svg" alt="Одноцветный логотип Лента маршрута" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-08-favicon.svg" width="48" height="48" alt="Фавикон Лента маршрута"><img src="./logo-refinements/concept-08-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-08-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-08-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-08-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-08-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-08-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="08" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article>
+<article class="card" id="concept-09" data-id="09" data-group="motion">
+ <div class="card__head"><div class="card__ordinal">КОНЦЕПЦИЯ 09 <span class="dot">•</span> Путь и движение</div><h3>Точка назначения</h3><p>Внешняя форма напоминает отметку маршрута на карте. Внутри — лаконичный пассажир. Для сервиса перевозок это сочетание человека и точки назначения.</p></div>
+ <div class="card__preview">
+  <div class="card__icon"><img src="./logo-refinements/concept-09-icon.svg" alt="Символ Точка назначения" width="160" height="160"></div>
+  <div class="card__wordmark"><img src="./logo-refinements/concept-09-logo.svg" alt="Логотип Точка назначения вместе с названием Путь без преград" width="790" height="172"></div>
+ </div>
+ <div class="card__label">Город и навигация</div>
+ <div class="card__tests">
+  <div class="card__mono"><span>ОДНОЦВЕТНОЕ ИСПОЛНЕНИЕ</span><img src="./logo-refinements/concept-09-mono.svg" alt="Одноцветный логотип Точка назначения" width="790" height="172"></div>
+  <div class="card__fav"><span>ФАВИКОН · 48 / 32 / 16</span><div><img src="./logo-refinements/concept-09-favicon.svg" width="48" height="48" alt="Фавикон Точка назначения"><img src="./logo-refinements/concept-09-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-refinements/concept-09-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div></div>
+ </div>
+ <div class="card__footer"><div class="downloads"><a download href="./logo-refinements/concept-09-logo.svg">Логотип SVG</a><a download href="./logo-refinements/concept-09-icon.svg">Знак SVG</a><a download href="./logo-refinements/concept-09-mono.svg">Монохром SVG</a><a download href="./logo-refinements/concept-09-favicon.svg">Фавикон SVG</a></div><button class="pick" type="button" data-pick="09" aria-pressed="false">Отметить вариант <span aria-hidden="true">＋</span></button></div>
+</article></section>
+<section class="summary" aria-label="Выбранные варианты"><div><h2>Мой короткий список</h2><p>Отметь 2–3 понравившихся варианта. Ссылка сохранит выбор в адресе — её можно отправить заказчику. На действующем лендинге логотип не меняется до утверждения.</p></div><div class="summary__right"><strong id="chosen-text">Пока ничего не выбрано</strong><button type="button" id="copy-link">Скопировать ссылку на выбор</button><p id="copy-status" role="status" aria-live="polite"></p></div></section>
+</main><footer class="wrap footer">Авторские SVG-концепции в рамках проекта. Перед утверждением фирменного знака рекомендуется проверить его уникальность и возможность регистрации. SVG-надписи используют системный шрифт; для финального выпуска шрифты можно перевести в кривые.</footer>
+<script>
+(()=>{const cards=Array.from(document.querySelectorAll('.card'));const buttons=Array.from(document.querySelectorAll('[data-pick]'));const filters=Array.from(document.querySelectorAll('[data-filter]'));const status=document.getElementById('copy-status');const chosenText=document.getElementById('chosen-text');const legal=new Set(["01","02","03","04","05","06","07","08","09"]);
+let selected=new Set(new URLSearchParams(location.search).get('pick')?.split(',').filter(x=>legal.has(x))||[]);
+function render(){buttons.forEach(btn=>{const active=selected.has(btn.dataset.pick);btn.setAttribute('aria-pressed',String(active));btn.innerHTML=active?'В коротком списке <span aria-hidden="true">✓</span>':'Отметить вариант <span aria-hidden="true">＋</span>'});cards.forEach(card=>card.classList.toggle('chosen',selected.has(card.dataset.id)));const ids=Array.from(selected).sort();chosenText.textContent=ids.length?'Отмечены: '+ids.map(id=>'№'+id).join(', '):'Пока ничего не выбрано';const url=new URL(location.href);if(ids.length)url.searchParams.set('pick',ids.join(','));else url.searchParams.delete('pick');history.replaceState(null,'',url.pathname+url.search+url.hash)}
+buttons.forEach(btn=>btn.addEventListener('click',()=>{const id=btn.dataset.pick;if(selected.has(id))selected.delete(id);else selected.add(id);render()}));
+filters.forEach(btn=>btn.addEventListener('click',()=>{const key=btn.dataset.filter;filters.forEach(x=>x.setAttribute('aria-pressed',String(x===btn)));cards.forEach(card=>{card.hidden=key!=='all'&&card.dataset.group!==key})}));
+document.getElementById('copy-link').addEventListener('click',()=>{const value=location.href;if(navigator.clipboard?.writeText){navigator.clipboard.writeText(value).then(()=>{status.textContent='Ссылка скопирована'}).catch(()=>{status.textContent='Скопируй адрес страницы из строки браузера'})}else status.textContent='Скопируй адрес страницы из строки браузера'});
+render()})();
+</script></body></html>
