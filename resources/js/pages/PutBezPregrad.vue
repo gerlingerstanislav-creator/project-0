@@ -8,6 +8,9 @@ const secondaryPhone = '8 (967) 771-73-03';
 const secondaryPhoneHref = 'tel:+79677717303';
 const email = 'bezpregrad73@yandex.ru';
 const maxUrl = 'https://max.ru/u/f9LHodD0cOIMqlrwFHrhALk5VeAh-knTiBJCLnhZSFM3iMksBuOEXJ6JMec';
+const photoVan = '/images/accessible-van.webp';
+const photoPassenger = '/images/accessible-passenger.webp';
+const photoBoarding = '/images/accessible-boarding.webp';
 const departure = ref('');
 const destination = ref('');
 const passenger = ref('');
@@ -49,7 +52,7 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero__image" aria-hidden="true">
-          <img src="/images/accessible-van.webp" alt="" width="170" height="130" fetchpriority="high" />
+          <img  :src="photoVan" alt="" width="170" height="130" fetchpriority="high" />
         </div>
         <div class="hero__content container">
           <div class="hero__text">
@@ -100,15 +103,15 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
           <div class="section-heading"><div><span class="eyebrow">ФОТОГАЛЕРЕЯ</span><h2 id="fleet-title">Наш автопарк</h2></div><p>Спецавтомобиль для перевозки людей на инвалидных колясках — с оборудованным местом для посадки.</p></div>
           <div class="fleet-grid">
             <article class="fleet-card">
-              <img src="/images/accessible-van.webp" alt="Пример автомобиля с открытой задней дверью, пандусом и инвалидной коляской" width="170" height="130" loading="lazy" />
+              <img  :src="photoVan" alt="Пример автомобиля с открытой задней дверью, пандусом и инвалидной коляской" width="170" height="130" loading="lazy" />
               <div class="fleet-card__body"><h3>Специализированный автомобиль</h3><p>Транспорт с доступной посадкой</p></div>
             </article>
             <article class="fleet-card">
-              <img src="/images/accessible-passenger.webp" alt="Пассажирка на инвалидной коляске с сопровождающим у автомобиля" width="100" height="75" loading="lazy" />
+              <img  :src="photoPassenger" alt="Пассажирка на инвалидной коляске с сопровождающим у автомобиля" width="100" height="75" loading="lazy" />
               <div class="fleet-card__body"><h3>Комфорт пассажира</h3><p>Забота о человеке в течение поездки</p></div>
             </article>
             <article class="fleet-card">
-              <img src="/images/accessible-boarding.webp" alt="Сопровождающий помогает пассажиру на инвалидной коляске заехать по пандусу автомобиля" width="100" height="75" loading="lazy" />
+              <img  :src="photoBoarding" alt="Сопровождающий помогает пассажиру на инвалидной коляске заехать по пандусу автомобиля" width="100" height="75" loading="lazy" />
               <div class="fleet-card__body"><h3>Помощь при посадке</h3><p>Возможность сопровождения по запросу</p></div>
             </article>
           </div>
