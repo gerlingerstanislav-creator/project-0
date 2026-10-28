@@ -68,11 +68,27 @@ try {
       assert.equal(await page.locator('.header-nav').isVisible(), true, 'Desktop navigation must be visible');
     }
 
+    if (viewport.width <= 600) {
+      const logo = await page.locator('.site-header .logo').boundingBox();
+      const menu = await page.locator('.menu-toggle').boundingBox();
+      assert.ok(logo && menu && logo.x + logo.width <= menu.x - 2,
+        'Mobile menu must not overlap the brand logo');
+
+      for (const link of await page.locator('.footer-contact a').all()) {
+        const rect = await link.boundingBox();
+        assert.ok(rect && rect.x >= 0 && rect.x + rect.width <= viewport.width - 4,
+          'Footer contact must be fully visible at ' + viewport.width + 'px');
+      }
+    }
+
     await page.evaluate(() => window.scrollTo(0, 1300));
     const sticky = await page.locator('.site-header').boundingBox();
     assert.ok(sticky && Math.abs(sticky.y) < 3, 'Header must remain fixed while scrolling');
     assert.deepEqual(errors, [], 'No runtime JavaScript errors or missing images');
 
+    // Full-page screenshots should begin at the top; a sticky header otherwise
+    // appears in the middle of the stitched screenshot.
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: `${screenshotDir}/${viewport.label}.png`, fullPage: true });
     console.log('PASS', viewport.label, viewport.width + 'x' + viewport.height);
     await page.close();
