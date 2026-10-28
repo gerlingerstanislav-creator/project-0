@@ -2,14 +2,12 @@
 import { Head } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
-// Replace the placeholder with the confirmed business number to activate tap-to-call.
-const primaryPhone = '8 (8422) XXX-XX-XX';
-const primaryPhoneHref = computed(() => {
-    const digits = primaryPhone.replace(/\D/g, '');
-    if (/^8\d{10}$/.test(digits)) return `tel:+7${digits.slice(1)}`;
-    if (/^7\d{10}$/.test(digits)) return `tel:+${digits}`;
-    return null;
-});
+const primaryPhone = '8 (8422) 71-73-03';
+const primaryPhoneHref = 'tel:+78422717303';
+const secondaryPhone = '8 (967) 771-73-03';
+const secondaryPhoneHref = 'tel:+79677717303';
+const email = 'bezpregrad73@yandex.ru';
+const maxUrl = 'https://max.ru/u/f9LHodD0cOIMqlrwFHrhALk5VeAh-knTiBJCLnhZSFM3iMksBuOEXJ6JMec';
 const departure = ref('');
 const destination = ref('');
 const passenger = ref('');
@@ -24,37 +22,14 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
     </Head>
 
     <div class="accessible-taxi">
-        <header class="taxi-header">
-            <a href="#top" class="brand" aria-label="Путь без преград — наверх">
-                <span class="brand__symbol" aria-hidden="true">✳</span>
-                <span>ПУТЬ <small>БЕЗ ПРЕГРАД</small></span>
-            </a>
-            <div class="taxi-header__right">
-                <span class="taxi-header__city">Ульяновск и область</span>
-                <span class="taxi-header__hours"><i></i> Работаем 24/7</span>
-                <button type="button" class="text-link" @click="scrollToRequest">Заказать поездку <span aria-hidden="true">↗</span></button>
-            </div>
-        </header>
+        <header class="taxi-header"><a href="#top" class="brand" aria-label="Путь без преград — наверх"><span class="brand__symbol" aria-hidden="true">♿</span><span>ПУТЬ <small>БЕЗ ПРЕГРАД</small></span></a>
+<div class="taxi-header__right"><div class="header-phones"><a :href="primaryPhoneHref">{{ primaryPhone }}</a><a :href="secondaryPhoneHref">{{ secondaryPhone }}</a></div><a class="header-email" :href="`mailto:${email}`">{{ email }}</a><a :href="maxUrl" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX" class="max-link"><span class="max-icon">M</span> MAX</a></div></header>
 
         <main id="top">
-            <section class="hero">
-                <div class="hero__copy">
-                    <p class="eyebrow"><span class="eyebrow__line"></span> СПЕЦИАЛИЗИРОВАННЫЕ ПЕРЕВОЗКИ · 24/7</p>
-                    <h1>Дорога должна <em>быть доступна</em> каждому.</h1>
-                    <p class="hero__intro">Комфортные поездки для маломобильных пассажиров по Ульяновску и Ульяновской области — на оборудованном автомобиле, с сопровождением или без.</p>
-                    <div class="hero__contact" aria-label="Связаться и заказать перевозку">
-                        <div class="hero__phone">
-                            <span class="hero__phone-label">ЗАКАЗАТЬ ПЕРЕВОЗКУ · 24/7</span>
-                            <a v-if="primaryPhoneHref" :href="primaryPhoneHref" class="hero__phone-number" :aria-label="`Позвонить по номеру ${primaryPhone}`"><span aria-hidden="true">☎</span> {{ primaryPhone }}</a>
-                            <span v-else class="hero__phone-number hero__phone-number--placeholder"><span aria-hidden="true">☎</span> {{ primaryPhone }}</span>
-                            <span class="hero__phone-description">{{ primaryPhoneHref ? 'Нажмите на номер, чтобы позвонить' : 'Демо-номер — ожидаем настоящий телефон' }}</span>
-                        </div>
-                        <button type="button" class="button button--primary hero__request-button" @click="scrollToRequest">Оставить заявку <span aria-hidden="true">↗</span></button>
-                    </div>
-                </div>
-                <div class="hero__visual">
-                    <div class="hero__visual-top"><span>ВАША ПОЕЗДКА — НАША ЗАБОТА</span><span>УЛЬЯНОВСК · 73</span></div>
-                    <svg viewBox="0 0 690 460" role="img" aria-label="Иллюстрация специального автомобиля с подъемником для инвалидной коляски" class="hero__illustration">
+            <section class="hero"><div class="hero__copy"><p class="eyebrow">СПЕЦТРАНСПОРТ · УЛЬЯНОВСК И ОБЛАСТЬ · 24/7</p><h1>Перевозка инвалидов-колясочников <em>в спецавтомобиле</em> по городу и области</h1>
+<div class="hero__contact"><div class="hero__phone"><span class="hero__phone-label">ЗВОНИТЕ КРУГЛОСУТОЧНО</span><a :href="primaryPhoneHref" class="hero__phone-number" aria-label="Позвонить по номеру 8 8422 71 73 03"><span class="hero__phone-prefix">8 (8422)</span><strong>71-73-03</strong></a><a :href="secondaryPhoneHref" class="hero__phone-secondary">{{ secondaryPhone }}</a></div><a :href="primaryPhoneHref" class="button button--primary hero__request-button">☎ Позвонить</a></div>
+<p class="hero__subactions"><a href="#request">Оставить заявку</a> · <a :href="maxUrl" target="_blank" rel="noopener noreferrer">Написать в MAX</a></p></div>
+<div class="hero__visual"><div class="hero__visual-top"><span>ДОСТУПНЫЕ ПОЕЗДКИ</span><span>24/7</span></div><svg viewBox="0 0 690 460" role="img" aria-label="Иллюстрация специального автомобиля с подъемником для инвалидной коляски" class="hero__illustration">
                         <defs>
                             <linearGradient id="vanBody" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f8f6ef"/><stop offset="1" stop-color="#dedfd9"/></linearGradient>
                             <linearGradient id="vanGlass" x1="0" x2="1"><stop stop-color="#273a57"/><stop offset="1" stop-color="#56748b"/></linearGradient>
@@ -78,17 +53,9 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
                         <path d="M117 204H205L223 184" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".55"/>
                         <path d="M587 305H621" stroke="#e8bc48" stroke-width="12" stroke-linecap="round"/>
                         <path d="M62 357H643" stroke="#e8bc48" stroke-width="4" stroke-linecap="round" stroke-dasharray="20 15"/>
-                    </svg>
-                    <div class="hero__visual-bottom"><span>Специальный транспорт</span><span class="visual-arrow" aria-hidden="true">↗</span></div>
-                </div>
-                <div class="hero__facts" aria-label="Основная информация о перевозке">
-                    <div><strong>24/7</strong><span>Принимаем обращения</span></div>
-                    <div><strong>от 1 000 ₽</strong><span>Стоимость поездки</span></div>
-                    <div><strong>Ульяновск и область</strong><span>География поездок</span></div>
-                </div>
-            </section>
-
-            <section id="benefits" class="benefits section-wrap">
+                    </svg><div class="hero__visual-bottom"><span>Специальный транспорт</span><span class="visual-arrow" aria-hidden="true">↗</span></div></div>
+<div class="hero__facts"><div><strong>24/7</strong><span>На связи ежедневно</span></div><div><strong>от 1 500 ₽</strong><span>Стоимость поездки</span></div><div><strong>С сопровождением</strong><span>Или без сопровождения</span></div></div></section>
+<section id="benefits" class="benefits section-wrap">
                 <div class="section-heading"><div><p class="section-kicker">01 — НАШ ПОДХОД</p><h2>Заботимся не только<br>о маршруте.</h2></div><p>Поездка должна быть спокойной и понятной — для самого пассажира и его близких.</p></div>
                 <div class="benefit-grid">
                     <article class="benefit-card"><div class="benefit-card__icon">↗</div><span>01</span><h3>Оперативно</h3><p>Не нужно планировать поездку за месяц. Свяжитесь с нами, чтобы обсудить ближайшее доступное время.</p></article>
@@ -98,8 +65,10 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
                 </div>
             </section>
 
-            <section id="how-it-works" class="process section-wrap">
-                <div class="process__intro"><p class="section-kicker">02 — ПРОСТОЙ ПРОЦЕСС</p><h2>От заявки<br>до пункта назначения.</h2><p>Расскажите, куда нужно добраться и какая помощь потребуется. Мы уточним условия поездки и её стоимость.</p><button type="button" class="button button--light" @click="scrollToRequest">Обсудить маршрут <span aria-hidden="true">↗</span></button></div>
+            <section id="destinations" class="destinations section-wrap"><div class="section-heading"><div><p class="section-kicker">02 — КУДА ПЕРЕВОЗИМ</p><h2>Поможем добраться<br>куда необходимо.</h2></div><p>Поездки по Ульяновску и области. Маршрут согласовываем заранее.</p></div><div class="destination-grid"><article><span aria-hidden="true">✚</span><h3>Из больницы домой</h3><p>После лечения</p></article><article><span aria-hidden="true">✚</span><h3>Из дома в поликлинику</h3><p>К врачу</p></article><article><span aria-hidden="true">▣</span><h3>Из дома в МФЦ</h3><p>Для оформления документов</p></article><article><span aria-hidden="true">✦</span><h3>На обследование</h3><p>Диагностика и процедуры</p></article><article><span aria-hidden="true">⌂</span><h3>В социальные учреждения</h3><p>По важным вопросам</p></article><article><span aria-hidden="true">↗</span><h3>По личным делам</h3><p>Поездки и встречи</p></article></div></section>
+<section id="fleet" class="fleet section-wrap"><div class="section-heading"><div><p class="section-kicker">03 — НАШ АВТОПАРК</p><h2>Специальный транспорт.</h2></div><p>Автомобиль ожидается. Реальные фото добавим после его получения.</p></div><div class="fleet-grid"><article class="fleet-card"><div class="fleet-art fleet-art--0" role="img" aria-label="Временная концептуальная иллюстрация: Специальный автомобиль"><span>🚐</span></div><div class="fleet-card__body"><h3>Специальный автомобиль</h3><p>Транспорт для людей на инвалидных колясках</p></div></article><article class="fleet-card"><div class="fleet-art fleet-art--1" role="img" aria-label="Временная концептуальная иллюстрация: Пассажир на коляске"><span>♿</span></div><div class="fleet-card__body"><h3>Пассажир на коляске</h3><p>Поездка с учётом потребностей человека</p></div></article><article class="fleet-card"><div class="fleet-art fleet-art--2" role="img" aria-label="Временная концептуальная иллюстрация: Посадка в автомобиль"><span>♿ ↗ 🚐</span></div><div class="fleet-card__body"><h3>Посадка в автомобиль</h3><p>Необходимую помощь обсуждаем заранее</p></div></article></div><p class="fleet-disclaimer">Пока здесь концептуальные иллюстрации вместо фотографий реального автопарка.</p></section>
+<section id="how-it-works" class="process section-wrap">
+                <div class="process__intro"><p class="section-kicker">04 — ПРОСТОЙ ПРОЦЕСС</p><h2>От заявки<br>до пункта назначения.</h2><p>Расскажите, куда нужно добраться и какая помощь потребуется. Мы уточним условия поездки и её стоимость.</p><button type="button" class="button button--light" @click="scrollToRequest">Обсудить маршрут <span aria-hidden="true">↗</span></button></div>
                 <ol class="process__steps">
                     <li><b>01</b><div><h3>Оставляете запрос</h3><p>Указываете маршрут и контактный номер.</p></div></li>
                     <li><b>02</b><div><h3>Уточняем детали</h3><p>Обсуждаем время, необходимость сопровождения и цену.</p></div></li>
@@ -108,12 +77,12 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
             </section>
 
             <section id="pricing" class="price section-wrap">
-                <div><p class="section-kicker">03 — СТОИМОСТЬ</p><h2>Понятная стоимость.<br>Без неожиданностей.</h2><p class="price__description">Окончательная цена зависит от расстояния, времени и необходимых дополнительных услуг. Обсудим все детали до поездки.</p></div>
-                <div class="price__card"><span>СТОИМОСТЬ ПОЕЗДКИ</span><p>от <strong>1 000</strong> ₽</p><small>Предварительный ориентир. Точную стоимость назовём после уточнения маршрута.</small><button type="button" class="button button--primary" @click="scrollToRequest">Уточнить стоимость <span aria-hidden="true">↗</span></button></div>
+                <div><p class="section-kicker">05 — СТОИМОСТЬ</p><h2>Понятная стоимость.<br>Без неожиданностей.</h2><p class="price__description">Окончательная цена зависит от расстояния, времени и необходимых дополнительных услуг. Обсудим все детали до поездки.</p></div>
+                <div class="price__card"><span>СТОИМОСТЬ ПОЕЗДКИ</span><p>от <strong>1 500</strong> ₽</p><small>Предварительный ориентир. Точную стоимость назовём после уточнения маршрута.</small><button type="button" class="button button--primary" @click="scrollToRequest">Уточнить стоимость <span aria-hidden="true">↗</span></button></div>
             </section>
 
             <section id="request" class="request section-wrap">
-                <div class="request__intro"><p class="section-kicker">04 — СВЯЗАТЬСЯ С НАМИ</p><h2>Расскажите,<br><em>куда нужно ехать.</em></h2><p>Заполните маршрут — так оператору будет проще сориентировать вас по условиям поездки.</p><div class="request__callout">Демонстрационная версия сайта: номера телефонов и отправка заявок будут подключены после согласования с заказчиком.</div></div>
+                <div class="request__intro"><p class="section-kicker">06 — СВЯЗАТЬСЯ С НАМИ</p><h2>Расскажите,<br><em>куда нужно ехать.</em></h2><p>Заполните маршрут — так оператору будет проще сориентировать вас по условиям поездки.</p><div class="request__callout">Телефоны и MAX доступны для связи. Отправка заявок через форму пока не подключена.</div></div>
                 <form class="request__form" @submit.prevent>
                     <h3>Предварительный запрос</h3>
                     <label for="taxi-from">Откуда забрать пассажира</label><input id="taxi-from" v-model="departure" type="text" autocomplete="street-address" placeholder="Адрес отправления" />
@@ -125,7 +94,7 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
             </section>
         </main>
 
-        <footer class="taxi-footer"><div class="footer-brand">✳ <strong>ПУТЬ БЕЗ ПРЕГРАД</strong></div><p>Перевозка маломобильных пассажиров<br>Ульяновск и Ульяновская область</p><div><span>ГОРОДСКОЙ · <a v-if="primaryPhoneHref" :href="primaryPhoneHref">{{ primaryPhone }}</a><span v-else>{{ primaryPhone }}</span></span><span>МОБИЛЬНЫЙ · 8 (9XX) XXX-XX-XX</span><small>Номера телефонов будут уточнены</small></div><a href="#top">Наверх ↑</a></footer>
+        <footer class="taxi-footer"><div class="footer-brand">♿ <strong>ПУТЬ БЕЗ ПРЕГРАД</strong><p>Ульяновск и область · 24/7</p></div><div class="footer-contacts"><a :href="primaryPhoneHref">{{ primaryPhone }}</a><a :href="secondaryPhoneHref">{{ secondaryPhone }}</a><a :href="`mailto:${email}`">{{ email }}</a></div><a class="max-link" :href="maxUrl" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX"><span class="max-icon">M</span> MAX</a><a href="#top">Наверх ↑</a></footer>
     </div>
 </template>
 
@@ -230,4 +199,25 @@ const scrollToRequest = () => document.getElementById('request')?.scrollIntoView
   .hero__visual{min-height:250px}
   .hero__phone-description{font-size:14px}
 }
+
+.accessible-taxi{--ink:#101e30;--muted:#314457;--accent:#db1034;--wine:#be052a;--cream:#f6fafc;background:#f6fafc}
+.taxi-header{max-width:1560px;background:white}.brand__symbol{background:#df1034;color:white}
+.header-phones{display:grid;gap:3px}.header-phones a,.header-email{color:#101e30;font-size:16px;font-weight:800;text-decoration:none;white-space:nowrap}
+.header-phones a:hover,.header-email:hover{text-decoration:underline}
+.max-link{display:inline-flex;align-items:center;gap:8px;color:#111f31;text-decoration:none;font-weight:900;font-size:17px;white-space:nowrap}
+.max-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,#6454ef,#00a5ed);color:white;font-size:24px}
+.hero h1{font-size:clamp(40px,4.4vw,68px);line-height:1.12}.hero h1 em{color:#c8002c}
+.hero__visual{background:linear-gradient(135deg,#20334b,#0c7884)}.hero__phone-number{text-decoration:none;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.hero__phone-prefix{font-size:clamp(19px,1.8vw,27px);font-weight:800}.hero__phone-number strong{font-size:clamp(40px,4vw,62px);letter-spacing:-.05em;line-height:1.03}.hero__phone-secondary{font-size:21px;font-weight:800;color:#314457;text-decoration:none}.hero__phone-number:hover,.hero__phone-secondary:hover{text-decoration:underline;color:#b8002b}
+.hero__contact{gap:16px}.hero__request-button,.button--primary{background:#dc1036;color:white}.hero__request-button:hover,.button--primary:hover:not(:disabled){background:#aa092a;color:white}.hero__subactions{display:flex;gap:14px;font-size:18px;font-weight:800}.hero__subactions a{color:#af062e}.hero__facts{border-top:3px solid #e00b32}
+.destination-grid,.fleet-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.destinations{background:#eaf5f8}
+.destination-grid article{border:1px solid #d4e5ea;background:white;border-radius:14px;padding:24px;min-height:175px}
+.destination-grid article>span{display:grid;place-items:center;width:52px;height:52px;background:#ffe8ed;color:#c0002e;font-size:28px;font-weight:900;border-radius:10px;margin-bottom:15px}
+.destination-grid h3,.fleet-card h3{font-size:23px;line-height:1.25;margin:0 0 9px}.destination-grid p,.fleet-card p{font-size:18px;line-height:1.5;color:#314457;margin:0}
+.fleet{background:white}.fleet-card{background:#f7fbfd;border:1px solid #d5e3e9;border-radius:14px;overflow:hidden}.fleet-card__body{padding:24px}.fleet-art{height:260px;display:grid;place-items:center;background:linear-gradient(145deg,#d7edf3,#91bfce)}.fleet-art>span{font-size:120px;filter:drop-shadow(3px 12px 4px #304c5d35)}.fleet-art--1{background:linear-gradient(145deg,#e0eef2,#b5d5df)}.fleet-art--2{background:linear-gradient(145deg,#deeff0,#a5d4da)}.fleet-art--2>span{font-size:62px}.fleet-disclaimer{font-size:16px;color:#314457}
+.price__card{border:2px solid #db1034}.price__card strong{color:#c5002b}.request{background:#e8f5f8}
+.taxi-footer{max-width:none;background:#142c3b;color:white;flex-wrap:wrap;align-items:center}.taxi-footer .footer-brand,.taxi-footer .footer-brand strong,.taxi-footer>a,.footer-contacts a{color:white!important}.footer-contacts{display:grid;gap:7px}.footer-contacts a{font-size:17px;font-weight:800;text-decoration:none}.footer-brand p{font-size:15px;color:#e1eef2}.taxi-footer .max-link{color:white}
+.accessible-taxi :is(a,button,input):focus-visible{outline:4px solid #00a5b5;outline-offset:4px}
+@media(max-width:1180px){.header-email{display:none}.hero__contact{flex-wrap:wrap}}
+@media(max-width:900px){.taxi-header{flex-wrap:wrap}.taxi-header__right{margin-left:auto}.destination-grid,.fleet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.taxi-header__right{width:100%;justify-content:space-between;gap:8px}.header-phones a{font-size:15px}.hero__contact{flex-direction:column;align-items:stretch}.hero__request-button{width:100%}.hero__phone-number strong{font-size:clamp(40px,11.3vw,62px)}.hero__phone-secondary{font-size:19px}.destination-grid,.fleet-grid{grid-template-columns:1fr}.fleet-art{height:220px}.taxi-footer{display:grid;grid-template-columns:1fr}}
 </style>
