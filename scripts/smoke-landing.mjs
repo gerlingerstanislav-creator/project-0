@@ -35,6 +35,44 @@ try {
     await page.locator('h1').waitFor({ state: 'visible', timeout: 20000 });
 
     assert.equal(await page.locator('.fleet-card img').count(), 3, 'Three gallery photos expected');
+    // The original wordmark was truncated inside its own SVG viewBox while
+    // the <img> itself fitted the header. Verify the actual browser font metrics.
+    if (viewport.label === 'desktop') {
+      for (const asset of [
+        '/images/put-bez-pregrad/logo.svg',
+        '/images/put-bez-pregrad/logo-light.svg',
+      ]) {
+        const measured = await page.evaluate(async assetUrl => {
+          const response = await fetch(assetUrl, { cache: 'no-store' });
+          if (!response.ok) return { error: 'HTTP ' + response.status };
+          const xml = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
+          if (xml.querySelector('parsererror')) return { error: 'Invalid SVG XML' };
+          const svg = document.importNode(xml.documentElement, true);
+          svg.setAttribute('width', '600');
+          svg.setAttribute('height', '186');
+          svg.style.position = 'fixed';
+          svg.style.left = '-9999px';
+          svg.style.top = '0';
+          svg.style.visibility = 'hidden';
+          document.body.appendChild(svg);
+          const width = svg.viewBox.baseVal.width;
+          const textBoxes = Array.from(svg.querySelectorAll('text')).map(element => {
+            const rect = element.getBBox();
+            return { text: element.textContent.trim(), right: rect.x + rect.width };
+          });
+          svg.remove();
+          return { width, textBoxes };
+        }, asset);
+        assert.ok(!measured.error, asset + ': ' + (measured.error || 'SVG must load'));
+        assert.equal(measured.textBoxes?.length, 3, asset + ': all three text elements must render');
+        for (const textBox of measured.textBoxes) {
+          assert.ok(textBox.right <= measured.width - 8,
+            asset + ': text "' + textBox.text + '" clips outside the SVG viewBox (' +
+            textBox.right.toFixed(1) + ' > ' + measured.width + ')');
+        }
+      }
+    }
+
     assert.equal(await page.locator('.hero__phone').getAttribute('href'), 'tel:+78422717303');
     assert.equal(await page.locator('.header-phones a').nth(1).getAttribute('href'), 'tel:+79677717303');
     assert.ok((await page.locator('.max-link').first().getAttribute('href')).startsWith('https://max.ru/'));
