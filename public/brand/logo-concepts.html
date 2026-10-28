@@ -1,228 +1,193 @@
 <!doctype html>
 <html lang="ru">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <meta name="color-scheme" content="light">
- <meta name="description" content="Четыре минималистичных концепции логотипа для сервиса перевозки маломобильных пассажиров «Путь без преград». Отдельные SVG-логотипы, знаки и фавиконы.">
- <link rel="icon" type="image/svg+xml" href="./logo-concepts/variant-a-favicon.svg">
- <title>Логотип «Путь без преград» — 4 концепции</title>
- <style>
- :root{--ink:#142B3F;--teal:#009C9A;--red:#DA304A;--white:#fff;--bg:#F4F8FA;--line:#DCE7ED;--muted:#536779}
- *{box-sizing:border-box}
- html{scroll-behavior:smooth}
- body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
- a{color:inherit}
- button{font:inherit;cursor:pointer}
- :is(a,button):focus-visible{outline:3px solid var(--teal);outline-offset:4px}
- .wrap{width:min(1430px,calc(100% - 48px));margin:auto}
- .topbar{border-bottom:1px solid var(--line);background:#fff}
- .topbar__inner{min-height:79px;display:flex;align-items:center;justify-content:space-between;gap:20px}
- .topbar__name{display:flex;gap:12px;align-items:center;font-size:15px;font-weight:850;letter-spacing:-.015em}
- .topbar__name b{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--ink);color:white;font-size:20px}
- .topbar__name span span{display:block;font-size:12px;color:var(--muted);font-weight:600}
- .topbar__links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:750}
- .topbar__links a{text-decoration:none}
- .topbar__links a:hover{text-decoration:underline}
- .return-link{padding:10px 14px;border:1px solid var(--line);border-radius:10px}
- .hero{padding:68px 0 43px}
- .eyebrow{margin:0 0 14px;font-size:12px;font-weight:850;letter-spacing:.17em;color:var(--teal)}
- .hero__line{display:flex;align-items:end;justify-content:space-between;gap:40px}
- .hero h1{font-size:clamp(38px,4.4vw,70px);line-height:1.05;letter-spacing:-.055em;margin:0;font-weight:850}
- .hero h1 em{font-style:normal;color:var(--red)}
- .hero__lead{max-width:500px;margin:0 0 4px;color:var(--muted);font-size:16px;line-height:1.7}
- .process{margin-top:38px;display:flex;gap:13px;flex-wrap:wrap}
- .process span{padding:8px 14px;background:#fff;border:1px solid var(--line);border-radius:30px;font-size:12px;font-weight:700}
- .swatches{margin:0 0 33px;display:flex;align-items:center;gap:26px;flex-wrap:wrap;padding:20px 24px;border:1px solid var(--line);border-radius:16px;background:#fff}
- .swatches__title{font-size:13px;font-weight:850}
- .swatch{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:650}
- .swatch i{width:28px;height:28px;border-radius:9px;border:1px solid #0000000d;background:var(--color)}
- .swatch code{font-size:11px;color:var(--muted)}
- .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;padding-bottom:65px}
- .concept{min-width:0;background:#fff;border:1.5px solid var(--line);border-radius:21px;overflow:hidden;box-shadow:0 8px 36px #102d4210;display:flex;flex-direction:column;scroll-margin-top:18px;transition:border-color .2s,box-shadow .2s}
- .concept.is-selected{border-color:var(--teal);box-shadow:0 0 0 3px #009c9a1b,0 12px 35px #102d4212}
- .concept__intro{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:22px 26px 0}
- .concept__number{font-size:12px;font-weight:850;letter-spacing:.12em;color:var(--muted)}
- .concept__type{font-size:11px;font-weight:750;color:var(--teal);background:#E7F6F4;padding:6px 10px;border-radius:20px}
- .concept__header{padding:5px 26px 18px}
- .concept h3{font-size:34px;font-weight:850;line-height:1.15;letter-spacing:-.04em;margin:0 0 6px}
- .concept__header p{color:var(--muted);margin:0;font-size:14px}
- .concept__art{display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:0 26px}
- .symbol-frame,.logo-frame{background:#F5FAFC;border-radius:14px;min-height:186px;display:flex;align-items:center;justify-content:center}
- .symbol-frame img{width:125px;height:125px}
- .logo-frame{padding:15px;position:relative}
- .logo-frame img{display:block;width:100%;max-width:420px;height:auto;max-height:152px;object-fit:contain}
- .frame-caption{display:block;font-size:10px;letter-spacing:.11em;font-weight:800;color:#607588}
- .logo-frame .frame-caption{position:absolute;left:17px;top:11px}
- .concept__description{margin:0;padding:22px 26px 12px;min-height:133px;color:#405367;line-height:1.65;font-size:14px}
- .semantic{display:flex;flex-wrap:wrap;gap:7px;padding:0 26px 20px}
- .semantic span{font-size:11px;font-weight:750;color:#446070;border-radius:6px;background:#EEF5F6;padding:5px 8px}
- .context{margin:0 26px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(135px,.8fr);gap:12px}
- .context__dark,.context__fav{border-radius:12px;min-height:133px;padding:13px}
- .context__dark{background:#132C40;display:flex;flex-direction:column;gap:10px}
- .context__dark .frame-caption{color:#A8BEC9}
- .context__dark img{width:min(100%,285px);height:76px;object-fit:contain;filter:brightness(0) invert(1)}
- .context__fav{background:#F0F5F8}
- .fav-row{display:flex;gap:10px;align-items:center;min-height:65px}
- .context__fav small{color:#607588;font-size:11px}
- .concept__footer{margin-top:auto;padding:19px 26px 24px;display:flex;justify-content:space-between;align-items:center;gap:13px;flex-wrap:wrap}
- .downloads{display:flex;gap:7px;flex-wrap:wrap}
- .downloads a{text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-size:11px;font-weight:800}
- .downloads a:hover{border-color:var(--teal)}
- .downloads a span{font-size:9px;color:var(--teal);margin-left:4px}
- .choose{border:0;background:var(--ink);color:#fff;border-radius:9px;padding:11px 12px;font-size:11px;font-weight:850}
- .choose span{padding-left:8px}
- .choose:hover,.choose[aria-pressed="true"]{background:#087F80}
- .final{border-top:1px solid var(--line);padding:40px 0 55px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
- .final h2{font-size:27px;margin:0 0 10px;letter-spacing:-.03em}
- .final p{color:var(--muted);margin:0}
- .result{padding:16px 20px;background:#E8F6F4;border:1px solid #B8DEDB;border-radius:12px;font-weight:700;font-size:14px}
- .legal{font-size:12px;color:var(--muted);padding:0 0 30px}
- @media(max-width:1180px){.hero__line{display:block}.hero__lead{margin-top:20px}.cards{grid-template-columns:1fr}.concept__description{min-height:0}.logo-frame img{max-width:540px}}
- @media(max-width:650px){.wrap{width:calc(100% - 28px)}.topbar__inner{padding:11px 0;align-items:start}.topbar__links{justify-content:flex-end;gap:8px}.topbar__links a:first-child{display:none}.hero{padding:42px 0 26px}.hero h1{font-size:43px}.swatches{gap:13px;padding:16px}.swatches__title{width:100%}.cards{gap:15px}.concept__intro{padding:19px 18px 0}.concept__header{padding:7px 18px 15px}.concept h3{font-size:29px}.concept__art{grid-template-columns:1fr;gap:9px;padding:0 18px}.symbol-frame{min-height:130px}.symbol-frame img{width:103px;height:103px}.logo-frame{min-height:150px}.concept__description{padding:17px 18px 13px}.semantic{padding:0 18px 17px}.context{margin:0 18px;grid-template-columns:1fr}.concept__footer{padding:18px}.choose{width:100%}.final{grid-template-columns:1fr;gap:16px}.header-nav{display:none}}
- @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.concept{transition:none}}
- </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F9FA">
+<meta name="description" content="Четыре оригинальные векторные концепции логотипа Путь без преград: два варианта с автомобильной темой и два без автомобиля.">
+<link rel="icon" type="image/svg+xml" href="./logo-concepts/variant-b-favicon.svg">
+<title>Путь без преград — новые концепции логотипа</title>
+<style>
+:root{--ink:#142C40;--red:#E42F4D;--teal:#0CA6A1;--muted:#536779;--line:#DCE5EA;--surface:#F6F9FA}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+a:focus-visible,button:focus-visible{outline:3px solid var(--teal);outline-offset:4px}
+.wrap{max-width:1420px;width:calc(100% - 56px);margin:auto}
+.top{background:white;border-bottom:1px solid var(--line)}
+.top__inner{min-height:75px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+.top__brand{font-size:17px;font-weight:850;line-height:1.2}
+.top__brand small{display:block;font-size:12px;color:var(--muted);font-weight:650;margin-top:4px}
+.top__link{font-size:14px;text-decoration:none;font-weight:750;padding:10px 14px;background:#F0F5F7;border-radius:11px}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;padding:65px 0 34px;align-items:end}
+.kicker{display:block;font-size:12px;font-weight:850;letter-spacing:.16em;color:#B60F30;margin-bottom:14px}
+.hero h1{font-size:clamp(39px,5vw,72px);letter-spacing:-.055em;line-height:1.04;margin:0}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero__text{max-width:440px;margin:0 0 4px;font-size:17px;line-height:1.75;color:var(--muted)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;padding-bottom:29px}
+.filters a{font-weight:800;text-decoration:none;border:1px solid var(--line);border-radius:40px;background:#fff;font-size:14px;padding:10px 15px}
+.filters a:hover{border-color:var(--teal)}
+.pal{background:white;border:1px solid var(--line);border-radius:16px;padding:18px 23px;margin-bottom:22px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.pal__label{font-size:14px;font-weight:850;margin-right:5px}
+.pal__swatch{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700}
+.pal__swatch i{display:block;width:27px;height:27px;border-radius:8px;background:var(--c);border:1px solid #101d2d12}
+.pal__swatch code{font-size:11px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;padding-bottom:40px}
+.concept{background:#fff;border:1.5px solid var(--line);border-radius:21px;overflow:hidden;scroll-margin-top:14px;box-shadow:0 12px 35px #142c4010;display:flex;flex-direction:column}
+.concept.is-selected{border-color:var(--teal);box-shadow:0 0 0 3px #0ca6a127}
+.concept__header{padding:24px 25px 12px;display:flex;align-items:start;justify-content:space-between;gap:20px}
+.concept__number{font-size:11px;letter-spacing:.1em;font-weight:850;color:#537383;text-transform:uppercase}
+.concept h2{font-size:29px;letter-spacing:-.045em;line-height:1.13;margin:5px 0 0}
+.concept__tag{border-radius:30px;padding:7px 12px;background:#E8F6F5;color:#087e7b;font-size:11px;font-weight:850;line-height:1.3}
+.concept__wide{height:235px;display:flex;align-items:center;justify-content:center;margin:0 25px;background:#F0F6F8;border-radius:14px;padding:23px}
+.concept__wide img{display:block;width:100%;max-width:550px;height:auto;max-height:185px;object-fit:contain}
+.concept__description{margin:17px 25px 12px;font-size:15px;color:#3D5366;line-height:1.7;min-height:102px}
+.concept__metadata{display:flex;flex-wrap:wrap;gap:7px;margin:0 25px 20px}
+.concept__metadata span{font-size:11px;font-weight:700;padding:5px 9px;border-radius:7px;background:#F1F6F6;color:#47606d}
+.concept__previews{display:grid;grid-template-columns:.75fr 1.4fr 1fr;gap:9px;padding:0 25px}
+.preview{min-width:0;height:152px;border-radius:12px;background:#F5F9FA;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:13px;gap:12px}
+.preview__label{color:#5D7485;font-size:10px;font-weight:800;letter-spacing:.06em;text-align:center}
+.preview__icon{width:100px;height:100px;object-fit:contain}
+.preview--dark{background:#142C40}
+.preview--dark .preview__label{color:#CFDEE5}
+.preview__mono{width:100%;height:auto;max-height:96px;filter:brightness(0) invert(1)}
+.favicon-row{display:flex;align-items:center;justify-content:center;gap:9px;min-height:79px}
+.concept__footer{padding:20px 25px 26px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-top:auto}
+.download-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.download-row a{font-size:11px;text-decoration:none;font-weight:850;border:1px solid #D4E1E6;border-radius:8px;padding:9px 10px;background:white}
+.download-row a:hover{border-color:var(--teal)}
+.concept__footer button{background:var(--ink);color:white;border:0;border-radius:9px;padding:10px 18px;font-size:12px;font-weight:850}
+.concept__footer button[aria-pressed=true],.concept__footer button:hover{background:#087D7B}
+.selection{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;border-top:1px solid var(--line);padding:35px 0 60px}
+.selection h2{margin:0 0 8px;font-size:27px;letter-spacing:-.03em}
+.selection p{margin:0;color:var(--muted);font-size:15px}
+.selection__result{padding:21px;border:1px solid #BBDAD8;background:#E9F8F6;border-radius:13px;font-size:14px;font-weight:750}
+.footer{border-top:1px solid var(--line);padding:25px 0 40px;font-size:13px;color:var(--muted)}
+@media(max-width:1150px){.hero{display:block}.hero__text{margin-top:20px}.cards{grid-template-columns:1fr}.concept__description{min-height:0}}
+@media(max-width:690px){.wrap{width:calc(100% - 30px)}.top__inner{padding:14px 0;min-height:67px}.top__link{font-size:12px}.hero{padding:40px 0 25px}.hero h1{font-size:42px}.pal{gap:12px;padding:15px}.pal__label{width:100%}.concept__header{padding:20px 17px 11px;display:block}.concept__tag{display:inline-block;margin-top:12px}.concept__wide{margin:0 17px;padding:12px;height:176px}.concept__wide img{max-height:155px}.concept__description{margin:16px 17px 12px}.concept__metadata{margin:0 17px 16px}.concept__previews{padding:0 17px;grid-template-columns:1fr 1fr}.preview{height:135px}.preview:last-child{grid-column:1/-1;height:112px}.preview__icon{height:85px;width:85px}.concept__footer{padding:17px}.concept__footer button{width:100%}.selection{grid-template-columns:1fr;gap:20px}}
+</style>
 </head>
 <body>
- <header class="topbar"><div class="wrap topbar__inner">
-  <div class="topbar__name"><b>П</b><span>Путь без преград <span>Логотип · варианты для выбора</span></span></div>
-  <div class="topbar__links"><a href="#concepts">Смотреть варианты</a><a class="return-link" href="/put-bez-pregrad">На действующий лендинг ↗</a></div>
- </div></header>
- <main class="wrap">
-  <section class="hero">
-    <p class="eyebrow">АЙДЕНТИКА / ПОИСК ЗНАКА / КОНЦЕПЦИИ 01–04</p>
-    <div class="hero__line"><h1>Просто. Узнаваемо.<br><em>Без перегруза.</em></h1><p class="hero__lead">Четыре принципиально разных логотипа для «Пути без преград». В каждом есть тема доступного движения, а автомобильная составляющая передаётся через форму кузова, дорогу или рампу — без мелких деталей.</p></div>
-    <div class="process"><span>01 · Оценить силуэт</span><span>02 · Проверить в 16 px</span><span>03 · Выбрать направление</span></div>
-  </section>
-  <section class="swatches" aria-label="Общая цветовая палитра">
-   <span class="swatches__title">Общая палитра</span>
-   <span class="swatch"><i style="--color:#142B3F"></i> Тёмно-синий <code>#142B3F</code></span>
-   <span class="swatch"><i style="--color:#DA304A"></i> Кораллово-красный <code>#DA304A</code></span>
-   <span class="swatch"><i style="--color:#009C9A"></i> Бирюзовый <code>#009C9A</code></span>
-   <span class="swatch"><i style="--color:#F4F8FA"></i> Светлый фон <code>#F4F8FA</code></span>
-  </section>
-  <section class="cards" id="concepts" aria-label="Четыре варианта логотипа">
-   
-  <article class="concept" id="variant-a" data-variant="a">
-    <div class="concept__intro">
-      <div class="concept__number">ВАРИАНТ 01</div>
-      <span class="concept__type">Рекомендую</span>
+<header class="top"><div class="wrap top__inner"><div class="top__brand">Путь без преград<small>Концепции фирменного знака · вторая итерация</small></div><a class="top__link" href="/put-bez-pregrad">На действующий сайт ↗</a></div></header>
+<main class="wrap">
+<section class="hero"><div><span class="kicker">ИДЕИ 2026 / ВТОРАЯ ИТЕРАЦИЯ</span><h1>Меньше деталей.<br><em>Больше смысла.</em></h1></div><p class="hero__text">Не четыре вариации одного рисунка, а четыре разных подхода. Два автомобильных и два без машины. Каждый подготовлен как самостоятельный SVG со словесным знаком и отдельным фавиконом.</p></section>
+<nav class="filters" aria-label="Переход к концепциям"><a href="#variant-a">01 · Спецтранспорт</a><a href="#variant-b">02 · Дверь и пандус</a><a href="#variant-c">03 · Сопровождение</a><a href="#variant-d">04 · Свободный путь</a></nav>
+<div class="pal" aria-label="Цветовая палитра"><span class="pal__label">Единая палитра:</span><span class="pal__swatch"><i style="--c:#142C40"></i> Тёмно-синий <code>#142C40</code></span><span class="pal__swatch"><i style="--c:#E42F4D"></i> Красный <code>#E42F4D</code></span><span class="pal__swatch"><i style="--c:#0CA6A1"></i> Бирюзовый <code>#0CA6A1</code></span><span class="pal__swatch"><i style="--c:#F6F9FA"></i> Светлый <code>#F6F9FA</code></span></div>
+<section class="cards" aria-label="Варианты">
+ <article class="concept" id="variant-a" data-id="a">
+  <div class="concept__header">
+   <div><span class="concept__number">С автомобилем · 01</span><h2>Городской спецтранспорт</h2></div>
+   <span class="concept__tag">Самая понятная услуга</span>
+  </div>
+  <div class="concept__wide"><img src="./logo-concepts/variant-a-logo.svg" width="760" height="170" loading="lazy" alt="Полноцветный логотип «Городской спецтранспорт»"></div>
+  <p class="concept__description">Компактный силуэт минивэна без дверных ручек, фар и других мелких деталей. Доступная посадка показана крупным знаком внутри кузова, а красная линия обозначает движение.</p>
+  <div class="concept__metadata"><span>Автомобиль</span><span>Доступная посадка</span><span>Услуга</span></div>
+  <div class="concept__previews">
+    <div class="preview"><span class="preview__label">Знак</span><img class="preview__icon" width="160" height="160" src="./logo-concepts/variant-a-icon.svg" alt="Отдельный знак «Городской спецтранспорт»"></div>
+    <div class="preview preview--dark"><span class="preview__label">Монохром</span><img class="preview__mono" width="760" height="170" src="./logo-concepts/variant-a-mono.svg" alt="Одноцветная версия логотипа «Городской спецтранспорт»"></div>
+    <div class="preview"><span class="preview__label">Фавикон 48 / 32 / 16</span><div class="favicon-row"><img width="48" height="48" src="./logo-concepts/variant-a-favicon.svg" alt="Фавикон «Городской спецтранспорт» 48 пикселей"><img width="32" height="32" src="./logo-concepts/variant-a-favicon.svg" alt="" aria-hidden="true"><img width="16" height="16" src="./logo-concepts/variant-a-favicon.svg" alt="" aria-hidden="true"></div></div>
+  </div>
+  <div class="concept__footer">
+    <div class="download-row">
+      <a href="./logo-concepts/variant-a-logo.svg" download>Логотип SVG</a>
+      <a href="./logo-concepts/variant-a-icon.svg" download>Знак SVG</a>
+      <a href="./logo-concepts/variant-a-mono.svg" download>Монохром SVG</a>
+      <a href="./logo-concepts/variant-a-favicon.svg" download>Фавикон SVG</a>
     </div>
-    <div class="concept__header"><div><h3>Пандус</h3><p>Спецтранспорт без лишних деталей</p></div></div>
-    <div class="concept__art">
-      <div class="symbol-frame"><img src="./logo-concepts/variant-a-icon.svg" alt="Знак: Пандус" width="128" height="128"></div>
-      <div class="logo-frame"><span class="frame-caption">ГОРИЗОНТАЛЬНЫЙ ЛОГОТИП</span><img src="./logo-concepts/variant-a-logo.svg" alt="Логотип Путь без преград — Пандус" width="700" height="170"></div>
-    </div>
-    <p class="concept__description">Открытый силуэт кузова, пассажир на коляске и короткая линия движения. Автомобильная тема читается сразу, но не превращается в подробную иллюстрацию.</p>
-    <div class="semantic"><span>Спецавтомобиль</span><span>Доступная посадка</span><span>Уверенное движение</span></div>
-    <div class="context">
-      <div class="context__dark"><span class="frame-caption">НА ТЁМНОМ ФОНЕ · МОНОХРОМ</span><img src="./logo-concepts/variant-a-logo.svg" alt="" width="700" height="170"></div>
-      <div class="context__fav"><span class="frame-caption">ФАВИКОН</span><div class="fav-row"><img src="./logo-concepts/variant-a-favicon.svg" width="48" height="48" alt="Фавикон Пандус"><img src="./logo-concepts/variant-a-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-concepts/variant-a-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div><small>48 · 32 · 16 px</small></div>
-    </div>
-    <div class="concept__footer">
-      <div class="downloads">
-        <a href="./logo-concepts/variant-a-icon.svg" download>Знак <span>SVG</span></a>
-        <a href="./logo-concepts/variant-a-logo.svg" download>Логотип <span>SVG</span></a>
-        <a href="./logo-concepts/variant-a-favicon.svg" download>Фавикон <span>SVG</span></a>
-      </div>
-      <button class="choose" type="button" data-choose="a" aria-pressed="false">Выбрать вариант <span aria-hidden="true">↗</span></button>
-    </div>
-  </article>
+    <button type="button" data-select="a" aria-pressed="false">Выбрать</button>
+  </div>
+ </article>
 
-  <article class="concept" id="variant-b" data-variant="b">
-    <div class="concept__intro">
-      <div class="concept__number">ВАРИАНТ 02</div>
-      <span class="concept__type">Самый лаконичный</span>
+ <article class="concept" id="variant-b" data-id="b">
+  <div class="concept__header">
+   <div><span class="concept__number">С автомобилем · 02</span><h2>Доступная дверь</h2></div>
+   <span class="concept__tag">Мой фаворит с автомобилем</span>
+  </div>
+  <div class="concept__wide"><img src="./logo-concepts/variant-b-logo.svg" width="760" height="170" loading="lazy" alt="Полноцветный логотип «Доступная дверь»"></div>
+  <p class="concept__description">Дверной проём спецавтомобиля без подробного кузова. Внутри — пассажир на коляске, снизу — въездной пандус. Автомобильная тема передаётся архитектурой двери, а не множеством элементов.</p>
+  <div class="concept__metadata"><span>Дверь микроавтобуса</span><span>Пандус</span><span>Свобода въезда</span></div>
+  <div class="concept__previews">
+    <div class="preview"><span class="preview__label">Знак</span><img class="preview__icon" width="160" height="160" src="./logo-concepts/variant-b-icon.svg" alt="Отдельный знак «Доступная дверь»"></div>
+    <div class="preview preview--dark"><span class="preview__label">Монохром</span><img class="preview__mono" width="760" height="170" src="./logo-concepts/variant-b-mono.svg" alt="Одноцветная версия логотипа «Доступная дверь»"></div>
+    <div class="preview"><span class="preview__label">Фавикон 48 / 32 / 16</span><div class="favicon-row"><img width="48" height="48" src="./logo-concepts/variant-b-favicon.svg" alt="Фавикон «Доступная дверь» 48 пикселей"><img width="32" height="32" src="./logo-concepts/variant-b-favicon.svg" alt="" aria-hidden="true"><img width="16" height="16" src="./logo-concepts/variant-b-favicon.svg" alt="" aria-hidden="true"></div></div>
+  </div>
+  <div class="concept__footer">
+    <div class="download-row">
+      <a href="./logo-concepts/variant-b-logo.svg" download>Логотип SVG</a>
+      <a href="./logo-concepts/variant-b-icon.svg" download>Знак SVG</a>
+      <a href="./logo-concepts/variant-b-mono.svg" download>Монохром SVG</a>
+      <a href="./logo-concepts/variant-b-favicon.svg" download>Фавикон SVG</a>
     </div>
-    <div class="concept__header"><div><h3>Путь</h3><p>Лёгкое движение вперёд</p></div></div>
-    <div class="concept__art">
-      <div class="symbol-frame"><img src="./logo-concepts/variant-b-icon.svg" alt="Знак: Путь" width="128" height="128"></div>
-      <div class="logo-frame"><span class="frame-caption">ГОРИЗОНТАЛЬНЫЙ ЛОГОТИП</span><img src="./logo-concepts/variant-b-logo.svg" alt="Логотип Путь без преград — Путь" width="700" height="170"></div>
-    </div>
-    <p class="concept__description">Пассажир и две динамичные линии, напоминающие дорожную траекторию. Абстрактнее, чем первый вариант, лучше подходит небольшому значку и узнаваемому фирменному символу.</p>
-    <div class="semantic"><span>Человек в центре</span><span>Дорога</span><span>Свобода перемещения</span></div>
-    <div class="context">
-      <div class="context__dark"><span class="frame-caption">НА ТЁМНОМ ФОНЕ · МОНОХРОМ</span><img src="./logo-concepts/variant-b-logo.svg" alt="" width="700" height="170"></div>
-      <div class="context__fav"><span class="frame-caption">ФАВИКОН</span><div class="fav-row"><img src="./logo-concepts/variant-b-favicon.svg" width="48" height="48" alt="Фавикон Путь"><img src="./logo-concepts/variant-b-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-concepts/variant-b-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div><small>48 · 32 · 16 px</small></div>
-    </div>
-    <div class="concept__footer">
-      <div class="downloads">
-        <a href="./logo-concepts/variant-b-icon.svg" download>Знак <span>SVG</span></a>
-        <a href="./logo-concepts/variant-b-logo.svg" download>Логотип <span>SVG</span></a>
-        <a href="./logo-concepts/variant-b-favicon.svg" download>Фавикон <span>SVG</span></a>
-      </div>
-      <button class="choose" type="button" data-choose="b" aria-pressed="false">Выбрать вариант <span aria-hidden="true">↗</span></button>
-    </div>
-  </article>
+    <button type="button" data-select="b" aria-pressed="false">Выбрать</button>
+  </div>
+ </article>
 
-  <article class="concept" id="variant-c" data-variant="c">
-    <div class="concept__intro">
-      <div class="concept__number">ВАРИАНТ 03</div>
-      <span class="concept__type">Самый транспортный</span>
+ <article class="concept" id="variant-c" data-id="c">
+  <div class="concept__header">
+   <div><span class="concept__number">Без автомобиля · 03</span><h2>Рядом</h2></div>
+   <span class="concept__tag">Мой фаворит без автомобиля</span>
+  </div>
+  <div class="concept__wide"><img src="./logo-concepts/variant-c-logo.svg" width="760" height="170" loading="lazy" alt="Полноцветный логотип «Рядом»"></div>
+  <p class="concept__description">Две фигуры — сопровождающий и пассажир. Символ буквально передаёт человеческую поддержку и заботу, но остаётся строгим и компактным. Цветной маршрут добавляет ощущение движения.</p>
+  <div class="concept__metadata"><span>Забота</span><span>Сопровождение</span><span>Движение</span></div>
+  <div class="concept__previews">
+    <div class="preview"><span class="preview__label">Знак</span><img class="preview__icon" width="160" height="160" src="./logo-concepts/variant-c-icon.svg" alt="Отдельный знак «Рядом»"></div>
+    <div class="preview preview--dark"><span class="preview__label">Монохром</span><img class="preview__mono" width="760" height="170" src="./logo-concepts/variant-c-mono.svg" alt="Одноцветная версия логотипа «Рядом»"></div>
+    <div class="preview"><span class="preview__label">Фавикон 48 / 32 / 16</span><div class="favicon-row"><img width="48" height="48" src="./logo-concepts/variant-c-favicon.svg" alt="Фавикон «Рядом» 48 пикселей"><img width="32" height="32" src="./logo-concepts/variant-c-favicon.svg" alt="" aria-hidden="true"><img width="16" height="16" src="./logo-concepts/variant-c-favicon.svg" alt="" aria-hidden="true"></div></div>
+  </div>
+  <div class="concept__footer">
+    <div class="download-row">
+      <a href="./logo-concepts/variant-c-logo.svg" download>Логотип SVG</a>
+      <a href="./logo-concepts/variant-c-icon.svg" download>Знак SVG</a>
+      <a href="./logo-concepts/variant-c-mono.svg" download>Монохром SVG</a>
+      <a href="./logo-concepts/variant-c-favicon.svg" download>Фавикон SVG</a>
     </div>
-    <div class="concept__header"><div><h3>Минивэн</h3><p>Перевозки с первого взгляда</p></div></div>
-    <div class="concept__art">
-      <div class="symbol-frame"><img src="./logo-concepts/variant-c-icon.svg" alt="Знак: Минивэн" width="128" height="128"></div>
-      <div class="logo-frame"><span class="frame-caption">ГОРИЗОНТАЛЬНЫЙ ЛОГОТИП</span><img src="./logo-concepts/variant-c-logo.svg" alt="Логотип Путь без преград — Минивэн" width="700" height="170"></div>
-    </div>
-    <p class="concept__description">Максимально упрощённый кузов с двумя колёсами и пиктограммой коляски внутри. Подходит, если заказчику важнее немедленная ассоциация с автомобилем.</p>
-    <div class="semantic"><span>Автомобиль</span><span>Спецоборудование</span><span>Надёжность</span></div>
-    <div class="context">
-      <div class="context__dark"><span class="frame-caption">НА ТЁМНОМ ФОНЕ · МОНОХРОМ</span><img src="./logo-concepts/variant-c-logo.svg" alt="" width="700" height="170"></div>
-      <div class="context__fav"><span class="frame-caption">ФАВИКОН</span><div class="fav-row"><img src="./logo-concepts/variant-c-favicon.svg" width="48" height="48" alt="Фавикон Минивэн"><img src="./logo-concepts/variant-c-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-concepts/variant-c-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div><small>48 · 32 · 16 px</small></div>
-    </div>
-    <div class="concept__footer">
-      <div class="downloads">
-        <a href="./logo-concepts/variant-c-icon.svg" download>Знак <span>SVG</span></a>
-        <a href="./logo-concepts/variant-c-logo.svg" download>Логотип <span>SVG</span></a>
-        <a href="./logo-concepts/variant-c-favicon.svg" download>Фавикон <span>SVG</span></a>
-      </div>
-      <button class="choose" type="button" data-choose="c" aria-pressed="false">Выбрать вариант <span aria-hidden="true">↗</span></button>
-    </div>
-  </article>
+    <button type="button" data-select="c" aria-pressed="false">Выбрать</button>
+  </div>
+ </article>
 
-  <article class="concept" id="variant-d" data-variant="d">
-    <div class="concept__intro">
-      <div class="concept__number">ВАРИАНТ 04</div>
-      <span class="concept__type">Самый фирменный</span>
+ <article class="concept" id="variant-d" data-id="d">
+  <div class="concept__header">
+   <div><span class="concept__number">Без автомобиля · 04</span><h2>Свободный путь</h2></div>
+   <span class="concept__tag">Самый фирменный</span>
+  </div>
+  <div class="concept__wide"><img src="./logo-concepts/variant-d-logo.svg" width="760" height="170" loading="lazy" alt="Полноцветный логотип «Свободный путь»"></div>
+  <p class="concept__description">Человек на коляске внутри открытого кольца-маршрута. Это не социальная пиктограмма, а самостоятельный лаконичный знак. Он лучше остальных переносится на вывеску, наклейку и фавикон.</p>
+  <div class="concept__metadata"><span>Путь</span><span>Открытость</span><span>Доступность</span></div>
+  <div class="concept__previews">
+    <div class="preview"><span class="preview__label">Знак</span><img class="preview__icon" width="160" height="160" src="./logo-concepts/variant-d-icon.svg" alt="Отдельный знак «Свободный путь»"></div>
+    <div class="preview preview--dark"><span class="preview__label">Монохром</span><img class="preview__mono" width="760" height="170" src="./logo-concepts/variant-d-mono.svg" alt="Одноцветная версия логотипа «Свободный путь»"></div>
+    <div class="preview"><span class="preview__label">Фавикон 48 / 32 / 16</span><div class="favicon-row"><img width="48" height="48" src="./logo-concepts/variant-d-favicon.svg" alt="Фавикон «Свободный путь» 48 пикселей"><img width="32" height="32" src="./logo-concepts/variant-d-favicon.svg" alt="" aria-hidden="true"><img width="16" height="16" src="./logo-concepts/variant-d-favicon.svg" alt="" aria-hidden="true"></div></div>
+  </div>
+  <div class="concept__footer">
+    <div class="download-row">
+      <a href="./logo-concepts/variant-d-logo.svg" download>Логотип SVG</a>
+      <a href="./logo-concepts/variant-d-icon.svg" download>Знак SVG</a>
+      <a href="./logo-concepts/variant-d-mono.svg" download>Монохром SVG</a>
+      <a href="./logo-concepts/variant-d-favicon.svg" download>Фавикон SVG</a>
     </div>
-    <div class="concept__header"><div><h3>Монограмма «П»</h3><p>Свой знак вместо пиктограммы</p></div></div>
-    <div class="concept__art">
-      <div class="symbol-frame"><img src="./logo-concepts/variant-d-icon.svg" alt="Знак: Монограмма «П»" width="128" height="128"></div>
-      <div class="logo-frame"><span class="frame-caption">ГОРИЗОНТАЛЬНЫЙ ЛОГОТИП</span><img src="./logo-concepts/variant-d-logo.svg" alt="Логотип Путь без преград — Монограмма «П»" width="700" height="170"></div>
-    </div>
-    <p class="concept__description">Буква «П» выглядит как открытая дверь спецтранспорта. Внутри — человек на коляске, снизу — лёгкая линия пути. Легко создавать собственный узнаваемый стиль.</p>
-    <div class="semantic"><span>Буква бренда</span><span>Открытый доступ</span><span>Спецперевозка</span></div>
-    <div class="context">
-      <div class="context__dark"><span class="frame-caption">НА ТЁМНОМ ФОНЕ · МОНОХРОМ</span><img src="./logo-concepts/variant-d-logo.svg" alt="" width="700" height="170"></div>
-      <div class="context__fav"><span class="frame-caption">ФАВИКОН</span><div class="fav-row"><img src="./logo-concepts/variant-d-favicon.svg" width="48" height="48" alt="Фавикон Монограмма «П»"><img src="./logo-concepts/variant-d-favicon.svg" width="32" height="32" alt="" aria-hidden="true"><img src="./logo-concepts/variant-d-favicon.svg" width="16" height="16" alt="" aria-hidden="true"></div><small>48 · 32 · 16 px</small></div>
-    </div>
-    <div class="concept__footer">
-      <div class="downloads">
-        <a href="./logo-concepts/variant-d-icon.svg" download>Знак <span>SVG</span></a>
-        <a href="./logo-concepts/variant-d-logo.svg" download>Логотип <span>SVG</span></a>
-        <a href="./logo-concepts/variant-d-favicon.svg" download>Фавикон <span>SVG</span></a>
-      </div>
-      <button class="choose" type="button" data-choose="d" aria-pressed="false">Выбрать вариант <span aria-hidden="true">↗</span></button>
-    </div>
-  </article>
-  </section>
-  <section class="final"><div><p class="eyebrow">СЛЕДУЮЩИЙ ШАГ</p><h2>Выбираем форму, затем доводим детали</h2><p>После выбора уточним пропорции, начертание, минимальный размер, монохром и окончательный фавикон. Текущий логотип основного сайта пока не меняется.</p></div><div class="result" id="selection-result" role="status" aria-live="polite">Пока ни один вариант не выбран. Нажмите «Выбрать вариант» в понравившейся карточке.</div></section>
- </main>
- <footer class="wrap legal">Концепции выполнены в векторе SVG. Текст в файлах логотипов остаётся редактируемым. Перед коммерческим применением знака рекомендуется проверить уникальность.</footer>
- <script>
-  const buttons=[...document.querySelectorAll('[data-choose]')];
-  const output=document.getElementById('selection-result');
-  const names={"a":"Пандус","b":"Путь","c":"Минивэн","d":"Монограмма «П»"};
-  function choose(id){
-   buttons.forEach(b=>{const selected=b.dataset.choose===id;b.setAttribute('aria-pressed',selected?'true':'false');b.textContent=selected?'Выбран ✓':'Выбрать вариант ↗'});
-   document.querySelectorAll('.concept').forEach(c=>c.classList.toggle('is-selected',c.dataset.variant===id));
-   output.textContent='Выбран вариант '+id.toUpperCase()+' — «'+names[id]+'». Эту ссылку можно отправить на согласование: '+location.origin+location.pathname+'#variant-'+id;
+    <button type="button" data-select="d" aria-pressed="false">Выбрать</button>
+  </div>
+ </article></section>
+<section class="selection"><div><h2>Выбираем идею, а не мелкие детали</h2><p>После утверждения одного направления доведём пропорции, проверим знак на реальных носителях и заменим только брендирование лендинга. Текущий сайт пока не меняем.</p></div><div id="selected" class="selection__result" role="status" aria-live="polite">Пока ни один вариант не выбран. Нажми «Выбрать» на карточке.</div></section>
+</main><footer class="wrap footer">Все рисунки оригинальные, векторные и редактируемые. Перед коммерческим использованием проверьте уникальность знака и возможность регистрации.</footer>
+<script>
+(function(){
+ const names={"a":"Городской спецтранспорт","b":"Доступная дверь","c":"Рядом","d":"Свободный путь"};
+ const buttons=Array.from(document.querySelectorAll('[data-select]'));
+ const output=document.getElementById('selected');
+ function select(id){
+   buttons.forEach(b=>{const chosen=b.dataset.select===id;b.setAttribute('aria-pressed',chosen?'true':'false');b.textContent=chosen?'Выбрано ✓':'Выбрать'});
+   document.querySelectorAll('.concept').forEach(c=>c.classList.toggle('is-selected',c.dataset.id===id));
+   output.textContent='Выбран вариант '+id.toUpperCase()+' — «'+names[id]+'». Отправь на согласование ссылку: '+location.origin+location.pathname+'#variant-'+id;
    history.replaceState(null,'','#variant-'+id);
-  }
-  buttons.forEach(button=>button.addEventListener('click',()=>choose(button.dataset.choose)));
-  const initially=location.hash.match(/^#variant-([abcd])$/);
-  if(initially)choose(initially[1]);
- </script>
+ }
+ buttons.forEach(b=>b.addEventListener('click',()=>select(b.dataset.select)));
+ const hash=location.hash.match(/^#variant-([abcd])$/);
+ if(hash)select(hash[1]);
+})();
+</script>
 </body>
 </html>

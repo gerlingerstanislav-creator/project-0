@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
-<title id="title">Фавикон Путь без преград — Монограмма «П»</title>
-<desc id="desc">Свой знак вместо пиктограммы</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="Путь без преград: Свободный путь, фавикон">
 
- <rect width="64" height="64" rx="14" fill="#142B3F"/>
- <g transform="translate(8 8) scale(0.375)">
- <path d="M26 103V28H101V91" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
- <circle cx="57" cy="51" r="8" fill="#DA304A"/>
- <path d="M58 64V79H80" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
- <circle cx="57" cy="91" r="16" fill="none" stroke="#009C9A" stroke-width="8"/>
- <path d="M31 115Q64 115 98 103" fill="none" stroke="#DA304A" stroke-width="7" stroke-linecap="round"/></g>
+  <rect width="80" height="80" rx="18" fill="#142C40"/>
+  <path d="M19 59C8 42 16 20 36 15C51 11 64 19 67 32" fill="none" stroke="#0CA6A1" stroke-width="7" stroke-linecap="round"/>
+  <path d="M68 44C75 57 65 67 52 69" fill="none" stroke="#E42F4D" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="41" cy="30" r="5" fill="#FFFFFF"/>
+  <path d="M41 38V47H51" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="41" cy="57" r="11" fill="none" stroke="#FFFFFF" stroke-width="6"/>
 </svg>

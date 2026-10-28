@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
-<title id="title">Фавикон Путь без преград — Минивэн</title>
-<desc id="desc">Перевозки с первого взгляда</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="Путь без преград: Рядом, фавикон">
 
- <rect width="64" height="64" rx="14" fill="#142B3F"/>
- <g transform="translate(8 8) scale(0.375)">
- <path d="M16 87V57Q16 47 27 47H37L49 32H85Q99 32 106 48L114 62V88H16" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M49 41H85Q91 41 96 53L99 59H48Z" fill="#009C9A"/>
- <circle cx="38" cy="90" r="10" fill="#FFFFFF"/><circle cx="94" cy="90" r="10" fill="#FFFFFF"/>
- <circle cx="69" cy="64" r="5" fill="#DA304A"/>
- <path d="M69 71V80H83" fill="none" stroke="#DA304A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
- <circle cx="69" cy="84" r="8" fill="none" stroke="#DA304A" stroke-width="4"/></g>
+  <rect width="80" height="80" rx="18" fill="#142C40"/>
+  <circle cx="21" cy="26" r="7" fill="#FFFFFF"/>
+  <path d="M20 35L20 51L12 61M20 38L34 44" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="47" cy="33" r="7" fill="#FFFFFF"/>
+  <path d="M47 43V52H58" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="47" cy="60" r="12" fill="none" stroke="#0CA6A1" stroke-width="6"/>
+  <path d="M12 72H68" stroke="#E42F4D" stroke-width="5" stroke-linecap="round"/>
 </svg>

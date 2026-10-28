@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
-<title id="title">Фавикон Путь без преград — Пандус</title>
-<desc id="desc">Спецтранспорт без лишних деталей</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="Путь без преград: Городской спецтранспорт, фавикон">
 
- <rect width="64" height="64" rx="14" fill="#142B3F"/>
- <g transform="translate(8 8) scale(0.375)">
- <path d="M30 29H83Q108 29 108 55V89" fill="none" stroke="#009C9A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
- <circle cx="52" cy="45" r="8" fill="#FFFFFF"/>
- <path d="M53 58V71H78" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
- <circle cx="53" cy="86" r="17" fill="none" stroke="#FFFFFF" stroke-width="8"/>
- <path d="M79 72L91 91H101" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M20 115Q60 105 110 112" fill="none" stroke="#DA304A" stroke-width="8" stroke-linecap="round"/></g>
+  <rect width="80" height="80" rx="18" fill="#142C40"/>
+  <path d="M12 49V35C12 27 18 22 27 22H47C55 22 61 26 64 34L71 45V55H12Z" fill="#FFFFFF"/>
+  <path d="M21 30H47V44H21Z" fill="#0CA6A1"/>
+  <circle cx="27" cy="55" r="7" fill="#142C40" stroke="#FFFFFF" stroke-width="3"/>
+  <circle cx="58" cy="55" r="7" fill="#142C40" stroke="#FFFFFF" stroke-width="3"/>
+  <path d="M18 67H56" fill="none" stroke="#E42F4D" stroke-width="6" stroke-linecap="round"/>
 </svg>
