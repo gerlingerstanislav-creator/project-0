@@ -35,6 +35,19 @@ try {
     await page.locator('h1').waitFor({ state: 'visible', timeout: 20000 });
 
     assert.equal(await page.locator('.fleet-card img').count(), 3, 'Three gallery photos expected');
+    assert.equal((await page.locator('#destinations-title').textContent()).trim(),
+      'Транспортировка с сопровождением', 'Destination section title should match approved wording');
+    assert.equal((await page.locator('.header-nav a[href="#destinations"]').textContent()).trim(),
+      'С сопровождением', 'Navigation should show the updated section name');
+    for (const [index, asset] of [
+      '/images/accessible-van.avif',
+      '/images/accessible-passenger.avif',
+      '/images/accessible-boarding.avif',
+    ].entries()) {
+      assert.equal(await page.locator('.fleet-card img').nth(index).getAttribute('src'), asset,
+        'Gallery card should load the dedicated optimized AVIF image');
+    }
+
     // The original wordmark was truncated inside its own SVG viewBox while
     // the <img> itself fitted the header. Verify the actual browser font metrics.
     if (viewport.label === 'desktop') {
@@ -83,7 +96,7 @@ try {
       await gallery.nth(i).scrollIntoViewIfNeeded();
       await page.waitForFunction(index => {
         const img = document.querySelectorAll('.fleet-card img')[index];
-        return img?.complete && img.naturalWidth >= 800;
+        return img?.complete && img.naturalWidth >= 1100 && img.naturalHeight >= 820;
       }, i, { timeout: 20000 });
     }
 

@@ -75,7 +75,7 @@ const sendRequestEmail = () => {
           @keydown.esc="closeMenu"
         >
           <a href="#benefits" @click="closeMenu">Преимущества</a>
-          <a href="#destinations" @click="closeMenu">Куда перевозим</a>
+          <a href="#destinations" @click="closeMenu">С сопровождением</a>
           <a href="#fleet" @click="closeMenu">Автопарк</a>
           <a href="#pricing" @click="closeMenu">Цены</a>
           <a href="#request" @click="closeMenu">Как заказать</a>
@@ -94,7 +94,7 @@ const sendRequestEmail = () => {
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero__image" aria-hidden="true">
-          <img :src="photoVan" alt="" width="900" height="675" fetchpriority="high" decoding="async" />
+          <img :src="photoVan" alt="" width="1200" height="900" fetchpriority="high" decoding="async" />
         </div>
         <div class="hero__content container">
           <div class="hero__text">
@@ -129,7 +129,7 @@ const sendRequestEmail = () => {
       </section>
 
       <section class="destinations container" id="destinations" aria-labelledby="destinations-title">
-        <div class="section-heading"><div><span class="eyebrow">НАПРАВЛЕНИЯ ПОЕЗДОК</span><h2 id="destinations-title">Куда перевозим</h2></div><p>От медицинских учреждений до повседневных дел. Обсудим маршрут и необходимые условия заранее.</p></div>
+        <div class="section-heading"><div><span class="eyebrow">НАПРАВЛЕНИЯ ПОЕЗДОК</span><h2 id="destinations-title">Транспортировка с сопровождением</h2></div><p>От медицинских учреждений до повседневных дел. Обсудим маршрут и необходимые условия заранее.</p></div>
         <div class="destination-grid">
           <article><span class="destination-icon"><TransportIcon name="hospital" /></span><h3>Из больницы домой</h3><p>После лечения и выписки</p></article>
           <article><span class="destination-icon"><TransportIcon name="stethoscope" /></span><h3>Из дома в поликлинику</h3><p>На приём к врачу</p></article>
@@ -142,18 +142,18 @@ const sendRequestEmail = () => {
 
       <section class="fleet" id="fleet" aria-labelledby="fleet-title">
         <div class="container">
-          <div class="section-heading"><div><span class="eyebrow">ФОТОГАЛЕРЕЯ</span><h2 id="fleet-title">Наш автопарк</h2></div><p>Спецавтомобиль для перевозки людей на инвалидных колясках — с оборудованным местом для посадки.</p></div>
+          <div class="section-heading"><div><span class="eyebrow">ФОТОГАЛЕРЕЯ</span><h2 id="fleet-title">Наш автопарк</h2></div><p>Honda N-BOX (G Slope) со складной задней рампой для заезда инвалидной коляски и креплениями для её фиксации.</p></div>
           <div class="fleet-grid">
             <article class="fleet-card">
-              <img :src="photoVan" alt="Серый спецминивэн с открытой задней дверью и пандусом для инвалидной коляски" width="900" height="675" loading="lazy" decoding="async" />
-              <div class="fleet-card__body"><h3>Специализированный автомобиль</h3><p>Транспорт с доступной посадкой</p></div>
+              <img :src="photoVan" alt="Серая Honda N-BOX G Slope с открытой задней дверью и складной рампой для коляски" width="1200" height="900" loading="lazy" decoding="async" />
+              <div class="fleet-card__body"><h3>Специализированный автомобиль</h3><p>Honda N-BOX G Slope с задней рампой</p></div>
             </article>
             <article class="fleet-card">
-              <img :src="photoPassenger" alt="Женщина на инвалидной коляске рядом с серым спецминивэном и сопровождающим" width="900" height="675" loading="lazy" decoding="async" />
+              <img :src="photoPassenger" alt="Пожилая женщина в инвалидной коляске с темноволосым мужчиной-сопровождающим рядом с серой Honda N-BOX" width="1200" height="900" loading="lazy" decoding="async" />
               <div class="fleet-card__body"><h3>Комфорт пассажира</h3><p>Забота о человеке в течение поездки</p></div>
             </article>
             <article class="fleet-card">
-              <img :src="photoBoarding" alt="Сопровождающий помогает пассажиру на коляске подняться по пандусу в серый спецминивэн" width="900" height="675" loading="lazy" decoding="async" />
+              <img :src="photoBoarding" alt="Мужчина помогает пожилой женщине в коляске заехать по задней рампе серой Honda N-BOX" width="1200" height="900" loading="lazy" decoding="async" />
               <div class="fleet-card__body"><h3>Помощь при посадке</h3><p>Возможность сопровождения по запросу</p></div>
             </article>
           </div>
@@ -191,7 +191,7 @@ const sendRequestEmail = () => {
     <footer class="site-footer">
       <div class="container site-footer__inner">
         <div class="footer-brand"><a class="footer-brand__link" href="#top" aria-label="Путь без преград — наверх"><img :src="brandLogoLight" class="footer-brand__image" width="300" height="93" alt="Путь без преград — доступные перевозки" /></a><p>Перевозка людей на инвалидных колясках<br>Ульяновск и Ульяновская область</p></div>
-        <nav aria-label="Навигация в подвале"><a href="#benefits">Преимущества</a><a href="#destinations">Куда перевозим</a><a href="#fleet">Автопарк</a><a href="#pricing">Стоимость</a><a href="#request">Контакты</a></nav>
+        <nav aria-label="Навигация в подвале"><a href="#benefits">Преимущества</a><a href="#destinations">С сопровождением</a><a href="#fleet">Автопарк</a><a href="#pricing">Стоимость</a><a href="#request">Контакты</a></nav>
         <div class="footer-contact"><a :href="primaryPhoneHref">{{ primaryPhone }}</a><a :href="secondaryPhoneHref">{{ secondaryPhone }}</a><a :href="'mailto:' + email">{{ email }}</a></div>
         <a class="max-link" :href="maxUrl" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX"><span class="max-icon"><MaxIcon /></span></a>
       </div>
