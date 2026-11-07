@@ -1,0 +1,45 @@
+name: Build Timeweb landing
+
+on:
+  push:
+    branches: [timeweb-landing]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frontend dependencies
+        run: npm install --no-audit --no-fund
+      - name: Validate standalone adapter
+        run: |
+          node --check scripts/build-timeweb.mjs
+          node --check vite.config.timeweb.js
+          node --check timeweb/main.js
+      - name: Build the standalone website
+        run: |
+          node scripts/build-timeweb.mjs
+          npx vite build --config vite.config.timeweb.js
+      - name: Check required website files
+        run: |
+          test -s dist-timeweb/index.html
+          test -s dist-timeweb/images/accessible-van.avif
+          test -s dist-timeweb/images/accessible-passenger.avif
+          test -s dist-timeweb/images/accessible-boarding.avif
+          test -s dist-timeweb/images/put-bez-pregrad/logo.svg
+          test -s dist-timeweb/images/put-bez-pregrad/favicon.svg
+          test -n "$(find dist-timeweb/assets -name '*.js' -print -quit)"
+          test -n "$(find dist-timeweb/assets -name '*.css' -print -quit)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: put-bez-pregrad-timeweb
+          path: dist-timeweb/
+          if-no-files-found: error
+          retention-days: 14

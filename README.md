@@ -99,6 +99,11 @@ npm run dev
 
 Production-сборка: `npm run build`. Тесты: `vendor/bin/phpunit`. Тестовый набор использует SQLite в памяти и автоматически применяет миграции через `RefreshDatabase`.
 
+
+## Отдельная публикация «Путь без преград» на Timeweb
+
+Ветка `timeweb-landing` содержит независимую статическую сборку публичного лендинга без PHP, Laravel и базы данных. Workflow `Build Timeweb landing` формирует ZIP-артефакт `put-bez-pregrad-timeweb`. Для публикации распакуйте содержимое артефакта в `public_html` виртуального хостинга Timeweb и привяжите домен `путь-без-преград73.рф`. Подробности — `timeweb/README.md`. Основной production `project-0` при этом не затрагивается.
+
 ## CI/CD
 
 Push в `main` запускает два workflow: CI проверяет PHPUnit и production-сборку Vite, а отдельный Deploy workflow повторно выполняет тесты, собирает production release и выкладывает его на Ubuntu VPS без использования GitHub Artifacts. После выкладки проверяются главная страница, лендинг и полноразмерные изображения. После успешного Deploy автоматически запускается `.github/workflows/landing-smoke.yml`: Chromium проверяет публичный лендинг на пяти размерах экрана (навигация, изображения, телефоны, горизонтальная прокрутка, липкая шапка и JavaScript-ошибки) и сохраняет скриншоты на 5 дней. Проверку также можно запустить вручную из GitHub Actions. Скрипт проверок: `scripts/smoke-landing.mjs`.

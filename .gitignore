@@ -10,3 +10,8 @@
 /storage/framework/testing/*
 /storage/framework/views/*
 /storage/app/public
+
+# Standalone Timeweb build output
+/dist-timeweb/
+/timeweb/generated/
+/timeweb/public/
